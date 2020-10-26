@@ -27,3 +27,7 @@ main_menu/android/.gradle/vcs-1/gc.properties
 main_menu/android/gradlew.bat
 main_menu/android/local.properties
 main_menu/android/gradlew
+.idea/workspace.xml
+.idea/Unit-CurrencyConverter.iml
+.idea/vcs.xml
+.idea/modules.xml
