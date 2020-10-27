@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'currency_page.dart';
+import 'unit_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -42,29 +44,42 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blueGrey[900],
-      body: Column(
-        children: [
-          SvgPicture.asset("svg/logo_circlecompass.svg"),
-          Text(
-            "Konwenter definiowalnych miar i walut",
-            style: Theme.of(context).textTheme.headline1,
+    return Stack(
+      children: <Widget>[
+        Scaffold(
+          backgroundColor: Colors.blueGrey[900],
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SvgPicture.asset("svg/logo_circlecompass.svg"),
+              Container(
+                  margin: EdgeInsets.fromLTRB(0.0, 20.0, 50.0, 50.0),
+                  child: Text(
+                    "Konwenter definiowalnych miar i walut",
+                    style: Theme.of(context).textTheme.headline1,
+                  )),
+              MenuEntry(
+                  context: context,
+                  label: "Konwerter Miar",
+                  iconName: "svg/unit_speedometer.svg"),
+              MenuEntry(
+                  context: context,
+                  label: "Konwerter Walut",
+                  iconName: "svg/currency_money.svg"),
+              MenuEntry(
+                  context: context,
+                  label: "Opcje",
+                  iconName: "svg/options_paintroller.svg"),
+            ],
           ),
-          MenuEntry(
-              context: context,
-              label: "Konwerter Miar",
-              iconName: "svg/unit_speedometer.svg"),
-          MenuEntry(
-              context: context,
-              label: "Konwerter Walut",
-              iconName: "svg/currency_money.svg"),
-          MenuEntry(
-              context: context,
-              label: "Opcje",
-              iconName: "svg/options_paintroller.svg"),
-        ],
-      ),
+        ),
+        Container(
+          width: 200,
+          height: 200,
+          child: UnitConverterPage(),
+        )
+      ],
     );
   }
 }
