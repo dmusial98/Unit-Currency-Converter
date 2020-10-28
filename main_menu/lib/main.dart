@@ -42,9 +42,15 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
+  List<bool> isSelected = List<bool>(3);
+
+  void setOneSelected(int index) {
+    for (int i = 0; i < isSelected.length; i++) isSelected[i] = false;
+    isSelected[index] = true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<bool> isSelected = [false, false, false];
     return Stack(
       children: <Widget>[
         Scaffold(
@@ -60,39 +66,39 @@ class _MainMenuState extends State<MainMenu> {
                     "Konwenter definiowalnych miar i walut",
                     style: Theme.of(context).textTheme.headline1,
                   )),
-              RotatedBox(
-                quarterTurns: 1,
-                child: ToggleButtons(
-                    borderWidth: 0.0,
-                    borderColor: Colors.blueGrey[900],
-                    children: <Widget>[
-                      RotatedBox(
-                          quarterTurns: 3,
-                          child: MenuEntry(
-                              context: context,
-                              label: "Konwerter Miar",
-                              iconName: "svg/unit_speedometer.svg")),
-                      RotatedBox(
-                          quarterTurns: 3,
-                          child: MenuEntry(
-                              context: context,
-                              label: "Konwerter Walut",
-                              iconName: "svg/currency_money.svg")),
-                      RotatedBox(
-                          quarterTurns: 3,
-                          child: MenuEntry(
-                              context: context,
-                              label: "Opcje",
-                              iconName: "svg/options_paintroller.svg")),
-                    ],
-                    isSelected: isSelected,
-                    onPressed: (int index) {
-                      setState(() {
-                        isSelected.map((e) => e = false);
-                        isSelected[index] = true;
-                      });
-                    }),
-              ),
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      setOneSelected(0);
+                    });
+                  },
+                  child: MenuEntry(
+                      context: context,
+                      label: "Konwerter Miar",
+                      iconName: "svg/unit_speedometer.svg",
+                      isSelected: isSelected[0])),
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      setOneSelected(1);
+                    });
+                  },
+                  child: MenuEntry(
+                      context: context,
+                      label: "Konwerter Walut",
+                      iconName: "svg/currency_money.svg",
+                      isSelected: isSelected[1])),
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      setOneSelected(2);
+                    });
+                  },
+                  child: MenuEntry(
+                      context: context,
+                      label: "Opcje",
+                      iconName: "svg/options_paintroller.svg",
+                      isSelected: isSelected[2])),
             ],
           ),
         ),
@@ -110,8 +116,9 @@ class MenuEntry extends StatefulWidget {
   final BuildContext context;
   final String label;
   final String iconName;
+  final bool isSelected;
 
-  const MenuEntry({Key key, this.context, this.label, this.iconName})
+  MenuEntry({Key key, this.context, this.label, this.iconName, this.isSelected})
       : super(key: key);
 
   @override
@@ -119,14 +126,12 @@ class MenuEntry extends StatefulWidget {
 }
 
 class _MenuEntryState extends State<MenuEntry> {
-  bool isSelected = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(3.0),
       decoration: BoxDecoration(
-          color: Colors.blueGrey[800],
+          color: (Colors.blueGrey[widget.isSelected ? 700 : 800]),
           borderRadius: BorderRadius.all(Radius.circular(15.0))),
       child: Row(
         children: [
