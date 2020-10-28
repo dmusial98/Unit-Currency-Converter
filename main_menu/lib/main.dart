@@ -70,6 +70,7 @@ class _MainMenuState extends State<MainMenu> {
                   onTap: () {
                     setState(() {
                       setOneSelected(0);
+                      Navigator.of(context).push(_createRoute());
                     });
                   },
                   child: MenuEntry(
@@ -144,4 +145,13 @@ class _MenuEntryState extends State<MenuEntry> {
       ),
     );
   }
+}
+
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => UnitConverterPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return child;
+    },
+  );
 }
