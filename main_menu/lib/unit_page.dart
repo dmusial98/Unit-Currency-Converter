@@ -16,6 +16,7 @@ class Home extends StatelessWidget {
       length: unitType.length,
       child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[900],
             automaticallyImplyLeading: false,
             title: Text("Konwerter Miar"),
@@ -45,42 +46,42 @@ class _TabContent {
   _TabContent(this.unitType) {
     if (this.unitType == UnitType.weight) {
       title = "Masa";
-      this.unitsMeasure.add(_UnitMeasure("kilogram", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("gram", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("dekagram", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("miligram", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("funt", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("uncja", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("tona", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("kwintal", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("junit", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("karat", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight));
+      this.unitsMeasure.add(_UnitMeasure("kilogram", UnitType.weight, "kg"));
+      this.unitsMeasure.add(new _UnitMeasure("gram", UnitType.weight, "g"));
+      this.unitsMeasure.add(new _UnitMeasure("dekagram", UnitType.weight, "dag"));
+      this.unitsMeasure.add(new _UnitMeasure("miligram", UnitType.weight, "mg"));
+      this.unitsMeasure.add(new _UnitMeasure("funt", UnitType.weight, "lb"));
+      this.unitsMeasure.add(new _UnitMeasure("uncja", UnitType.weight, "oz"));
+      this.unitsMeasure.add(new _UnitMeasure("tona", UnitType.weight, "t"));
+      this.unitsMeasure.add(new _UnitMeasure("kwintal", UnitType.weight, "q"));
+      this.unitsMeasure.add(new _UnitMeasure("unit (jedn. masy atomowej)", UnitType.weight, "u"));
+      this.unitsMeasure.add(new _UnitMeasure("karat", UnitType.weight, "ct"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
     } else if (this.unitType == UnitType.length) {
       title = "Długość";
-      unitsMeasure.add(new _UnitMeasure("metr", UnitType.length));
-      unitsMeasure.add(new _UnitMeasure("kilometr", UnitType.length));
-      unitsMeasure.add(new _UnitMeasure("decymetr", UnitType.length));
-      unitsMeasure.add(new _UnitMeasure("centymetr", UnitType.length));
-      unitsMeasure.add(new _UnitMeasure("milimetr", UnitType.length));
-      unitsMeasure.add(new _UnitMeasure("mila morska", UnitType.length));
-      unitsMeasure.add(new _UnitMeasure("mila lądowa", UnitType.length));
-      unitsMeasure.add(new _UnitMeasure("łokieć", UnitType.length));
-      unitsMeasure.add(new _UnitMeasure("stopa", UnitType.length));
-      unitsMeasure.add(new _UnitMeasure("jard", UnitType.length));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length));
+      unitsMeasure.add(new _UnitMeasure("metr", UnitType.length, "m"));
+      unitsMeasure.add(new _UnitMeasure("kilometr", UnitType.length, "km"));
+      unitsMeasure.add(new _UnitMeasure("decymetr", UnitType.length, "dm"));
+      unitsMeasure.add(new _UnitMeasure("centymetr", UnitType.length, "cm"));
+      unitsMeasure.add(new _UnitMeasure("milimetr", UnitType.length, "mm"));
+      unitsMeasure.add(new _UnitMeasure("mila morska", UnitType.length, "INM"));
+      unitsMeasure.add(new _UnitMeasure("mila angielska", UnitType.length, "LM"));
+      unitsMeasure.add(new _UnitMeasure("łokieć", UnitType.length, "ell"));
+      unitsMeasure.add(new _UnitMeasure("stopa", UnitType.length, "ft"));
+      unitsMeasure.add(new _UnitMeasure("jard", UnitType.length, "yd"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
+      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
     }
   }
 
@@ -94,7 +95,12 @@ class _TabContent {
       children: [
         for (final unit in unitsMeasure)
           ListTile(
-            //TODO: Ogarnąć później ikonę
+            leading: ExcludeSemantics(
+              child: CircleAvatar(child: Text(unit.abbreviation),
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,)
+            ),
+
             title: Text(
               unit.name,
               style: TextStyle(
@@ -112,10 +118,10 @@ class _TabContent {
 
 class _UnitMeasure {
   String name;
-  String skrot;
+  String abbreviation;
   UnitType type;
 
-  _UnitMeasure(this.name, this.type);
+  _UnitMeasure(this.name, this.type, this.abbreviation);
 }
 
 enum UnitType { weight, length }
