@@ -44,6 +44,7 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
+    List<bool> isSelected = [false, false, false];
     return Stack(
       children: <Widget>[
         Scaffold(
@@ -59,42 +60,66 @@ class _MainMenuState extends State<MainMenu> {
                     "Konwenter definiowalnych miar i walut",
                     style: Theme.of(context).textTheme.headline1,
                   )),
-              MenuEntry(
-                  context: context,
-                  label: "Konwerter Miar",
-                  iconName: "svg/unit_speedometer.svg"),
-              MenuEntry(
-                  context: context,
-                  label: "Konwerter Walut",
-                  iconName: "svg/currency_money.svg"),
-              MenuEntry(
-                  context: context,
-                  label: "Opcje",
-                  iconName: "svg/options_paintroller.svg"),
+              RotatedBox(
+                quarterTurns: 1,
+                child: ToggleButtons(
+                    borderWidth: 0.0,
+                    borderColor: Colors.blueGrey[900],
+                    children: <Widget>[
+                      RotatedBox(
+                          quarterTurns: 3,
+                          child: MenuEntry(
+                              context: context,
+                              label: "Konwerter Miar",
+                              iconName: "svg/unit_speedometer.svg")),
+                      RotatedBox(
+                          quarterTurns: 3,
+                          child: MenuEntry(
+                              context: context,
+                              label: "Konwerter Walut",
+                              iconName: "svg/currency_money.svg")),
+                      RotatedBox(
+                          quarterTurns: 3,
+                          child: MenuEntry(
+                              context: context,
+                              label: "Opcje",
+                              iconName: "svg/options_paintroller.svg")),
+                    ],
+                    isSelected: isSelected,
+                    onPressed: (int index) {
+                      setState(() {
+                        isSelected.map((e) => e = false);
+                        isSelected[index] = true;
+                      });
+                    }),
+              ),
             ],
           ),
         ),
-        Container(
-          width: 200,
-          height: 200,
-          child: UnitConverterPage(),
-        )
+        // Container(
+        //   width: 200,
+        //   height: 200,
+        //   child: UnitConverterPage(),
+        // )
       ],
     );
   }
 }
 
-class MenuEntry extends StatelessWidget {
-  const MenuEntry({
-    Key key,
-    @required this.context,
-    @required this.label,
-    @required this.iconName,
-  }) : super(key: key);
-
+class MenuEntry extends StatefulWidget {
   final BuildContext context;
   final String label;
   final String iconName;
+
+  const MenuEntry({Key key, this.context, this.label, this.iconName})
+      : super(key: key);
+
+  @override
+  _MenuEntryState createState() => _MenuEntryState();
+}
+
+class _MenuEntryState extends State<MenuEntry> {
+  bool isSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +131,10 @@ class MenuEntry extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            child: SvgPicture.asset(iconName),
+            child: SvgPicture.asset(widget.iconName),
             margin: EdgeInsets.all(5.0),
           ),
-          Text(label, style: Theme.of(context).textTheme.headline2),
+          Text(widget.label, style: Theme.of(context).textTheme.headline2),
         ],
       ),
     );
