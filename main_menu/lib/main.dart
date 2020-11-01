@@ -41,73 +41,78 @@ class MainMenu extends StatefulWidget {
   _MainMenuState createState() => _MainMenuState();
 }
 
-class _MainMenuState extends State<MainMenu> {
-  List<bool> isSelected = List<bool>(3);
+class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
+  List<bool> highLightedButton = List.filled(3, false);
 
-  void setOneSelected(int index) {
-    for (int i = 0; i < isSelected.length; i++) isSelected[i] = false;
-    isSelected[index] = true;
+  void setHighLightedButton(int index) {
+    setState(() {
+      for (int i = 0; i < highLightedButton.length; i++)
+        highLightedButton[i] = false;
+      highLightedButton[index] = true;
+    });
   }
+
+  bool isHighLighted(int index) => highLightedButton[index];
+
+  // final RelativeRectTween relativeRectTween = RelativeRectTween(
+  //   begin: RelativeRect.fromLTRB(40, 40, 0, 0),
+  //   end: RelativeRect.fromLTRB(0, 0, 40, 40),
+  // );
+
+  // AnimationController uniAnimationController;
+
+  // initState() {
+  //   uniAnimationController = AnimationController(
+  //     vsync: this,
+  //     duration: const Duration(seconds: 1),
+  //   );
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
+        Container(
+          width: 200,
+          height: 200,
+          child: UnitConverterPage(),
+        ),
         Scaffold(
-          backgroundColor: Colors.blueGrey[900],
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SvgPicture.asset("svg/logo_circlecompass.svg"),
-              Container(
-                  margin: EdgeInsets.fromLTRB(0.0, 20.0, 50.0, 50.0),
-                  child: Text(
-                    "Konwenter definiowalnych miar i walut",
-                    style: Theme.of(context).textTheme.headline1,
-                  )),
-              GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      setOneSelected(0);
-                      Navigator.of(context).push(_createRoute());
-                    });
-                  },
-                  child: MenuEntry(
+            backgroundColor: Colors.blueGrey[900],
+            body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SvgPicture.asset("svg/logo_circlecompass.svg"),
+                  Container(
+                      margin: EdgeInsets.fromLTRB(0.0, 20.0, 50.0, 50.0),
+                      child: Text(
+                        "Konwenter definiowalnych miar i walut",
+                        style: Theme.of(context).textTheme.headline1,
+                      )),
+                  MenuEntry(
                       context: context,
                       label: "Konwerter Miar",
                       iconName: "svg/unit_speedometer.svg",
-                      isSelected: isSelected[0])),
-              GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      setOneSelected(1);
-                    });
-                  },
-                  child: MenuEntry(
+                      entryIndex: 0,
+                      isHighLighted: isHighLighted,
+                      setHighLightedButton: setHighLightedButton),
+                  MenuEntry(
                       context: context,
                       label: "Konwerter Walut",
                       iconName: "svg/currency_money.svg",
-                      isSelected: isSelected[1])),
-              GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      setOneSelected(2);
-                    });
-                  },
-                  child: MenuEntry(
+                      entryIndex: 1,
+                      isHighLighted: isHighLighted,
+                      setHighLightedButton: setHighLightedButton),
+                  MenuEntry(
                       context: context,
                       label: "Opcje",
                       iconName: "svg/options_paintroller.svg",
-                      isSelected: isSelected[2])),
-            ],
-          ),
-        ),
-        // Container(
-        //   width: 200,
-        //   height: 200,
-        //   child: UnitConverterPage(),
-        // )
+                      entryIndex: 2,
+                      isHighLighted: isHighLighted,
+                      setHighLightedButton: setHighLightedButton),
+                ]))
       ],
     );
   }
@@ -117,9 +122,18 @@ class MenuEntry extends StatefulWidget {
   final BuildContext context;
   final String label;
   final String iconName;
-  final bool isSelected;
+  final int entryIndex;
+  final Function setHighLightedButton;
+  final Function isHighLighted;
 
-  MenuEntry({Key key, this.context, this.label, this.iconName, this.isSelected})
+  MenuEntry(
+      {Key key,
+      this.context,
+      this.label,
+      this.iconName,
+      this.entryIndex,
+      this.setHighLightedButton,
+      this.isHighLighted})
       : super(key: key);
 
   @override
@@ -127,31 +141,31 @@ class MenuEntry extends StatefulWidget {
 }
 
 class _MenuEntryState extends State<MenuEntry> {
+  int test = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(3.0),
-      decoration: BoxDecoration(
-          color: (Colors.blueGrey[widget.isSelected ? 700 : 800]),
-          borderRadius: BorderRadius.all(Radius.circular(15.0))),
-      child: Row(
-        children: [
-          Container(
-            child: SvgPicture.asset(widget.iconName),
-            margin: EdgeInsets.all(5.0),
+    return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+            widget.setHighLightedButton(widget.entryIndex);
+        },
+        child: Container(
+          margin: EdgeInsets.all(3.0),
+          decoration: BoxDecoration(
+              color: (widget.isHighLighted(widget.entryIndex) == true
+                  ? Colors.blueGrey[700]
+                  : Colors.blueGrey[800]),
+              borderRadius: BorderRadius.all(Radius.circular(15.0))),
+          child: Row(
+            children: [
+              Container(
+                child: SvgPicture.asset(widget.iconName),
+                margin: EdgeInsets.all(5.0),
+              ),
+              Text(widget.label, style: Theme.of(context).textTheme.headline2),
+            ],
           ),
-          Text(widget.label, style: Theme.of(context).textTheme.headline2),
-        ],
-      ),
-    );
+        ));
   }
-}
-
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => UnitConverterPage(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return child;
-    },
-  );
 }
