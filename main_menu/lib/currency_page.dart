@@ -5,7 +5,7 @@ class CurrencyConverterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Welcome to Flutter'),
+          title: Text('Currency'),
         ),
         body: Center(
           child: Text('Currency converter page'),

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class UnitConverterPage extends StatelessWidget {
+class OptionsrPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Unit'),
+          title: Text('Options'),
         ),
         body: Center(
-          child: Text('Unit converter page'),
+          child: Text('Options page'),
         ),
-    );
+      );
   }
 }

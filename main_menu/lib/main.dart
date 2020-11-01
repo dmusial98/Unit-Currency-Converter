@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'currency_page.dart';
 import 'unit_page.dart';
+import 'options_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,9 +44,18 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   List<bool> highLightedButton = List.filled(3, false);
+  Widget currentPage;
 
-  void setHighLightedButton(int index) {
+  void changePage(int index, Widget newTopWidget) {
+    if (highLightedButton[index] == true) return;
+
     setState(() {
+      currentPage = Container(
+        width: 200,
+        height: 200,
+        child: newTopWidget,
+      );
+
       for (int i = 0; i < highLightedButton.length; i++)
         highLightedButton[i] = false;
       highLightedButton[index] = true;
@@ -54,67 +64,56 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
 
   bool isHighLighted(int index) => highLightedButton[index];
 
-  // final RelativeRectTween relativeRectTween = RelativeRectTween(
-  //   begin: RelativeRect.fromLTRB(40, 40, 0, 0),
-  //   end: RelativeRect.fromLTRB(0, 0, 40, 40),
-  // );
+  @override
+  void initState() {
+    changePage(0, UnitConverterPage());
 
-  // AnimationController uniAnimationController;
-
-  // initState() {
-  //   uniAnimationController = AnimationController(
-  //     vsync: this,
-  //     duration: const Duration(seconds: 1),
-  //   );
-  //   super.initState();
-  // }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          width: 200,
-          height: 200,
-          child: UnitConverterPage(),
-        ),
-        Scaffold(
-            backgroundColor: Colors.blueGrey[900],
-            body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SvgPicture.asset("svg/logo_circlecompass.svg"),
-                  Container(
-                      margin: EdgeInsets.fromLTRB(0.0, 20.0, 50.0, 50.0),
-                      child: Text(
-                        "Konwenter definiowalnych miar i walut",
-                        style: Theme.of(context).textTheme.headline1,
-                      )),
-                  MenuEntry(
-                      context: context,
-                      label: "Konwerter Miar",
-                      iconName: "svg/unit_speedometer.svg",
-                      entryIndex: 0,
-                      isHighLighted: isHighLighted,
-                      setHighLightedButton: setHighLightedButton),
-                  MenuEntry(
-                      context: context,
-                      label: "Konwerter Walut",
-                      iconName: "svg/currency_money.svg",
-                      entryIndex: 1,
-                      isHighLighted: isHighLighted,
-                      setHighLightedButton: setHighLightedButton),
-                  MenuEntry(
-                      context: context,
-                      label: "Opcje",
-                      iconName: "svg/options_paintroller.svg",
-                      entryIndex: 2,
-                      isHighLighted: isHighLighted,
-                      setHighLightedButton: setHighLightedButton),
-                ]))
-      ],
-    );
+    return Stack(children: <Widget>[
+      Scaffold(
+          backgroundColor: Colors.blueGrey[900],
+          body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SvgPicture.asset("svg/logo_circlecompass.svg"),
+                Container(
+                    margin: EdgeInsets.fromLTRB(0.0, 20.0, 50.0, 50.0),
+                    child: Text(
+                      "Konwenter definiowalnych miar i walut",
+                      style: Theme.of(context).textTheme.headline1,
+                    )),
+                MenuEntry(
+                    context: context,
+                    label: "Konwerter Miar",
+                    iconName: "svg/unit_speedometer.svg",
+                    entryIndex: 0,
+                    isHighLighted: isHighLighted,
+                    changePage: changePage,
+                    correspondingWidget: UnitConverterPage()),
+                MenuEntry(
+                    context: context,
+                    label: "Konwerter Walut",
+                    iconName: "svg/currency_money.svg",
+                    entryIndex: 1,
+                    isHighLighted: isHighLighted,
+                    changePage: changePage,
+                    correspondingWidget: CurrencyConverterPage()),
+                MenuEntry(
+                    context: context,
+                    label: "Opcje",
+                    iconName: "svg/options_paintroller.svg",
+                    entryIndex: 2,
+                    isHighLighted: isHighLighted,
+                    changePage: changePage,
+                    correspondingWidget: OptionsrPage()),
+              ])),
+      currentPage
+    ]);
   }
 }
 
@@ -123,8 +122,9 @@ class MenuEntry extends StatefulWidget {
   final String label;
   final String iconName;
   final int entryIndex;
-  final Function setHighLightedButton;
+  final Function changePage;
   final Function isHighLighted;
+  final Widget correspondingWidget;
 
   MenuEntry(
       {Key key,
@@ -132,8 +132,9 @@ class MenuEntry extends StatefulWidget {
       this.label,
       this.iconName,
       this.entryIndex,
-      this.setHighLightedButton,
-      this.isHighLighted})
+      this.changePage,
+      this.isHighLighted,
+      this.correspondingWidget})
       : super(key: key);
 
   @override
@@ -141,14 +142,12 @@ class MenuEntry extends StatefulWidget {
 }
 
 class _MenuEntryState extends State<MenuEntry> {
-  int test = 0;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
-            widget.setHighLightedButton(widget.entryIndex);
+          widget.changePage(widget.entryIndex, widget.correspondingWidget);
         },
         child: Container(
           margin: EdgeInsets.all(3.0),
