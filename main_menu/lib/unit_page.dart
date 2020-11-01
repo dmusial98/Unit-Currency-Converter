@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
 
 class UnitConverterPage extends StatelessWidget {
   @override
@@ -7,10 +9,150 @@ class UnitConverterPage extends StatelessWidget {
   }
 }
 
-class Home extends StatelessWidget {
-  final unitType = [_TabContent(UnitType.weight), _TabContent(UnitType.length)];
+class Home extends StatefulWidget {
+  Home({Key key}) : super(key: key);
 
   @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class UnitMeasure {
+  String name;
+  String abbreviation;
+  UnitType type;
+  final Key key;
+
+  UnitMeasure(this.name, this.type, this.abbreviation, this.key);
+}
+
+class _HomePageState extends State<Home> {
+  final unitType = [UnitType.weight, UnitType.length];
+  List<List<UnitMeasure>> unitsMeasure = new List<List<UnitMeasure>>();
+  var cardTitle = ["Masa", "Długość"];
+  var tabIndex = 0;
+
+  _HomePageState() {
+    int index = 0;
+
+    this.unitsMeasure.add(List<UnitMeasure>());
+
+    this
+        .unitsMeasure[0]
+        .add(UnitMeasure("kilogram", UnitType.weight, "kg", ValueKey(index++)));
+    this
+        .unitsMeasure[0]
+        .add(UnitMeasure("gram", UnitType.weight, "g", ValueKey(index++)));
+    this.unitsMeasure[0].add(
+        UnitMeasure("dekagram", UnitType.weight, "dag", ValueKey(index++)));
+    this
+        .unitsMeasure[0]
+        .add(UnitMeasure("miligram", UnitType.weight, "mg", ValueKey(index++)));
+    this
+        .unitsMeasure[0]
+        .add(UnitMeasure("funt", UnitType.weight, "lb", ValueKey(index++)));
+    this
+        .unitsMeasure[0]
+        .add(UnitMeasure("uncja", UnitType.weight, "oz", ValueKey(index++)));
+    this
+        .unitsMeasure[0]
+        .add(UnitMeasure("tona", UnitType.weight, "t", ValueKey(index++)));
+    this
+        .unitsMeasure[0]
+        .add(UnitMeasure("kwintal", UnitType.weight, "q", ValueKey(index++)));
+    this.unitsMeasure[0].add(UnitMeasure(
+        "unit (jedn. masy atomowej)", UnitType.weight, "u", ValueKey(index++)));
+    this.unitsMeasure[0].add(
+        new UnitMeasure("karat", UnitType.weight, "ct", ValueKey(index++)));
+    this.unitsMeasure[0].add(
+        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
+    this.unitsMeasure[0].add(
+        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
+    this.unitsMeasure[0].add(
+        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
+    this.unitsMeasure[0].add(
+        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
+    this.unitsMeasure[0].add(
+        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
+    this.unitsMeasure[0].add(
+        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
+    this.unitsMeasure[0].add(
+        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
+
+    index = 0;
+
+    this.unitsMeasure.add(List<UnitMeasure>());
+
+    unitsMeasure[1]
+        .add(new UnitMeasure("metr", UnitType.length, "m", ValueKey(index++)));
+    unitsMeasure[1]
+        .add(UnitMeasure("kilometr", UnitType.length, "km", ValueKey(index++)));
+    this
+        .unitsMeasure[1]
+        .add(UnitMeasure("decymetr", UnitType.length, "dm", ValueKey(index++)));
+    this.unitsMeasure[1].add(
+        UnitMeasure("centymetr", UnitType.length, "cm", ValueKey(index++)));
+    this
+        .unitsMeasure[1]
+        .add(UnitMeasure("milimetr", UnitType.length, "mm", ValueKey(index++)));
+    this.unitsMeasure[1].add(
+        UnitMeasure("mila morska", UnitType.length, "INM", ValueKey(index++)));
+    this.unitsMeasure[1].add(UnitMeasure(
+        "mila angielska", UnitType.length, "LM", ValueKey(index++)));
+    this
+        .unitsMeasure[1]
+        .add(UnitMeasure("łokieć", UnitType.length, "ell", ValueKey(index++)));
+    this
+        .unitsMeasure[1]
+        .add(UnitMeasure("stopa", UnitType.length, "ft", ValueKey(index++)));
+    this
+        .unitsMeasure[1]
+        .add(UnitMeasure("jard", UnitType.length, "yd", ValueKey(index++)));
+    this.unitsMeasure[1].add(
+        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
+    this.unitsMeasure[1].add(
+        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
+    this.unitsMeasure[1].add(
+        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
+    this.unitsMeasure[1].add(
+        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
+    this.unitsMeasure[1].add(
+        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
+    this.unitsMeasure[1].add(
+        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
+    this.unitsMeasure[1].add(
+        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
+
+    for (final tab in unitsMeasure)
+      for (final unit in tab)
+        debugPrint("Unit ${unit.key} - ${unit.name}");
+
+  }
+
+  int _indexOfKey(Key key) {
+    return unitsMeasure[0].indexWhere((UnitMeasure d) => d.key == key);
+  }
+
+  bool _reorderCallback(Key item, Key newPosition) {
+    int draggingIndex = _indexOfKey(item);
+    int newPositionIndex = _indexOfKey(newPosition);
+
+    final draggedItem = unitsMeasure[0][draggingIndex];
+
+    setState(() {
+      debugPrint("Reordering $item -> $newPosition");
+      unitsMeasure[0].removeAt(draggingIndex);
+      unitsMeasure[0].insert(newPositionIndex, draggedItem);
+    });
+    return true;
+  }
+
+  void _reorderDone(Key item) {
+    final draggedItem = unitsMeasure[0][_indexOfKey(item)];
+    debugPrint("Reordering finished for ${draggedItem.name}}");
+  }
+
+  DraggingMode _draggingMode = DraggingMode.iOS;
+
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: unitType.length,
@@ -22,106 +164,143 @@ class Home extends StatelessWidget {
             title: Text("Konwerter Miar"),
             bottom: TabBar(
               isScrollable: true,
-              tabs: [for (final tab in unitType) Tab(text: tab.title)],
+              tabs: [for (final tab in cardTitle) Tab(text: tab)],
             ),
           ),
           body: TabBarView(
             children: [
-              for (final tab in unitType)
+              for (int i = 0; i < cardTitle.length; i++)
                 Container(
-                  child: tab.getContent(),
-                )
+                    child: ReorderableList(
+                        onReorder: this._reorderCallback,
+                        onReorderDone: this._reorderDone,
+                        child: CustomScrollView(
+                          slivers: <Widget>[
+                            SliverPadding(
+                                padding: EdgeInsets.only(
+                                    bottom:
+                                        MediaQuery.of(context).padding.bottom),
+                                sliver: SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                    (BuildContext context, int index) {
+                                      return Item(
+                                        data: unitsMeasure[0][index],
+                                        // first and last attributes affect border drawn during dragging
+                                        isFirst: index == 0,
+                                        isLast:
+                                            index == unitsMeasure[0].length - 1,
+                                        draggingMode: _draggingMode,
+                                      );
+                                    },
+                                    childCount: unitsMeasure[0].length,
+                                  ),
+                                )),
+                          ],
+                        )))
             ],
           )),
     );
   }
 }
 
-class _TabContent {
-  UnitType unitType;
-  String title;
-  List<_UnitMeasure> unitsMeasure = new List<_UnitMeasure>();
-  StatelessWidget content;
+class Item extends StatelessWidget {
+  Item({
+    this.data,
+    this.isFirst,
+    this.isLast,
+    this.draggingMode,
+  });
 
-  _TabContent(this.unitType) {
-    if (this.unitType == UnitType.weight) {
-      title = "Masa";
-      this.unitsMeasure.add(_UnitMeasure("kilogram", UnitType.weight, "kg"));
-      this.unitsMeasure.add(new _UnitMeasure("gram", UnitType.weight, "g"));
-      this.unitsMeasure.add(new _UnitMeasure("dekagram", UnitType.weight, "dag"));
-      this.unitsMeasure.add(new _UnitMeasure("miligram", UnitType.weight, "mg"));
-      this.unitsMeasure.add(new _UnitMeasure("funt", UnitType.weight, "lb"));
-      this.unitsMeasure.add(new _UnitMeasure("uncja", UnitType.weight, "oz"));
-      this.unitsMeasure.add(new _UnitMeasure("tona", UnitType.weight, "t"));
-      this.unitsMeasure.add(new _UnitMeasure("kwintal", UnitType.weight, "q"));
-      this.unitsMeasure.add(new _UnitMeasure("unit (jedn. masy atomowej)", UnitType.weight, "u"));
-      this.unitsMeasure.add(new _UnitMeasure("karat", UnitType.weight, "ct"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.weight, "jed"));
-    } else if (this.unitType == UnitType.length) {
-      title = "Długość";
-      unitsMeasure.add(new _UnitMeasure("metr", UnitType.length, "m"));
-      unitsMeasure.add(new _UnitMeasure("kilometr", UnitType.length, "km"));
-      unitsMeasure.add(new _UnitMeasure("decymetr", UnitType.length, "dm"));
-      unitsMeasure.add(new _UnitMeasure("centymetr", UnitType.length, "cm"));
-      unitsMeasure.add(new _UnitMeasure("milimetr", UnitType.length, "mm"));
-      unitsMeasure.add(new _UnitMeasure("mila morska", UnitType.length, "INM"));
-      unitsMeasure.add(new _UnitMeasure("mila angielska", UnitType.length, "LM"));
-      unitsMeasure.add(new _UnitMeasure("łokieć", UnitType.length, "ell"));
-      unitsMeasure.add(new _UnitMeasure("stopa", UnitType.length, "ft"));
-      unitsMeasure.add(new _UnitMeasure("jard", UnitType.length, "yd"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
-      this.unitsMeasure.add(new _UnitMeasure("Jednostka", UnitType.length, "jed"));
+  final UnitMeasure data;
+  final bool isFirst;
+  final bool isLast;
+  final DraggingMode draggingMode;
+
+  Widget _buildChild(BuildContext context, ReorderableItemState state) {
+    BoxDecoration decoration;
+
+    if (state == ReorderableItemState.dragProxy ||
+        state == ReorderableItemState.dragProxyFinished) {
+      // slightly transparent background white dragging (just like on iOS)
+      decoration = BoxDecoration(color: Colors.blueGrey[900]);
+    } else {
+      bool placeholder = state == ReorderableItemState.placeholder;
+      decoration = BoxDecoration(
+          border: Border(
+              top: isFirst && !placeholder
+                  ? Divider.createBorderSide(context) //
+                  : BorderSide.none,
+              bottom: isLast && placeholder
+                  ? BorderSide.none //
+                  : Divider.createBorderSide(context)),
+          color: placeholder ? null : Colors.blueGrey[900]);
     }
+
+    // For iOS dragging mode, there will be drag handle on the right that triggers
+    // reordering; For android mode it will be just an empty container
+    Widget dragHandle = draggingMode == DraggingMode.iOS
+        ? ReorderableListener(
+            child: Container(
+              padding: EdgeInsets.only(right: 18.0, left: 18.0),
+              color: Colors.blueGrey[900],
+              child: Center(
+                child: Icon(Icons.reorder, color: Color(0xFF888888)),
+              ),
+            ),
+          )
+        : Container();
+
+    Widget content = Container(
+      decoration: decoration,
+      child: SafeArea(
+          top: false,
+          bottom: false,
+          child: Opacity(
+            // hide content for placeholder
+            opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                      child: Padding(
+                        padding:
+                        EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
+                        child: Text(data.name,
+                        style: TextStyle(fontSize: 24.0,
+                            fontFamily: 'Sans',
+                            fontWeight: FontWeight.w500,
+                            color: Colors.brown[50])),
+                  )),
+                  // Triggers the reordering
+                  dragHandle,
+                ],
+              ),
+            ),
+          )),
+    );
+
+    // For android dragging mode, wrap the entire content in DelayedReorderableListener
+    if (draggingMode == DraggingMode.Android) {
+      content = DelayedReorderableListener(
+        child: content,
+      );
+    }
+
+    return content;
   }
 
-  StatelessWidget getContent() {
-    return Container(
-      color: Colors.blueGrey[900],
-      child: Scrollbar(
-        //TODO: dopisac zawartosc ListView
-        child: ListView(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      children: [
-        for (final unit in unitsMeasure)
-          ListTile(
-            leading: ExcludeSemantics(
-              child: CircleAvatar(child: Text(unit.abbreviation),
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,)
-            ),
-
-            title: Text(
-              unit.name,
-              style: TextStyle(
-                  fontSize: 24.0,
-                  fontFamily: 'Sans',
-                  fontWeight: FontWeight.w500,
-                  color: Colors.brown[50]),
-            ),
-            tileColor: Colors.blueGrey[800],
-          )
-      ],
-    )));
+  @override
+  Widget build(BuildContext context) {
+    return ReorderableItem(
+        key: data.key, //
+        childBuilder: _buildChild);
   }
 }
 
-class _UnitMeasure {
-  String name;
-  String abbreviation;
-  UnitType type;
-
-  _UnitMeasure(this.name, this.type, this.abbreviation);
+enum DraggingMode {
+  iOS,
+  Android,
 }
 
 enum UnitType { weight, length }
