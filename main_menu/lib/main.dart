@@ -45,17 +45,25 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   List<bool> highLightedButton = List.filled(3, false);
   Widget currentPage;
+  AnimationController pageAnimation;
+  RelativeRectTween relativeRectTween;
 
   void changePage(int index, Widget newTopWidget) {
-    if (highLightedButton[index] == true) return;
+    if (highLightedButton[index] == true) {
+      pageAnimation.animateTo(0.0);
+      return;
+    }
 
+    pageAnimation.animateTo(1.0);
+
+    currentPage = Container(
+      width: 200,
+      height: 200,
+      child: newTopWidget,
+    );
+
+    pageAnimation.animateTo(0.0);
     setState(() {
-      currentPage = Container(
-        width: 200,
-        height: 200,
-        child: newTopWidget,
-      );
-
       for (int i = 0; i < highLightedButton.length; i++)
         highLightedButton[i] = false;
       highLightedButton[index] = true;
@@ -64,9 +72,30 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
 
   bool isHighLighted(int index) => highLightedButton[index];
 
+  void mockUp() {
+    // animation to .5
+    pageAnimation.animateTo(0.5);
+  }
+
   @override
   void initState() {
-    changePage(0, UnitConverterPage());
+    pageAnimation =
+        AnimationController(duration: Duration(seconds: 1), vsync: this);
+
+    relativeRectTween = RelativeRectTween(
+      begin: RelativeRect.fromLTRB(0, 0, 0, 0),
+      end: RelativeRect.fromLTRB(
+          500,
+          500,
+          0,
+          500),
+    );
+
+    changePage(
+        0,
+        UnitConverterPage(
+          backToMainMenu: mockUp,
+        ));
 
     super.initState();
   }
@@ -94,7 +123,9 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                     entryIndex: 0,
                     isHighLighted: isHighLighted,
                     changePage: changePage,
-                    correspondingWidget: UnitConverterPage()),
+                    correspondingWidget: UnitConverterPage(
+                      backToMainMenu: mockUp,
+                    )),
                 MenuEntry(
                     context: context,
                     label: "Konwerter Walut",
@@ -102,7 +133,9 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                     entryIndex: 1,
                     isHighLighted: isHighLighted,
                     changePage: changePage,
-                    correspondingWidget: CurrencyConverterPage()),
+                    correspondingWidget: CurrencyConverterPage(
+                      backToMainMenu: mockUp,
+                    )),
                 MenuEntry(
                     context: context,
                     label: "Opcje",
@@ -110,9 +143,12 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                     entryIndex: 2,
                     isHighLighted: isHighLighted,
                     changePage: changePage,
-                    correspondingWidget: OptionsrPage()),
+                    correspondingWidget: OptionsrPage(backToMainMenu: mockUp)),
               ])),
-      currentPage
+      PositionedTransition(
+          rect: relativeRectTween.animate(CurvedAnimation(
+              parent: pageAnimation, curve: Curves.easeInOutCubic)),
+          child: currentPage)
     ]);
   }
 }
