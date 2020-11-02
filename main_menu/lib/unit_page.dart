@@ -129,25 +129,25 @@ class _HomePageState extends State<Home> {
   }
 
   int _indexOfKey(Key key) {
-    return unitsMeasure[0].indexWhere((UnitMeasure d) => d.key == key);
+    return unitsMeasure[tabIndex].indexWhere((UnitMeasure d) => d.key == key);
   }
 
   bool _reorderCallback(Key item, Key newPosition) {
     int draggingIndex = _indexOfKey(item);
     int newPositionIndex = _indexOfKey(newPosition);
 
-    final draggedItem = unitsMeasure[0][draggingIndex];
+    final draggedItem = unitsMeasure[tabIndex][draggingIndex];
 
     setState(() {
       debugPrint("Reordering $item -> $newPosition");
-      unitsMeasure[0].removeAt(draggingIndex);
-      unitsMeasure[0].insert(newPositionIndex, draggedItem);
+      unitsMeasure[tabIndex].removeAt(draggingIndex);
+      unitsMeasure[tabIndex].insert(newPositionIndex, draggedItem);
     });
     return true;
   }
 
   void _reorderDone(Key item) {
-    final draggedItem = unitsMeasure[0][_indexOfKey(item)];
+    final draggedItem = unitsMeasure[tabIndex][_indexOfKey(item)];
     debugPrint("Reordering finished for ${draggedItem.name}}");
   }
 
@@ -179,27 +179,27 @@ class _HomePageState extends State<Home> {
                             SliverPadding(
                                 padding: EdgeInsets.only(
                                     bottom:
-                                        MediaQuery.of(context).padding.bottom),
+                                    MediaQuery.of(context).padding.bottom),
                                 sliver: SliverList(
                                   delegate: SliverChildBuilderDelegate(
-                                    (BuildContext context, int index) {
+                                        (BuildContext context, int index) {
                                       return Item(
-                                        data: unitsMeasure[0][index],
+                                        data: unitsMeasure[tabIndex][index],
                                         // first and last attributes affect border drawn during dragging
                                         isFirst: index == 0,
                                         isLast:
-                                            index == unitsMeasure[0].length - 1,
+                                        index == unitsMeasure[tabIndex].length - 1,
                                         draggingMode: _draggingMode,
                                       );
                                     },
-                                    childCount: unitsMeasure[0].length,
+                                    childCount: unitsMeasure[tabIndex].length,
                                   ),
                                 )),
                           ],
                         )))
             ],
           )),
-    );
+      );
   }
 }
 
@@ -266,11 +266,18 @@ class Item extends StatelessWidget {
                       child: Padding(
                         padding:
                         EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
-                        child: Text(data.name,
-                        style: TextStyle(fontSize: 24.0,
-                            fontFamily: 'Sans',
-                            fontWeight: FontWeight.w500,
-                            color: Colors.brown[50])),
+                        child:
+                        Row( children: [
+                          ExcludeSemantics(
+                                child: CircleAvatar(child: Text(data.abbreviation),
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,)),
+                          Padding(padding: EdgeInsets.only(left: 5.0), child: Text(data.name,
+                              style: TextStyle(fontSize: 24.0,
+                                  fontFamily: 'Sans',
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.brown[50]))),
+                        ]),
                   )),
                   // Triggers the reordering
                   dragHandle,
