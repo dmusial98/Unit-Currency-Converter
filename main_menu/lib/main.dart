@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'currency_page.dart';
 import 'unit_page.dart';
 import 'options_page.dart';
+import 'custom_widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
   runApp(MyApp());
@@ -94,7 +95,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     changePage(
         0,
         UnitConverterPage(
-          backToMainMenu: mockUp,
+          openMenuFunction: mockUp,
         ));
 
     super.initState();
@@ -124,7 +125,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                     isHighLighted: isHighLighted,
                     changePage: changePage,
                     correspondingWidget: UnitConverterPage(
-                      backToMainMenu: mockUp,
+                      openMenuFunction: mockUp,
                     )),
                 MenuEntry(
                     context: context,
@@ -134,7 +135,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                     isHighLighted: isHighLighted,
                     changePage: changePage,
                     correspondingWidget: CurrencyConverterPage(
-                      backToMainMenu: mockUp,
+                      openMenuFunction: mockUp,
                     )),
                 MenuEntry(
                     context: context,
@@ -143,64 +144,12 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                     entryIndex: 2,
                     isHighLighted: isHighLighted,
                     changePage: changePage,
-                    correspondingWidget: OptionsrPage(backToMainMenu: mockUp)),
+                    correspondingWidget: OptionsPage(openMenuFunction: mockUp)),
               ])),
       PositionedTransition(
           rect: relativeRectTween.animate(CurvedAnimation(
               parent: pageAnimation, curve: Curves.easeInOutCubic)),
           child: currentPage)
     ]);
-  }
-}
-
-class MenuEntry extends StatefulWidget {
-  final BuildContext context;
-  final String label;
-  final String iconName;
-  final int entryIndex;
-  final Function changePage;
-  final Function isHighLighted;
-  final Widget correspondingWidget;
-
-  MenuEntry(
-      {Key key,
-      this.context,
-      this.label,
-      this.iconName,
-      this.entryIndex,
-      this.changePage,
-      this.isHighLighted,
-      this.correspondingWidget})
-      : super(key: key);
-
-  @override
-  _MenuEntryState createState() => _MenuEntryState();
-}
-
-class _MenuEntryState extends State<MenuEntry> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () {
-          widget.changePage(widget.entryIndex, widget.correspondingWidget);
-        },
-        child: Container(
-          margin: EdgeInsets.all(3.0),
-          decoration: BoxDecoration(
-              color: (widget.isHighLighted(widget.entryIndex) == true
-                  ? Colors.blueGrey[700]
-                  : Colors.blueGrey[800]),
-              borderRadius: BorderRadius.all(Radius.circular(15.0))),
-          child: Row(
-            children: [
-              Container(
-                child: SvgPicture.asset(widget.iconName),
-                margin: EdgeInsets.all(5.0),
-              ),
-              Text(widget.label, style: Theme.of(context).textTheme.headline2),
-            ],
-          ),
-        ));
   }
 }

@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
+import 'custom_widgets.dart';
 
-class OptionsrPage extends StatelessWidget {
-  final Function backToMainMenu;
+class OptionsPage extends StatelessWidget {
+  final Function openMenuFunction;
 
-  const OptionsrPage({Key key, this.backToMainMenu}) : super(key: key);
+  const OptionsPage({Key key, this.openMenuFunction}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            InkWell(child: Icon(Icons.menu), onTap: backToMainMenu),
-            Text('Options')
-          ],
-        ),
-      ),
+        title: CustomTitle(openMenuFunction: openMenuFunction, title: "Options")),
       body: Center(
         child: Text('Options page'),
       ),

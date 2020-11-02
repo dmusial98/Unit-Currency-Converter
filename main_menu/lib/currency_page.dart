@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
+import 'custom_widgets.dart';
 
 class CurrencyConverterPage extends StatelessWidget {
-  final Function backToMainMenu;
+  final Function openMenuFunction;
 
-  const CurrencyConverterPage({Key key, this.backToMainMenu}) : super(key: key);
+  const CurrencyConverterPage({Key key, this.openMenuFunction}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            InkWell(child: Icon(Icons.menu), onTap: backToMainMenu),
-            Text('Currency')
-          ],
-        ),
-      ),
+          title:
+              CustomTitle(title: "Currency", openMenuFunction: openMenuFunction)),
       body: Center(
         child: Text('Currency converter page'),
       ),
