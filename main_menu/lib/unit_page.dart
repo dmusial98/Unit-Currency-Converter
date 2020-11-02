@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
 
+//TODO: Dodac pobieranie indexu tabControllera i okno z jednostka
+//TODO: Ogarnac baze danych
+
 class UnitConverterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
