@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MenuEntry extends StatefulWidget {
+class MenuEntry extends StatelessWidget {
   final BuildContext context;
   final String label;
   final String iconName;
@@ -22,31 +22,26 @@ class MenuEntry extends StatefulWidget {
       : super(key: key);
 
   @override
-  _MenuEntryState createState() => _MenuEntryState();
-}
-
-class _MenuEntryState extends State<MenuEntry> {
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
-          widget.changePage(widget.entryIndex, widget.correspondingWidget);
+          changePage(entryIndex, correspondingWidget);
         },
         child: Container(
           margin: EdgeInsets.all(3.0),
           decoration: BoxDecoration(
-              color: (widget.isHighLighted(widget.entryIndex) == true
+              color: (isHighLighted(entryIndex) == true
                   ? Colors.blueGrey[700]
                   : Colors.blueGrey[800]),
               borderRadius: BorderRadius.all(Radius.circular(15.0))),
           child: Row(
             children: [
               Container(
-                child: SvgPicture.asset(widget.iconName),
+                child: SvgPicture.asset(iconName),
                 margin: EdgeInsets.all(5.0),
               ),
-              Text(widget.label, style: Theme.of(context).textTheme.headline2),
+              Text(label, style: Theme.of(context).textTheme.headline2),
             ],
           ),
         ));
