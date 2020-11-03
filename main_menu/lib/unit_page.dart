@@ -13,12 +13,15 @@ class UnitConverterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Home());
+    return MaterialApp(home: Home(openMenuFunction: openMenuFunction));
   }
 }
 
 class Home extends StatefulWidget {
-  Home({Key key}) : super(key: key);
+  final Function openMenuFunction;
+  
+  Home({Key key, this.openMenuFunction}) : super(key: key);
+
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -169,7 +172,7 @@ class _HomePageState extends State<Home> {
             centerTitle: true,
             backgroundColor: Colors.blueGrey[900],
             automaticallyImplyLeading: false,
-            title: Text("Konwerter Miar"),
+            title: CustomTitle(title: "Konwerter Miar", openMenuFunction: widget.openMenuFunction),
             bottom: TabBar(
               isScrollable: true,
               tabs: [for (final tab in cardTitle) Tab(text: tab)],
