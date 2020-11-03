@@ -46,24 +46,21 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   List<bool> highLightedButton = List.filled(3, false);
   Widget currentPage;
-  AnimationController pageAnimation;
-  RelativeRectTween relativeRectTween;
+  AnimationController animationController;
+  Animation<Offset> pageAnimation;
+  Animation<Offset> menuAnimation;
 
   void changePage(int index, Widget newTopWidget) {
     if (highLightedButton[index] == true) {
-      pageAnimation.animateTo(0.0);
+      animationController.animateTo(1.0);
       return;
     }
 
-    pageAnimation.animateTo(1.0);
+    animationController.animateTo(0.0);
 
-    currentPage = Container(
-      width: 200,
-      height: 200,
-      child: newTopWidget,
-    );
+    currentPage = newTopWidget;
 
-    pageAnimation.animateTo(0.0);
+    animationController.animateTo(1.0);
     setState(() {
       for (int i = 0; i < highLightedButton.length; i++)
         highLightedButton[i] = false;
@@ -75,22 +72,29 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
 
   void mockUp() {
     // animation to .5
-    pageAnimation.animateTo(0.5);
+    animationController.animateTo(0.5);
   }
 
   @override
   void initState() {
-    pageAnimation =
+    animationController =
         AnimationController(duration: Duration(seconds: 1), vsync: this);
 
-    relativeRectTween = RelativeRectTween(
-      begin: RelativeRect.fromLTRB(0, 0, 0, 0),
-      end: RelativeRect.fromLTRB(
-          500,
-          500,
-          0,
-          500),
-    );
+    pageAnimation = Tween<Offset>(
+      begin: const Offset(1.0, 0.0),
+      end: const Offset(0.0, 0.0),
+    ).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeInOutCubic,
+    ));
+
+    menuAnimation = Tween<Offset>(
+      begin: const Offset(1.075, 0.0),
+      end: const Offset(-1.0, 0.0),
+    ).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeInOutCubic,
+    ));
 
     changePage(
         0,
@@ -104,52 +108,59 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
-      Scaffold(
-          backgroundColor: Colors.blueGrey[900],
-          body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SvgPicture.asset("svg/logo_circlecompass.svg"),
-                Container(
-                    margin: EdgeInsets.fromLTRB(0.0, 20.0, 50.0, 50.0),
-                    child: Text(
-                      "Konwenter definiowalnych miar i walut",
-                      style: Theme.of(context).textTheme.headline1,
-                    )),
-                MenuEntry(
-                    context: context,
-                    label: "Konwerter Miar",
-                    iconName: "svg/unit_speedometer.svg",
-                    entryIndex: 0,
-                    isHighLighted: isHighLighted,
-                    changePage: changePage,
-                    correspondingWidget: UnitConverterPage(
-                      openMenuFunction: mockUp,
-                    )),
-                MenuEntry(
-                    context: context,
-                    label: "Konwerter Walut",
-                    iconName: "svg/currency_money.svg",
-                    entryIndex: 1,
-                    isHighLighted: isHighLighted,
-                    changePage: changePage,
-                    correspondingWidget: CurrencyConverterPage(
-                      openMenuFunction: mockUp,
-                    )),
-                MenuEntry(
-                    context: context,
-                    label: "Opcje",
-                    iconName: "svg/options_paintroller.svg",
-                    entryIndex: 2,
-                    isHighLighted: isHighLighted,
-                    changePage: changePage,
-                    correspondingWidget: OptionsPage(openMenuFunction: mockUp)),
-              ])),
-      PositionedTransition(
-          rect: relativeRectTween.animate(CurvedAnimation(
-              parent: pageAnimation, curve: Curves.easeInOutCubic)),
-          child: currentPage)
+      Container(color: Colors.blueGrey[900]),
+      SlideTransition(
+          position: menuAnimation,
+          child: Scaffold(
+              backgroundColor: Colors.blueGrey[900],
+              body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset("svg/logo_circlecompass.svg"),
+                    Container(
+                        margin: EdgeInsets.fromLTRB(0.0, 20.0, 50.0, 50.0),
+                        child: Text(
+                          "Konwenter definiowalnych miar i walut",
+                          style: Theme.of(context).textTheme.headline1,
+                        )),
+                    MenuEntry(
+                        context: context,
+                        label: "Konwerter Miar",
+                        iconName: "svg/unit_speedometer.svg",
+                        entryIndex: 0,
+                        isHighLighted: isHighLighted,
+                        changePage: changePage,
+                        correspondingWidget: UnitConverterPage(
+                          openMenuFunction: mockUp,
+                        )),
+                    MenuEntry(
+                        context: context,
+                        label: "Tabela kursów",
+                        iconName: "svg/currency_money.svg",
+                        entryIndex: 1,
+                        isHighLighted: isHighLighted,
+                        changePage: changePage,
+                        correspondingWidget: CurrencyConverterPage(
+                          openMenuFunction: mockUp,
+                        )),
+                    MenuEntry(
+                        context: context,
+                        label: "Opcje",
+                        iconName: "svg/options_paintroller.svg",
+                        entryIndex: 2,
+                        isHighLighted: isHighLighted,
+                        changePage: changePage,
+                        correspondingWidget:
+                            OptionsPage(openMenuFunction: mockUp)),
+                  ]))),
+      SlideTransition(
+          position: pageAnimation,
+          child: ScaleTransition(
+              scale: CurvedAnimation(
+                  curve: Curves.easeInOutCubic, parent: animationController),
+              child: currentPage))
+      //
     ]);
   }
 }
