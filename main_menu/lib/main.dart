@@ -4,8 +4,9 @@ import 'unit_page.dart';
 import 'options_page.dart';
 import 'custom_widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'database.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 
