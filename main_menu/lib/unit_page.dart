@@ -39,7 +39,7 @@ class UnitMeasure {
 class _HomePageState extends State<Home> {
   final unitType = [UnitType.weight, UnitType.length];
   List<List<UnitMeasure>> unitsMeasure = new List<List<UnitMeasure>>();
-  var cardTitle = ["Masa", "Długość"];
+  var cardTitles = ["Masa", "Długość"];
   var tabIndex = 0;
 
   _HomePageState() {
@@ -167,50 +167,62 @@ class _HomePageState extends State<Home> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: unitType.length,
-      child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.blueGrey[900],
-            automaticallyImplyLeading: false,
-            title: CustomTitle(title: "Konwerter Miar", openMenuFunction: widget.openMenuFunction),
-            bottom: TabBar(
-              isScrollable: true,
-              tabs: [for (final tab in cardTitle) Tab(text: tab)],
-            ),
-          ),
-          body: TabBarView(
-            children: [
-              for (int i = 0; i < cardTitle.length; i++)
-                Container(
-                    child: ReorderableList(
-                        onReorder: this._reorderCallback,
-                        onReorderDone: this._reorderDone,
-                        child: CustomScrollView(
-                          slivers: <Widget>[
-                            SliverPadding(
-                                padding: EdgeInsets.only(
-                                    bottom:
-                                    MediaQuery.of(context).padding.bottom),
-                                sliver: SliverList(
-                                  delegate: SliverChildBuilderDelegate(
-                                        (BuildContext context, int index) {
-                                      return Item(
-                                        data: unitsMeasure[tabIndex][index],
-                                        // first and last attributes affect border drawn during dragging
-                                        isFirst: index == 0,
-                                        isLast:
-                                        index == unitsMeasure[tabIndex].length - 1,
-                                        draggingMode: _draggingMode,
-                                      );
-                                    },
-                                    childCount: unitsMeasure[tabIndex].length,
-                                  ),
-                                )),
-                          ],
-                        )))
-            ],
-          )),
-      );
+      child: Builder(
+        builder: (BuildContext context) {
+          final TabController tabController = DefaultTabController.of(context);
+          tabController.addListener(() {
+            if(tabController.indexIsChanging) {
+              setState(() {
+                tabIndex = tabController.index;
+              });
+            }
+          });
+          return Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                backgroundColor: Colors.blueGrey[900],
+                automaticallyImplyLeading: false,
+                title: Text("Konwerter Miar"),
+                bottom: TabBar(
+                  isScrollable: false,
+                  tabs: [for (final tab in cardTitles) Tab(text: tab)],
+                ),
+              ),
+              body: TabBarView(
+                children: [
+                  for (int i = 0; i < cardTitles.length; i++)
+                    Container(
+                        color: Colors.blueGrey[900],
+                        child: ReorderableList(
+                            onReorder: this._reorderCallback,
+                            onReorderDone: this._reorderDone,
+                            child: CustomScrollView(
+                              slivers: <Widget>[
+                                SliverPadding(
+                                    padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context).padding.bottom),
+                                    sliver: SliverList(
+                                      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                                          return Item(
+                                            data: unitsMeasure[i][index],
+                                            // first and last attributes affect border drawn during dragging
+                                            isFirst: index == 0,
+                                            isLast:
+                                            index == unitsMeasure[i].length - 1,
+                                            draggingMode: _draggingMode,
+                                          );
+                                        },
+                                        childCount: unitsMeasure[i].length,
+                                      ),
+                                    )),
+                              ],
+                            )))
+                ],
+              )
+          );
+        }
+      )
+    );
   }
 }
 
@@ -278,13 +290,16 @@ class Item extends StatelessWidget {
                         padding:
                         EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
                         child:
-                        Row( children: [
-                          ExcludeSemantics(
+                        Row(
+                            children: [
+                              ExcludeSemantics(
                                 child: CircleAvatar(child: Text(data.abbreviation),
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white,)),
-                          Padding(padding: EdgeInsets.only(left: 5.0), child: Text(data.name,
-                              style: TextStyle(fontSize: 24.0,
+                                  backgroundColor: Colors.blue[700],
+                                  foregroundColor: Colors.white,)
+                              ),
+                              Padding(padding: EdgeInsets.only(left: 5.0),
+                              child: Text(data.name,
+                                style: TextStyle(fontSize: 24.0,
                                   fontFamily: 'Sans',
                                   fontWeight: FontWeight.w500,
                                   color: Colors.brown[50]))),
@@ -295,24 +310,16 @@ class Item extends StatelessWidget {
                 ],
               ),
             ),
-          )),
+          )
+      ),
     );
-
-    // For android dragging mode, wrap the entire content in DelayedReorderableListener
-    if (draggingMode == DraggingMode.Android) {
-      content = DelayedReorderableListener(
-        child: content,
-      );
-    }
 
     return content;
   }
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableItem(
-        key: data.key, //
-        childBuilder: _buildChild);
+    return ReorderableItem(key: data.key, childBuilder: _buildChild);
   }
 }
 
