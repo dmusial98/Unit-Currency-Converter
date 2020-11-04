@@ -41,7 +41,7 @@ class MenuEntry extends StatelessWidget {
                 child: SvgPicture.asset(iconName),
                 margin: EdgeInsets.all(5.0),
               ),
-              Text(label, style: Theme.of(context).textTheme.headline2),
+              Text(label, style: Theme.of(context).textTheme.headline3),
             ],
           ),
         ));
@@ -65,7 +65,49 @@ class CustomTitle extends StatelessWidget {
             onTap: openMenuFunction,
             borderRadius: BorderRadius.all(Radius.circular(8.0)),
           )),
-      Text(title)
+      Expanded(
+          child: Center(
+              child: Text(title, style: Theme.of(context).textTheme.headline2)))
     ]);
+  }
+}
+
+class ExchangeRateEntry extends StatelessWidget {
+  final String fullName;
+  final String code;
+  final double bid;
+  final double ask;
+
+  const ExchangeRateEntry(
+      {Key key, this.fullName, this.code, this.bid, this.ask})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.all(3.0),
+        padding: EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+            color: (Colors.blueGrey[800]),
+            borderRadius: BorderRadius.all(Radius.circular(15.0))),
+        child: Row(children: [
+          Text(code.toUpperCase(),
+              style: Theme.of(context).textTheme.headline2),
+          Expanded(
+              child: Center(
+            child: Row(
+              children: [
+                Text(ask.toString(),
+                    style: Theme.of(context).textTheme.headline2),
+                Icon(
+                  Icons.swap_horizontal_circle,
+                  color: Colors.brown[50],
+                ),
+                Text(bid.toString(),
+                    style: Theme.of(context).textTheme.headline2)
+              ],
+            ),
+          ))
+        ]));
   }
 }
