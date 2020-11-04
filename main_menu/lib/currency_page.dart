@@ -46,32 +46,26 @@ class _CurrencyConverterPage extends State<CurrencyConverterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.blueGrey[900],
-          title: CustomTitle(
-              title: "Tabela kursów",
-              openMenuFunction: widget.openMenuFunction)),
-      body: isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemCount: exchangeRates != null ? exchangeRates.length : 0,
-              itemBuilder: (BuildContext context, int index) {
-                return ExchangeRateEntry(
-                    fullName: exchangeRates[index].fullName,
-                    code: exchangeRates[index].code,
-                    bid: exchangeRates[index].bid,
-                    ask: exchangeRates[index].ask);
-              }),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: RaisedButton(
-          child: Text("Pobierz tabelę kursów"),
-          onPressed: _downloadRates,
-        ),
-      ),
-    );
+        backgroundColor: Colors.blueGrey[800],
+        appBar: AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.blueGrey[900],
+            title: CustomTitle(
+                title: "Tabela kursów",
+                openMenuFunction: widget.openMenuFunction)),
+        body: Container(
+            child: isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: exchangeRates != null ? exchangeRates.length : 0,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ExchangeRateEntry(rate: exchangeRates[index]);
+                    })),
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.download_outlined, color: Colors.brown[50]),
+            onPressed: _downloadRates,
+            backgroundColor: Colors.blueGrey[700]));
   }
 }
