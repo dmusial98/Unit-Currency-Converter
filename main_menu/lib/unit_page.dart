@@ -13,7 +13,7 @@ class UnitConverterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Home(openMenuFunction: openMenuFunction));
+    return  Home(openMenuFunction: openMenuFunction);
   }
 }
 
@@ -71,7 +71,7 @@ class _HomePageState extends State<Home> {
         .unitsMeasure[0]
         .add(UnitMeasure("kwintal", UnitType.weight, "q", ValueKey(index++)));
     this.unitsMeasure[0].add(UnitMeasure(
-        "unit (jedn. masy atomowej)", UnitType.weight, "u", ValueKey(index++)));
+        "unit (masa atomowa)", UnitType.weight, "u", ValueKey(index++)));
     this.unitsMeasure[0].add(
         new UnitMeasure("karat", UnitType.weight, "ct", ValueKey(index++)));
     this.unitsMeasure[0].add(
@@ -182,7 +182,7 @@ class _HomePageState extends State<Home> {
                 centerTitle: true,
                 backgroundColor: Colors.blueGrey[900],
                 automaticallyImplyLeading: false,
-                title: Text("Konwerter Miar"),
+                title: CustomTitle(title: "Konwerter Miar", openMenuFunction: widget.openMenuFunction),
                 bottom: TabBar(
                   isScrollable: false,
                   tabs: [for (final tab in cardTitles) Tab(text: tab)],
@@ -293,17 +293,14 @@ class Item extends StatelessWidget {
                         Row(
                             children: [
                               ExcludeSemantics(
-                                child: CircleAvatar(child: Text(data.abbreviation),
+                                child: CircleAvatar(child: Text(data.abbreviation, style: Theme.of(context).textTheme.headline4),
                                   backgroundColor: Colors.blue[700],
-                                  foregroundColor: Colors.white,)
+                                  foregroundColor: Colors.white)
                               ),
                               Padding(padding: EdgeInsets.only(left: 5.0),
                               child: Text(data.name,
-                                style: TextStyle(fontSize: 24.0,
-                                  fontFamily: 'Sans',
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.brown[50]))),
-                        ]),
+                                style: Theme.of(context).textTheme.headline2),
+                        )]),
                   )),
                   // Triggers the reordering
                   dragHandle,

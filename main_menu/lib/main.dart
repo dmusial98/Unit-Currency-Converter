@@ -33,6 +33,12 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Sans',
               fontWeight: FontWeight.w200,
               color: Colors.brown[50]),
+          headline4: TextStyle(
+              fontSize: 18.0,
+              fontFamily: 'Sans',
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.w300,
+              color: Colors.brown[50]),
         ),
       ),
       home: MainMenu(title: 'Unit Currency Converter'),
