@@ -5,16 +5,16 @@ import 'custom_widgets.dart';
 import 'package:http/http.dart' as http;
 import 'exchange_rates.dart';
 
-class CurrencyConverterPage extends StatefulWidget {
+class ExchangeRatesPage extends StatefulWidget {
   final Function openMenuFunction;
 
-  const CurrencyConverterPage({Key key, this.openMenuFunction})
+  const ExchangeRatesPage({Key key, this.openMenuFunction})
       : super(key: key);
 
   _CurrencyConverterPage createState() => _CurrencyConverterPage();
 }
 
-class _CurrencyConverterPage extends State<CurrencyConverterPage> {
+class _CurrencyConverterPage extends State<ExchangeRatesPage> {
   bool isLoading = false;
   List<ExchangeRate> exchangeRates;
 
