@@ -1,30 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:main_menu/UnitMeasureDao.dart';
 import 'custom_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
+import 'UnitMeasureDB.dart';
+import 'UnitMeasureDao.dart';
 
 //TODO: Dodac pobieranie indexu tabControllera i okno z jednostka
 //TODO: Ogarnac baze danych
 
 class UnitConverterPage extends StatelessWidget {
   final Function openMenuFunction;
-
-  const UnitConverterPage({Key key, this.openMenuFunction}) : super(key: key);
+  final UnitMeasureDao dao;
+  const UnitConverterPage({Key key, this.openMenuFunction, this.dao}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  Home(openMenuFunction: openMenuFunction);
+    return  Home(openMenuFunction: openMenuFunction, dao: dao);
   }
 }
 
 class Home extends StatefulWidget {
   final Function openMenuFunction;
-  
-  Home({Key key, this.openMenuFunction}) : super(key: key);
+  final UnitMeasureDao dao;
 
+  Home({Key key, this.openMenuFunction, this.dao}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState(this.dao);
 }
 
 class UnitMeasure {
@@ -38,105 +41,19 @@ class UnitMeasure {
 
 class _HomePageState extends State<Home> {
   final unitType = [UnitType.weight, UnitType.length];
-  List<List<UnitMeasure>> unitsMeasure = new List<List<UnitMeasure>>();
   var cardTitles = ["Masa", "Długość"];
   var tabIndex = 0;
+  final UnitMeasureDao dao;
+  List<List<UnitMeasureDB>> unitsMeasureDB = new List<List<UnitMeasureDB>>();
+  List<List<UnitMeasure>> unitsMeasure = new List<List<UnitMeasure>>();
+  // Future<List<UnitMeasureDB>> futureListUnit;
 
-  _HomePageState() {
-    int index = 0;
-
-    this.unitsMeasure.add(List<UnitMeasure>());
-
-    this
-        .unitsMeasure[0]
-        .add(UnitMeasure("kilogram", UnitType.weight, "kg", ValueKey(index++)));
-    this
-        .unitsMeasure[0]
-        .add(UnitMeasure("gram", UnitType.weight, "g", ValueKey(index++)));
-    this.unitsMeasure[0].add(
-        UnitMeasure("dekagram", UnitType.weight, "dag", ValueKey(index++)));
-    this
-        .unitsMeasure[0]
-        .add(UnitMeasure("miligram", UnitType.weight, "mg", ValueKey(index++)));
-    this
-        .unitsMeasure[0]
-        .add(UnitMeasure("funt", UnitType.weight, "lb", ValueKey(index++)));
-    this
-        .unitsMeasure[0]
-        .add(UnitMeasure("uncja", UnitType.weight, "oz", ValueKey(index++)));
-    this
-        .unitsMeasure[0]
-        .add(UnitMeasure("tona", UnitType.weight, "t", ValueKey(index++)));
-    this
-        .unitsMeasure[0]
-        .add(UnitMeasure("kwintal", UnitType.weight, "q", ValueKey(index++)));
-    this.unitsMeasure[0].add(UnitMeasure(
-        "unit (masa atomowa)", UnitType.weight, "u", ValueKey(index++)));
-    this.unitsMeasure[0].add(
-        new UnitMeasure("karat", UnitType.weight, "ct", ValueKey(index++)));
-    this.unitsMeasure[0].add(
-        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
-    this.unitsMeasure[0].add(
-        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
-    this.unitsMeasure[0].add(
-        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
-    this.unitsMeasure[0].add(
-        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
-    this.unitsMeasure[0].add(
-        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
-    this.unitsMeasure[0].add(
-        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
-    this.unitsMeasure[0].add(
-        UnitMeasure("Jednostka", UnitType.weight, "jed", ValueKey(index++)));
-
-    index = 0;
-
-    this.unitsMeasure.add(List<UnitMeasure>());
-
-    unitsMeasure[1]
-        .add(new UnitMeasure("metr", UnitType.length, "m", ValueKey(index++)));
-    unitsMeasure[1]
-        .add(UnitMeasure("kilometr", UnitType.length, "km", ValueKey(index++)));
-    this
-        .unitsMeasure[1]
-        .add(UnitMeasure("decymetr", UnitType.length, "dm", ValueKey(index++)));
-    this.unitsMeasure[1].add(
-        UnitMeasure("centymetr", UnitType.length, "cm", ValueKey(index++)));
-    this
-        .unitsMeasure[1]
-        .add(UnitMeasure("milimetr", UnitType.length, "mm", ValueKey(index++)));
-    this.unitsMeasure[1].add(
-        UnitMeasure("mila morska", UnitType.length, "INM", ValueKey(index++)));
-    this.unitsMeasure[1].add(UnitMeasure(
-        "mila angielska", UnitType.length, "LM", ValueKey(index++)));
-    this
-        .unitsMeasure[1]
-        .add(UnitMeasure("łokieć", UnitType.length, "ell", ValueKey(index++)));
-    this
-        .unitsMeasure[1]
-        .add(UnitMeasure("stopa", UnitType.length, "ft", ValueKey(index++)));
-    this
-        .unitsMeasure[1]
-        .add(UnitMeasure("jard", UnitType.length, "yd", ValueKey(index++)));
-    this.unitsMeasure[1].add(
-        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
-    this.unitsMeasure[1].add(
-        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
-    this.unitsMeasure[1].add(
-        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
-    this.unitsMeasure[1].add(
-        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
-    this.unitsMeasure[1].add(
-        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
-    this.unitsMeasure[1].add(
-        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
-    this.unitsMeasure[1].add(
-        UnitMeasure("Jednostka", UnitType.length, "jed", ValueKey(index++)));
+  _HomePageState(this.dao) {
+    dao.findAllUnitsAsStream().forEach((element) { unitsMeasureDB.add(element);});
 
     for (final tab in unitsMeasure)
       for (final unit in tab)
         debugPrint("Unit ${unit.key} - ${unit.name}");
-
   }
 
   int _indexOfKey(Key key) {

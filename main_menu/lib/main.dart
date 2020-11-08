@@ -1,16 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:main_menu/UnitMeasureDao.dart';
 import 'currency_page.dart';
 import 'unit_page.dart';
 import 'options_page.dart';
 import 'custom_widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'database.dart';
+import 'package:main_menu/UnitMeasureDB.dart';
 
 void main() async {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final database = await $FloorFlutterDatabase
+    .databaseBuilder('flutter_database.db')
+    .build();
+  final dao = database.unitMeasureDao;
+
+  int index = 0;
+
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "kilogram", "kg", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "gram", "g", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "dekagram", "dag", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "miligram", "mg", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "funt", "lb", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "uncja", "oz", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "tona", "t", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "kwintal", "q", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "unit (masa atomowa)", "u", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "karat", "ct", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
+
+  index = 0;
+
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "metr", "m", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "kilometr", "km", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "decymetr", "dm", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "centymetr", "cm", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "milimetr", "mm", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "mila morska", "INM", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "mila angielska", "LM", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "łokieć", "ell", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "stopa", "ft", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "jard", "yd", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
+
+  runApp(MyApp(dao));
 }
 
 class MyApp extends StatelessWidget {
+  final UnitMeasureDao dao;
+
+  const MyApp(this.dao);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,11 +101,12 @@ class MyApp extends StatelessWidget {
 }
 
 class MainMenu extends StatefulWidget {
-  MainMenu({Key key, this.title}) : super(key: key);
+  MainMenu({Key key, this.title, this.dao}) : super(key: key);
   final String title;
+  final UnitMeasureDao dao;
 
   @override
-  _MainMenuState createState() => _MainMenuState();
+  _MainMenuState createState() => _MainMenuState(dao);
 }
 
 class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
@@ -61,6 +115,9 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   AnimationController animationController;
   Animation<Offset> pageAnimation;
   Animation<Offset> menuAnimation;
+  final UnitMeasureDao dao;
+
+  _MainMenuState(this.dao);
 
   void changePage(int index, Widget newTopWidget) {
     if (highLightedButton[index] == true) {
@@ -111,7 +168,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     changePage(
         0,
         UnitConverterPage(
-          openMenuFunction: mockUp,
+          openMenuFunction: mockUp, dao: dao,
         ));
 
     super.initState();

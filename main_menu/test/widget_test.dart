@@ -7,13 +7,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:main_menu/database.dart';
 
 import 'package:main_menu/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    final database = await $FloorFlutterDatabase
+        .databaseBuilder('flutter_database.db')
+        .build();
+    final dao = database.unitMeasureDao;
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(MyApp(dao));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
