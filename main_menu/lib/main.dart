@@ -18,43 +18,43 @@ void main() async {
 
   int index = 0;
 
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "kilogram", "kg", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "gram", "g", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "dekagram", "dag", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "miligram", "mg", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "funt", "lb", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "uncja", "oz", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "tona", "t", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "kwintal", "q", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "unit (masa atomowa)", "u", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "karat", "ct", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "kilogram", "kg", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "gram", "g", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "dekagram", "dag", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "miligram", "mg", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "funt", "lb", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "uncja", "oz", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "tona", "t", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "kwintal", "q", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "unit (masa atomowa)", "u", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "karat", "ct", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0));
 
   index = 0;
 
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "metr", "m", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "kilometr", "km", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "decymetr", "dm", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "centymetr", "cm", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "milimetr", "mm", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "mila morska", "INM", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "mila angielska", "LM", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "łokieć", "ell", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "stopa", "ft", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "jard", "yd", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
-  dao.insertUnitMeasure(UnitMeasureDB(index++, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "metr", "m", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "kilometr", "km", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "decymetr", "dm", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "centymetr", "cm", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "milimetr", "mm", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "mila morska", "INM", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "mila angielska", "LM", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "łokieć", "ell", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "stopa", "ft", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "jard", "yd", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1));
+  dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1));
 
   runApp(MyApp(dao));
 }
@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
               color: Colors.brown[50]),
         ),
       ),
-      home: MainMenu(title: 'Unit Currency Converter'),
+      home: MainMenu(title: 'Unit Currency Converter', dao: dao),
     );
   }
 }
@@ -201,7 +201,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                         isHighLighted: isHighLighted,
                         changePage: changePage,
                         correspondingWidget: UnitConverterPage(
-                          openMenuFunction: mockUp,
+                          openMenuFunction: mockUp, dao: dao
                         )),
                     MenuEntry(
                         context: context,
