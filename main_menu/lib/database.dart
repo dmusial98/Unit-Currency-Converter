@@ -8,7 +8,7 @@ import 'UnitMeasureDao.dart';
 
 part 'database.g.dart'; // the generated code will be there
 
-@Database(version: 3, entities: [UnitMeasureDB])
+@Database(version: 4, entities: [UnitMeasureDB])
 abstract class AppDatabase extends FloorDatabase {
   UnitMeasureDao get unitMeasureDao;
   // UnitTypeDao get unitTypeDao;

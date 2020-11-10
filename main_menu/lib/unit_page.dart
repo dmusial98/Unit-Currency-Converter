@@ -44,16 +44,29 @@ class _HomePageState extends State<Home> {
   var cardTitles = ["Masa", "Długość"];
   var tabIndex = 0;
   final UnitMeasureDao dao;
-  List<List<UnitMeasureDB>> unitsMeasureDB = new List<List<UnitMeasureDB>>();
   List<List<UnitMeasure>> unitsMeasure = new List<List<UnitMeasure>>();
-  // Future<List<UnitMeasureDB>> futureListUnit;
+
+  Future<List<UnitMeasureDB>> _getUnitsFromDatabase() async {
+    return await dao.getAllUnits();
+  }
 
   _HomePageState(this.dao) {
-    dao.findAllUnitsAsStream().forEach((element) { unitsMeasureDB.add(element);});
+    // dao.findAllUnitsAsStream().forEach((element) { unitsMeasureDB.add(element);});
+    // final unitsFromDB = dao.getAllUnits();
+    unitsMeasure.add(List<UnitMeasure>());
+    unitsMeasure.add(List<UnitMeasure>());
 
-    for (final tab in unitsMeasure)
-      for (final unit in tab)
-        debugPrint("Unit ${unit.key} - ${unit.name}");
+    _getUnitsFromDatabase().asStream().forEach(
+            (element) {
+              element.forEach((elementInside) {
+                int index = elementInside.type;
+                unitsMeasure[index].add(UnitMeasure(elementInside.name, elementInside.type == 0 ? UnitType.weight : UnitType.length, elementInside.abbreviation, ValueKey(elementInside.id))); });
+            });
+    
+    var dupa = 10;
+    // for (final tab in unitsMeasure)
+    //   for (final unit in tab)
+    //     debugPrint("Unit ${unit.key} - ${unit.name}");
   }
 
   int _indexOfKey(Key key) {
