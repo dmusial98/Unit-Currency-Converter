@@ -12,11 +12,12 @@ import 'UnitMeasureDao.dart';
 class UnitConverterPage extends StatelessWidget {
   final Function openMenuFunction;
   final UnitMeasureDao dao;
-  const UnitConverterPage({Key key, this.openMenuFunction, this.dao}) : super(key: key);
+  const UnitConverterPage({Key key, this.openMenuFunction, this.dao})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  Home(openMenuFunction: openMenuFunction, dao: dao);
+    return Home(openMenuFunction: openMenuFunction, dao: dao);
   }
 }
 
@@ -46,28 +47,23 @@ class _HomePageState extends State<Home> {
   final UnitMeasureDao dao;
   List<List<UnitMeasure>> unitsMeasure = new List<List<UnitMeasure>>();
 
-  Future<List<UnitMeasureDB>> _getUnitsFromDatabase() async {
-    return await dao.getAllUnits();
-  }
-
-  _HomePageState(this.dao) {
-    // dao.findAllUnitsAsStream().forEach((element) { unitsMeasureDB.add(element);});
-    // final unitsFromDB = dao.getAllUnits();
+  Future<void> _getUnitsFromDatabase() async {
     unitsMeasure.add(List<UnitMeasure>());
     unitsMeasure.add(List<UnitMeasure>());
 
-    _getUnitsFromDatabase().asStream().forEach(
-            (element) {
-              element.forEach((elementInside) {
-                int index = elementInside.type;
-                unitsMeasure[index].add(UnitMeasure(elementInside.name, elementInside.type == 0 ? UnitType.weight : UnitType.length, elementInside.abbreviation, ValueKey(elementInside.id))); });
-            });
-    
-    var dupa = 10;
-    // for (final tab in unitsMeasure)
-    //   for (final unit in tab)
-    //     debugPrint("Unit ${unit.key} - ${unit.name}");
+    dao.getAllUnits().asStream().forEach((element) {
+      element.forEach((elementInside) {
+        int index = elementInside.type;
+        unitsMeasure[index].add(UnitMeasure(
+            elementInside.name,
+            elementInside.type == 0 ? UnitType.weight : UnitType.length,
+            elementInside.abbreviation,
+            ValueKey(elementInside.id)));
+      });
+    });
   }
+
+  _HomePageState(this.dao) {}
 
   int _indexOfKey(Key key) {
     return unitsMeasure[tabIndex].indexWhere((UnitMeasure d) => d.key == key);
@@ -96,12 +92,11 @@ class _HomePageState extends State<Home> {
 
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: unitType.length,
-      child: Builder(
-        builder: (BuildContext context) {
+        length: unitType.length,
+        child: Builder(builder: (BuildContext context) {
           final TabController tabController = DefaultTabController.of(context);
           tabController.addListener(() {
-            if(tabController.indexIsChanging) {
+            if (tabController.indexIsChanging) {
               setState(() {
                 tabIndex = tabController.index;
               });
@@ -112,7 +107,9 @@ class _HomePageState extends State<Home> {
                 centerTitle: true,
                 backgroundColor: Colors.blueGrey[900],
                 automaticallyImplyLeading: false,
-                title: CustomTitle(title: "Konwerter Miar", openMenuFunction: widget.openMenuFunction),
+                title: CustomTitle(
+                    title: "Konwerter Miar",
+                    openMenuFunction: widget.openMenuFunction),
                 bottom: TabBar(
                   isScrollable: false,
                   tabs: [for (final tab in cardTitles) Tab(text: tab)],
@@ -130,15 +127,18 @@ class _HomePageState extends State<Home> {
                               slivers: <Widget>[
                                 SliverPadding(
                                     padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context).padding.bottom),
+                                        bottom: MediaQuery.of(context)
+                                            .padding
+                                            .bottom),
                                     sliver: SliverList(
-                                      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                                      delegate: SliverChildBuilderDelegate(
+                                        (BuildContext context, int index) {
                                           return Item(
                                             data: unitsMeasure[i][index],
                                             // first and last attributes affect border drawn during dragging
                                             isFirst: index == 0,
-                                            isLast:
-                                            index == unitsMeasure[i].length - 1,
+                                            isLast: index ==
+                                                unitsMeasure[i].length - 1,
                                             draggingMode: _draggingMode,
                                           );
                                         },
@@ -148,11 +148,8 @@ class _HomePageState extends State<Home> {
                               ],
                             )))
                 ],
-              )
-          );
-        }
-      )
-    );
+              ));
+        }));
   }
 }
 
@@ -217,28 +214,28 @@ class Item extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                       child: Padding(
-                        padding:
+                    padding:
                         EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
-                        child:
-                        Row(
-                            children: [
-                              ExcludeSemantics(
-                                child: CircleAvatar(child: Text(data.abbreviation, style: Theme.of(context).textTheme.headline4),
-                                  backgroundColor: Colors.blue[700],
-                                  foregroundColor: Colors.white)
-                              ),
-                              Padding(padding: EdgeInsets.only(left: 5.0),
-                              child: Text(data.name,
-                                style: Theme.of(context).textTheme.headline2),
-                        )]),
+                    child: Row(children: [
+                      ExcludeSemantics(
+                          child: CircleAvatar(
+                              child: Text(data.abbreviation,
+                                  style: Theme.of(context).textTheme.headline4),
+                              backgroundColor: Colors.blue[700],
+                              foregroundColor: Colors.white)),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.0),
+                        child: Text(data.name,
+                            style: Theme.of(context).textTheme.headline2),
+                      )
+                    ]),
                   )),
                   // Triggers the reordering
                   dragHandle,
                 ],
               ),
             ),
-          )
-      ),
+          )),
     );
 
     return content;
