@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'exchange_rates.dart';
 
 class MenuEntry extends StatelessWidget {
   final BuildContext context;
@@ -39,7 +37,7 @@ class MenuEntry extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                child: SvgPicture.asset(iconName),
+                child: Image(image: AssetImage(iconName), width: 64, height: 64),
                 margin: EdgeInsets.all(5.0),
               ),
               Text(label, style: Theme.of(context).textTheme.headline3),
@@ -70,44 +68,5 @@ class CustomTitle extends StatelessWidget {
           child: Center(
               child: Text(title, style: Theme.of(context).textTheme.headline2)))
     ]);
-  }
-}
-
-class ExchangeRateEntry extends StatelessWidget {
-  final ExchangeRate rate;
-
-  const ExchangeRateEntry({Key key, this.rate}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text(rate.fullName),
-          duration: Duration(milliseconds: 1000),
-        ));
-      },
-      child: Container(
-          margin: EdgeInsets.all(3.0),
-          padding: EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-              color: (Colors.blueGrey[900]),
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child: Row(children: [
-            Text(rate.code.toUpperCase(),
-                style: Theme.of(context).textTheme.headline3),
-            Spacer(),
-            Text(rate.ask.toString(),
-                style: Theme.of(context).textTheme.headline2),
-            Expanded(
-                flex: 1,
-                child: Icon(
-                  Icons.swap_vert,
-                  color: Colors.brown[50],
-                )),
-            Text(rate.bid.toString(),
-                style: Theme.of(context).textTheme.headline2)
-          ])),
-    );
   }
 }

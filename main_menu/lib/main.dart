@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'currency_table_page.dart';
+import 'view/exchange_rates_page.dart';
 import 'unit_page.dart';
 import 'options_page.dart';
 import 'custom_widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'database.dart';
+import 'view/exchange_converter_page.dart';
 
 void main() async {
   runApp(MyApp());
@@ -56,7 +55,7 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
-  List<bool> highLightedButton = List.filled(3, false);
+  List<bool> highLightedButton = List.filled(4, false);
   Widget currentPage;
   AnimationController animationController;
   Animation<Offset> pageAnimation;
@@ -129,7 +128,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SvgPicture.asset("svg/logo_circlecompass.svg"),
+                    Image(image: AssetImage("png/logo.png"), width: 128, height: 128),
                     Container(
                         margin: EdgeInsets.fromLTRB(0.0, 20.0, 50.0, 50.0),
                         child: Text(
@@ -139,7 +138,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                     MenuEntry(
                         context: context,
                         label: "Konwerter Miar",
-                        iconName: "svg/unit_speedometer.svg",
+                        iconName: "png/unit_conv.png",
                         entryIndex: 0,
                         isHighLighted: isHighLighted,
                         changePage: changePage,
@@ -149,7 +148,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                     MenuEntry(
                         context: context,
                         label: "Tabela kursów",
-                        iconName: "svg/currency_money.svg",
+                        iconName: "png/curr_conv.png",
                         entryIndex: 1,
                         isHighLighted: isHighLighted,
                         changePage: changePage,
@@ -158,9 +157,18 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                         )),
                     MenuEntry(
                         context: context,
-                        label: "Opcje",
-                        iconName: "svg/options_paintroller.svg",
+                        label: "Konwerter walut",
+                        iconName: "png/curr_tbl.png",
                         entryIndex: 2,
+                        isHighLighted: isHighLighted,
+                        changePage: changePage,
+                        correspondingWidget:
+                            ExchangeConverterPage(openMenuFunction: mockUp)),
+                    MenuEntry(
+                        context: context,
+                        label: "Opcje",
+                        iconName: "png/options.png",
+                        entryIndex: 3,
                         isHighLighted: isHighLighted,
                         changePage: changePage,
                         correspondingWidget:

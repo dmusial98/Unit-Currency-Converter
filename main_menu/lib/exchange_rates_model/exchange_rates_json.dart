@@ -1,20 +1,3 @@
-class ExchangeRate {
-  final String fullName;
-  final String code;
-  final double bid;
-  final double ask;
-
-  ExchangeRate({this.fullName, this.code, this.bid, this.ask});
-
-  factory ExchangeRate.fromJson(Map<String, dynamic> json) {
-    return ExchangeRate(
-        fullName: json['currency'],
-        code: json['code'],
-        bid: json['bid'],
-        ask: json['ask']);
-  }
-}
-
 class ExchangeRatesForDay {
   final String tableType;
   final String no;
@@ -40,6 +23,23 @@ class ExchangeRatesForDay {
         tradingDate: json['tradingDate'],
         effectiveDate: json['effectiveDate'],
         rates: parsedRates);
+  }
+}
+
+class ExchangeRate {
+  final String fullName;
+  final String code;
+  final double bid;
+  final double ask;
+
+  ExchangeRate({this.fullName, this.code, this.bid, this.ask});
+
+  factory ExchangeRate.fromJson(Map<String, dynamic> json) {
+    return ExchangeRate(
+        fullName: json['currency'],
+        code: json['code'],
+        bid: json['bid'],
+        ask: json['ask']);
   }
 }
 
