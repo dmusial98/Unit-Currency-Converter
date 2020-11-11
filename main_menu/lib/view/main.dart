@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'view/exchange_rates_page.dart';
+import 'exchange_rates_page.dart';
 import 'unit_page.dart';
 import 'options_page.dart';
 import 'custom_widgets.dart';
-import 'view/exchange_converter_page.dart';
+import 'exchange_converter_page.dart';
 
 void main() async {
   runApp(MyApp());

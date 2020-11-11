@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../exchange_rates_model/exchange_rates.dart';
-import '../custom_widgets.dart';
+import 'custom_widgets.dart';
 
 class ExchangeConverterPage extends StatefulWidget {
   final Function openMenuFunction;

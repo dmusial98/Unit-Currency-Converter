@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../custom_widgets.dart';
+import 'custom_widgets.dart';
 import '../exchange_rates_model/exchange_rates.dart';
 import '../exchange_rates_model/exchange_rates_json.dart';
 
