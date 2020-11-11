@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'currency_page.dart';
+import 'currency_table_page.dart';
 import 'unit_page.dart';
 import 'options_page.dart';
 import 'custom_widgets.dart';
@@ -152,7 +152,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                         entryIndex: 1,
                         isHighLighted: isHighLighted,
                         changePage: changePage,
-                        correspondingWidget: CurrencyConverterPage(
+                        correspondingWidget: ExchangeRatesPage(
                           openMenuFunction: mockUp,
                         )),
                     MenuEntry(
