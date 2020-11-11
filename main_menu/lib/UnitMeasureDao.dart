@@ -25,4 +25,7 @@ abstract class UnitMeasureDao {
   @Query('SELECT * FROM UnitMeasureDB WHERE UnitMeasureDB.type = :unitType')
   Future<List<UnitMeasureDB>> getUnitsByType(int unitType);
 
+  // @Query('SELECT * FROM UnitMeasureDB WHERE UnitMeasureDB.type = :unitType')
+  // Future<List<UnitMeasureDB>> getUnitsByType(int unitType);
+
 }

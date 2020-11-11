@@ -134,7 +134,7 @@ class _$UnitMeasureDao extends UnitMeasureDao {
 
   @override
   Future<List<UnitMeasureDB>> getUnitsByType(int type) async {
-    return _queryAdapter.queryList('SELECT * FROM UnitMeasureDB WHERE task = ?',
+    return _queryAdapter.queryList('SELECT * FROM UnitMeasureDB WHERE type = ?',
         arguments: <dynamic>[type],
         mapper: (Map<String, dynamic> row) =>
             UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int));

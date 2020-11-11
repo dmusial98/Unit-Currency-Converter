@@ -6,7 +6,6 @@ import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
 import 'UnitMeasureDB.dart';
 import 'UnitMeasureDao.dart';
 
-//TODO: Dodac pobieranie indexu tabControllera i okno z jednostka
 //TODO: Ogarnac baze danych
 
 class UnitConverterPage extends StatelessWidget {
@@ -45,28 +44,21 @@ class _HomePageState extends State<Home> {
   var cardTitles = ["Masa", "Długość"];
   var tabIndex = 0;
   final UnitMeasureDao dao;
-  List<List<UnitMeasure>> unitsMeasure = new List<List<UnitMeasure>>();
+  List<List<UnitMeasureDB>> unitsMeasure = new List<List<UnitMeasureDB>>();
 
-  Future<void> _getUnitsFromDatabase() async {
-    unitsMeasure.add(List<UnitMeasure>());
-    unitsMeasure.add(List<UnitMeasure>());
+  Future<List<UnitMeasureDB>> _getUnitsFromDatabase(int index) async {
+    unitsMeasure.add(await dao.getUnitsByType(index));
 
-    dao.getAllUnits().asStream().forEach((element) {
-      element.forEach((elementInside) {
-        int index = elementInside.type;
-        unitsMeasure[index].add(UnitMeasure(
-            elementInside.name,
-            elementInside.type == 0 ? UnitType.weight : UnitType.length,
-            elementInside.abbreviation,
-            ValueKey(elementInside.id)));
-      });
-    });
+    return await dao.getUnitsByType(index);
   }
 
-  _HomePageState(this.dao) {}
+  _HomePageState(this.dao) {
+    // _getUnitsFromDatabase();
+  }
 
   int _indexOfKey(Key key) {
-    return unitsMeasure[tabIndex].indexWhere((UnitMeasure d) => d.key == key);
+    return unitsMeasure[tabIndex]
+        .indexWhere((UnitMeasureDB d) => ValueKey(d.id) == key);
   }
 
   bool _reorderCallback(Key item, Key newPosition) {
@@ -92,7 +84,7 @@ class _HomePageState extends State<Home> {
 
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: unitType.length,
+        length: 2,
         child: Builder(builder: (BuildContext context) {
           final TabController tabController = DefaultTabController.of(context);
           tabController.addListener(() {
@@ -120,33 +112,43 @@ class _HomePageState extends State<Home> {
                   for (int i = 0; i < cardTitles.length; i++)
                     Container(
                         color: Colors.blueGrey[900],
-                        child: ReorderableList(
-                            onReorder: this._reorderCallback,
-                            onReorderDone: this._reorderDone,
-                            child: CustomScrollView(
-                              slivers: <Widget>[
-                                SliverPadding(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context)
-                                            .padding
-                                            .bottom),
-                                    sliver: SliverList(
-                                      delegate: SliverChildBuilderDelegate(
-                                        (BuildContext context, int index) {
-                                          return Item(
-                                            data: unitsMeasure[i][index],
-                                            // first and last attributes affect border drawn during dragging
-                                            isFirst: index == 0,
-                                            isLast: index ==
-                                                unitsMeasure[i].length - 1,
-                                            draggingMode: _draggingMode,
-                                          );
-                                        },
-                                        childCount: unitsMeasure[i].length,
-                                      ),
-                                    )),
-                              ],
-                            )))
+                        child: FutureBuilder<List<UnitMeasureDB>>(
+                            future: _getUnitsFromDatabase(i),
+                            initialData: List<UnitMeasureDB>(),
+                            builder: (context, snapshot) {
+                              return snapshot.hasData
+                                  ? ReorderableList(
+                                      onReorder: this._reorderCallback,
+                                      onReorderDone: this._reorderDone,
+                                      child: CustomScrollView(
+                                        slivers: <Widget>[
+                                          SliverPadding(
+                                              padding: EdgeInsets.only(
+                                                  bottom: MediaQuery.of(context)
+                                                      .padding
+                                                      .bottom),
+                                              sliver: SliverList(
+                                                delegate:
+                                                    SliverChildBuilderDelegate(
+                                                  (BuildContext context, int index) {
+                                                    return Item(
+                                                      data: unitsMeasure[i][index],
+                                // first and last attributes affect border drawn during dragging
+                                                      isFirst: index == 0,
+                                                          isLast: index == unitsMeasure[i].length -1,
+                                                      draggingMode:_draggingMode,
+                                                      key: ValueKey(
+                                                          unitsMeasure[i][index].id),
+                                                    );
+                                                  },
+                                                  childCount: unitsMeasure[i].length,
+                                                ),
+                                              )),
+                                        ],
+                                      ))
+                                  : Center(
+                                      child: CircularProgressIndicator(),);
+                          }))
                 ],
               ));
         }));
@@ -154,17 +156,13 @@ class _HomePageState extends State<Home> {
 }
 
 class Item extends StatelessWidget {
-  Item({
-    this.data,
-    this.isFirst,
-    this.isLast,
-    this.draggingMode,
-  });
+  Item({this.data, this.isFirst, this.isLast, this.draggingMode, this.key});
 
-  final UnitMeasure data;
+  final UnitMeasureDB data;
   final bool isFirst;
   final bool isLast;
   final DraggingMode draggingMode;
+  final Key key;
 
   Widget _buildChild(BuildContext context, ReorderableItemState state) {
     BoxDecoration decoration;
@@ -243,7 +241,7 @@ class Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableItem(key: data.key, childBuilder: _buildChild);
+    return ReorderableItem(key: key, childBuilder: _buildChild);
   }
 }
 

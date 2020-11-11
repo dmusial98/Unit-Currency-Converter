@@ -10,7 +10,7 @@ class UnitMeasureDB {
   String name;
   String abbreviation;
 
-  @ColumnInfo(name: 'unit_measure_type')
+  // @ColumnInfo(name: 'unit_measure_type')
   int type;
   // final Key key;
 
