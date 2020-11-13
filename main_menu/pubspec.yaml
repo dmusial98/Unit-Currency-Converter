@@ -37,7 +37,6 @@ dev_dependencies:
     sdk: flutter
   floor_generator: ^0.17.0
   build_runner: ^1.10.3
-  flutter_svg: ^0.19.1
   json_serializable: ^3.5.0
 
 # For information on the generic Dart part of this file, see the
@@ -52,7 +51,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - svg/
+    - png/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
