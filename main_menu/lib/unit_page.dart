@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:main_menu/UnitMeasureDao.dart';
 import 'custom_widgets.dart';
@@ -107,50 +108,54 @@ class _HomePageState extends State<Home> {
                   tabs: [for (final tab in cardTitles) Tab(text: tab)],
                 ),
               ),
-              body: TabBarView(
-                children: [
-                  for (int i = 0; i < cardTitles.length; i++)
-                    Container(
-                        color: Colors.blueGrey[900],
-                        child: FutureBuilder<List<UnitMeasureDB>>(
-                            future: _getUnitsFromDatabase(i),
-                            initialData: List<UnitMeasureDB>(),
-                            builder: (context, snapshot) {
-                              return snapshot.hasData
-                                  ? ReorderableList(
-                                      onReorder: this._reorderCallback,
-                                      onReorderDone: this._reorderDone,
-                                      child: CustomScrollView(
-                                        slivers: <Widget>[
-                                          SliverPadding(
-                                              padding: EdgeInsets.only(
-                                                  bottom: MediaQuery.of(context)
-                                                      .padding
-                                                      .bottom),
-                                              sliver: SliverList(
-                                                delegate:
-                                                    SliverChildBuilderDelegate(
-                                                  (BuildContext context, int index) {
-                                                    return Item(
-                                                      data: unitsMeasure[i][index],
-                                // first and last attributes affect border drawn during dragging
-                                                      isFirst: index == 0,
-                                                          isLast: index == unitsMeasure[i].length -1,
-                                                      draggingMode:_draggingMode,
-                                                      key: ValueKey(
-                                                          unitsMeasure[i][index].id),
-                                                    );
-                                                  },
-                                                  childCount: unitsMeasure[i].length,
-                                                ),
-                                              )),
-                                        ],
-                                      ))
-                                  : Center(
-                                      child: CircularProgressIndicator(),);
-                          }))
-                ],
-              ));
+              body: GestureDetector( //zmiana indeksu w klasie do poprawnej zmiany elementow w liscie po przesunieciu karty
+                  onHorizontalDragDown: (DragDownDetails dragDownDetails) {
+                    setState(() {
+                      tabIndex = tabController.index;
+                    });
+                  },
+                  child: TabBarView(
+                    children: [
+                      for (int i = 0; i < cardTitles.length; i++)
+                        Container(
+                            color: Colors.blueGrey[900],
+                            child: FutureBuilder<List<UnitMeasureDB>>(
+                                future: _getUnitsFromDatabase(i),
+                                initialData: List<UnitMeasureDB>(),
+                                builder: (context, snapshot) {
+                                  return snapshot.hasData
+                                      ? ReorderableList(
+                                          onReorder: this._reorderCallback,
+                                          onReorderDone: this._reorderDone,
+                                          child: CustomScrollView(
+                                            slivers: <Widget>[
+                                              SliverPadding(
+                                                  padding: EdgeInsets.only(
+                                                      bottom: MediaQuery.of(context)
+                                                              .padding
+                                                              .bottom),
+                                                  sliver: SliverList(
+                                                    delegate:
+                                                        SliverChildBuilderDelegate(
+                                                      (BuildContext context, int index) {
+                                                        return Item(
+                                                          data: unitsMeasure[i][index],
+                                                          // first and last attributes affect border drawn during dragging
+                                                          isFirst: index == 0,
+                                                          isLast: index == unitsMeasure[i].length - 1,
+                                                          draggingMode: _draggingMode,
+                                                          key: ValueKey(unitsMeasure[i][index].id),
+                                                        );}, 
+                                                        childCount: unitsMeasure[i].length,
+                                                    ),
+                                                  )),
+                                            ],
+                                          ))
+                                      : Center(
+                                          child: CircularProgressIndicator());
+                                }))
+                    ],
+                  )));
         }));
   }
 }
