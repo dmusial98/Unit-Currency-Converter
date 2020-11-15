@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import '../database.dart';
+import '../database/database.dart';
 import 'exchange_rates_page.dart';
-import 'package:main_menu/UnitMeasureDao.dart';
-// import 'currency_page.dart';
+import '../database/unit_measure_db/unit_measure_dao.dart';
 import 'unit_page.dart';
 import 'options_page.dart';
 import 'custom_widgets.dart';
 import 'exchange_converter_page.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
-import 'package:main_menu/UnitMeasureDB.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,13 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:main_menu/UnitMeasureDao.dart';
 import 'custom_widgets.dart';
 import 'package:flutter/cupertino.dart';
+import '../database/unit_measure_db/unit_measure_db.dart';
+import '../database/unit_measure_db/unit_measure_dao.dart';
+import '../unit_converter_model/reorderable_list_item.dart';
 import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
-import '../UnitMeasureDB.dart';
-import '../UnitMeasureDao.dart';
-
-//TODO: Ogarnac baze danych
 
 class UnitConverterPage extends StatelessWidget {
   final Function openMenuFunction;
@@ -31,17 +29,7 @@ class Home extends StatefulWidget {
   _HomePageState createState() => _HomePageState(this.dao);
 }
 
-class UnitMeasure {
-  String name;
-  String abbreviation;
-  UnitType type;
-  final Key key;
-
-  UnitMeasure(this.name, this.type, this.abbreviation, this.key);
-}
-
 class _HomePageState extends State<Home> {
-  final unitType = [UnitType.weight, UnitType.length];
   var cardTitles = ["Masa", "Długość"];
   var tabIndex = 0;
   final UnitMeasureDao dao;
@@ -53,9 +41,7 @@ class _HomePageState extends State<Home> {
     return await dao.getUnitsByType(index);
   }
 
-  _HomePageState(this.dao) {
-    // _getUnitsFromDatabase();
-  }
+  _HomePageState(this.dao);
 
   int _indexOfKey(Key key) {
     return unitsMeasure[tabIndex]
@@ -80,8 +66,6 @@ class _HomePageState extends State<Home> {
     final draggedItem = unitsMeasure[tabIndex][_indexOfKey(item)];
     debugPrint("Reordering finished for ${draggedItem.name}}");
   }
-
-  DraggingMode _draggingMode = DraggingMode.iOS;
 
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -138,12 +122,11 @@ class _HomePageState extends State<Home> {
                                                     delegate:
                                                         SliverChildBuilderDelegate(
                                                       (BuildContext context, int index) {
-                                                        return Item(
+                                                        return ReorderableListItem(
                                                           data: unitsMeasure[i][index],
                                                           // first and last attributes affect border drawn during dragging
                                                           isFirst: index == 0,
                                                           isLast: index == unitsMeasure[i].length - 1,
-                                                          draggingMode: _draggingMode,
                                                           key: ValueKey(unitsMeasure[i][index].id),
                                                         );}, 
                                                         childCount: unitsMeasure[i].length,
@@ -159,100 +142,3 @@ class _HomePageState extends State<Home> {
         }));
   }
 }
-
-class Item extends StatelessWidget {
-  Item({this.data, this.isFirst, this.isLast, this.draggingMode, this.key});
-
-  final UnitMeasureDB data;
-  final bool isFirst;
-  final bool isLast;
-  final DraggingMode draggingMode;
-  final Key key;
-
-  Widget _buildChild(BuildContext context, ReorderableItemState state) {
-    BoxDecoration decoration;
-
-    if (state == ReorderableItemState.dragProxy ||
-        state == ReorderableItemState.dragProxyFinished) {
-      // slightly transparent background white dragging (just like on iOS)
-      decoration = BoxDecoration(color: Colors.blueGrey[900]);
-    } else {
-      bool placeholder = state == ReorderableItemState.placeholder;
-      decoration = BoxDecoration(
-          border: Border(
-              top: isFirst && !placeholder
-                  ? Divider.createBorderSide(context) //
-                  : BorderSide.none,
-              bottom: isLast && placeholder
-                  ? BorderSide.none //
-                  : Divider.createBorderSide(context)),
-          color: placeholder ? null : Colors.blueGrey[900]);
-    }
-
-    // For iOS dragging mode, there will be drag handle on the right that triggers
-    // reordering; For android mode it will be just an empty container
-    Widget dragHandle = draggingMode == DraggingMode.iOS
-        ? ReorderableListener(
-            child: Container(
-              padding: EdgeInsets.only(right: 18.0, left: 18.0),
-              color: Colors.blueGrey[900],
-              child: Center(
-                child: Icon(Icons.reorder, color: Color(0xFF888888)),
-              ),
-            ),
-          )
-        : Container();
-
-    Widget content = Container(
-      decoration: decoration,
-      child: SafeArea(
-          top: false,
-          bottom: false,
-          child: Opacity(
-            // hide content for placeholder
-            opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
-            child: IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Expanded(
-                      child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
-                    child: Row(children: [
-                      ExcludeSemantics(
-                          child: CircleAvatar(
-                              child: Text(data.abbreviation,
-                                  style: Theme.of(context).textTheme.headline4),
-                              backgroundColor: Colors.blue[700],
-                              foregroundColor: Colors.white)),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5.0),
-                        child: Text(data.name,
-                            style: Theme.of(context).textTheme.headline2),
-                      )
-                    ]),
-                  )),
-                  // Triggers the reordering
-                  dragHandle,
-                ],
-              ),
-            ),
-          )),
-    );
-
-    return content;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ReorderableItem(key: key, childBuilder: _buildChild);
-  }
-}
-
-enum DraggingMode {
-  iOS,
-  Android,
-}
-
-enum UnitType { weight, length }
