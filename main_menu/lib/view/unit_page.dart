@@ -101,42 +101,66 @@ class _HomePageState extends State<Home> {
                   child: TabBarView(
                     children: [
                       for (int i = 0; i < cardTitles.length; i++)
-                        Container(
-                            color: Colors.blueGrey[900],
-                            child: FutureBuilder<List<UnitMeasureDB>>(
-                                future: _getUnitsFromDatabase(i),
-                                initialData: List<UnitMeasureDB>(),
-                                builder: (context, snapshot) {
-                                  return snapshot.hasData
-                                      ? ReorderableList(
-                                          onReorder: this._reorderCallback,
-                                          onReorderDone: this._reorderDone,
-                                          child: CustomScrollView(
-                                            slivers: <Widget>[
-                                              SliverPadding(
-                                                  padding: EdgeInsets.only(
-                                                      bottom: MediaQuery.of(context)
-                                                              .padding
-                                                              .bottom),
-                                                  sliver: SliverList(
-                                                    delegate:
-                                                        SliverChildBuilderDelegate(
-                                                      (BuildContext context, int index) {
-                                                        return ReorderableListItem(
-                                                          data: unitsMeasure[i][index],
-                                                          // first and last attributes affect border drawn during dragging
-                                                          isFirst: index == 0,
-                                                          isLast: index == unitsMeasure[i].length - 1,
-                                                          key: ValueKey(unitsMeasure[i][index].id),
-                                                        );}, 
-                                                        childCount: unitsMeasure[i].length,
-                                                    ),
-                                                  )),
-                                            ],
-                                          ))
-                                      : Center(
-                                          child: CircularProgressIndicator());
-                                }))
+                      Column(
+                        mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Container(
+                              color: Colors.blueGrey[900],
+                              child: SizedBox(
+                                height: 150,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text("Amper", style: Theme.of(context).textTheme.headline2)
+                                  ],
+                                )
+                                  )
+                              ),
+                            Expanded(
+                                child:
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                            child:
+                                            Container(
+                                                color: Colors.blueGrey[900],
+                                                child:
+                                                FutureBuilder<List<UnitMeasureDB>>(
+                                                    future: _getUnitsFromDatabase(i),
+                                                    initialData: List<UnitMeasureDB>(),
+                                                    builder: (context, snapshot) {
+                                                      return snapshot.hasData
+                                                          ? ReorderableList(
+                                                          onReorder: this._reorderCallback,
+                                                          onReorderDone: this._reorderDone,
+                                                          child: CustomScrollView(
+                                                            slivers: <Widget>[
+                                                              SliverPadding(
+                                                                  padding: EdgeInsets.only(
+                                                                      bottom: MediaQuery.of(context)
+                                                                          .padding
+                                                                          .bottom),
+                                                                  sliver: SliverList(
+                                                                    delegate:
+                                                                    SliverChildBuilderDelegate(
+                                                                          (BuildContext context, int index) {
+                                                                        return ReorderableListItem(
+                                                                          data: unitsMeasure[i][index],
+                                                                          // first and last attributes affect border drawn during dragging
+                                                                          isFirst: index == 0,
+                                                                          isLast: index == unitsMeasure[i].length - 1,
+                                                                          key: ValueKey(unitsMeasure[i][index].id),
+                                                                        );},
+                                                                      childCount: unitsMeasure[i].length,
+                                                                    ),
+                                                                  )),
+                                                            ],
+                                                          ))
+                                                          : Center(child: CircularProgressIndicator());
+                                                    })))
+                                                ]))
+                          ]
+                      )
                     ],
                   )));
         }));
