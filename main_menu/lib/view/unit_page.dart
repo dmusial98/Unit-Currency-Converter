@@ -34,14 +34,15 @@ class _HomePageState extends State<Home> {
   var tabIndex = 0;
   final UnitMeasureDao dao;
   List<List<UnitMeasureDB>> unitsMeasure = new List<List<UnitMeasureDB>>();
+  int indexOfSelectedUnit = 0;
+
+  _HomePageState(this.dao);
 
   Future<List<UnitMeasureDB>> _getUnitsFromDatabase(int index) async {
     unitsMeasure.add(await dao.getUnitsByType(index));
 
     return await dao.getUnitsByType(index);
   }
-
-  _HomePageState(this.dao);
 
   int _indexOfKey(Key key) {
     return unitsMeasure[tabIndex]
@@ -111,7 +112,29 @@ class _HomePageState extends State<Home> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
-                                    Text("Amper", style: Theme.of(context).textTheme.headline2)
+                                    Row(
+                                      children: [
+                                        if(unitsMeasure.length != 0)
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 25, left: 15),
+                                            child: Text(unitsMeasure[i][indexOfSelectedUnit].name, style: TextStyle(color: Colors.white70, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold, fontSize: 30))
+                                        )
+                                        else
+                                          Padding(
+                                              padding: EdgeInsets.only(top: 15, left: 15),
+                                              child: Text("unitsMeasure[i][indexOfSelectedUnit].name", style: Theme.of(context).textTheme.headline2)
+                                          )
+                                      ]
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 25, top: 40),
+                                          child: Text(indexOfSelectedUnit.toString(), style: TextStyle(color: Colors.deepOrangeAccent, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold, fontSize: 40))
+                                        )
+                                      ],
+                                    )
                                   ],
                                 )
                                   )
