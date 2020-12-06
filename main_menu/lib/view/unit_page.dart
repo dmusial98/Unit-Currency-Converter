@@ -122,7 +122,7 @@ class _HomePageState extends State<Home> {
                                         else
                                           Padding(
                                               padding: EdgeInsets.only(top: 15, left: 15),
-                                              child: Text("unitsMeasure[i][indexOfSelectedUnit].name", style: Theme.of(context).textTheme.headline2)
+                                              child: CircularProgressIndicator()
                                           )
                                       ]
                                     ),

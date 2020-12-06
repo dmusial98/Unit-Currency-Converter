@@ -65,10 +65,21 @@ class ReorderableListItem extends StatelessWidget {
                                       style: Theme.of(context).textTheme.headline4),
                                   backgroundColor: Colors.blue[700],
                                   foregroundColor: Colors.white)),
-                          Padding(
-                            padding: EdgeInsets.only(left: 5.0),
-                            child: Text(data.name,
-                                style: Theme.of(context).textTheme.headline2),
+                          Expanded(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 5.0),
+                                    child: Text(data.name,
+                                        style: Theme.of(context).textTheme.headline2),
+                                  ),
+                                  Spacer(),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: Text(data.countedValue.toString(), style: TextStyle(color: Colors.blue, fontStyle: FontStyle.normal, fontSize: 20)),
+                                  )
+                                ],)
                           )
                         ]),
                       )),

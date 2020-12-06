@@ -74,7 +74,7 @@ class _$FlutterDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `UnitMeasureDB` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `abbreviation` TEXT, `type` INTEGER)');
+            'CREATE TABLE IF NOT EXISTS `UnitMeasureDB` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `abbreviation` TEXT, `type` INTEGER, `countedValue` INTEGER)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -95,21 +95,21 @@ class _$UnitMeasureDao extends UnitMeasureDao {
             database,
             'UnitMeasureDB',
                 (UnitMeasureDB item) =>
-            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type},
+            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type, 'countedValue': item.countedValue},
             changeListener),
         _taskUpdateAdapter = UpdateAdapter(
             database,
             'UnitMeasureDB',
             ['id'],
                 (UnitMeasureDB item) =>
-            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type},
+            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type, 'countedValue': item.countedValue},
             changeListener),
         _taskDeletionAdapter = DeletionAdapter(
             database,
             'UnitMeasureDB',
             ['id'],
                 (UnitMeasureDB item) =>
-            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type},
+            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type, 'countedValue': item.countedValue},
             changeListener);
 
   final sqflite.DatabaseExecutor database;
@@ -129,7 +129,7 @@ class _$UnitMeasureDao extends UnitMeasureDao {
     return _queryAdapter.query('SELECT * FROM UnitMeasureDB WHERE id = ?',
         arguments: <dynamic>[id],
         mapper: (Map<String, dynamic> row) =>
-            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int));
+            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['countedValue'] as int));
   }
 
   @override
@@ -137,14 +137,14 @@ class _$UnitMeasureDao extends UnitMeasureDao {
     return _queryAdapter.queryList('SELECT * FROM UnitMeasureDB WHERE type = ?',
         arguments: <dynamic>[type],
         mapper: (Map<String, dynamic> row) =>
-            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int));
+            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['countedValue'] as int));
   }
 
   @override
   Future<List<UnitMeasureDB>> getAllUnits() async {
     return _queryAdapter.queryList('SELECT * FROM UnitMeasureDB',
         mapper: (Map<String, dynamic> row) =>
-            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int));
+            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['countedValue'] as int));
   }
 
   @override
@@ -153,7 +153,7 @@ class _$UnitMeasureDao extends UnitMeasureDao {
         queryableName: 'UnitMeasureDB',
         isView: false,
         mapper: (Map<String, dynamic> row) =>
-            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int));
+            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['countedValue'] as int));
   }
 
 
