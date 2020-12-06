@@ -79,7 +79,7 @@ class ReorderableListItem extends StatelessWidget {
                                     padding: EdgeInsets.only(right: 10),
                                     child: Text(data.countedValue.toString(), style: TextStyle(color: Colors.blue, fontStyle: FontStyle.normal, fontSize: 20)),
                                   )
-                                ],)
+                                ])
                           )
                         ]),
                       )),

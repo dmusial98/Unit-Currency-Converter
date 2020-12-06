@@ -10,6 +10,7 @@ import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
 class UnitConverterPage extends StatelessWidget {
   final Function openMenuFunction;
   final UnitMeasureDao dao;
+
   const UnitConverterPage({Key key, this.openMenuFunction, this.dao})
       : super(key: key);
 
@@ -93,7 +94,8 @@ class _HomePageState extends State<Home> {
                   tabs: [for (final tab in cardTitles) Tab(text: tab)],
                 ),
               ),
-              body: GestureDetector( //zmiana indeksu w klasie do poprawnej zmiany elementow w liscie po przesunieciu karty
+              body: GestureDetector(
+                  //zmiana indeksu w klasie do poprawnej zmiany elementow w liscie po przesunieciu karty
                   onHorizontalDragDown: (DragDownDetails dragDownDetails) {
                     setState(() {
                       tabIndex = tabController.index;
@@ -102,88 +104,107 @@ class _HomePageState extends State<Home> {
                   child: TabBarView(
                     children: [
                       for (int i = 0; i < cardTitles.length; i++)
-                      Column(
-                        mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Container(
+                        Column(mainAxisSize: MainAxisSize.max, children: [
+                          Container(
                               color: Colors.blueGrey[900],
                               child: SizedBox(
-                                height: 150,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        if(unitsMeasure.length != 0)
+                                  height: 150,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Row(children: [
+                                        unitsMeasure.length != 0 ?
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: 25, left: 15),
+                                              child: Text(
+                                                  unitsMeasure[i][indexOfSelectedUnit].name,
+                                                  style: TextStyle(
+                                                      color:
+                                                          Colors.white70,
+                                                      fontStyle:
+                                                          FontStyle.normal,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 30)))
+                                          : Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: 15, left: 15),
+                                              child:
+                                                  CircularProgressIndicator())
+                                      ]),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
                                           Padding(
-                                            padding: EdgeInsets.only(top: 25, left: 15),
-                                            child: Text(unitsMeasure[i][indexOfSelectedUnit].name, style: TextStyle(color: Colors.white70, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold, fontSize: 30))
-                                        )
-                                        else
-                                          Padding(
-                                              padding: EdgeInsets.only(top: 15, left: 15),
-                                              child: CircularProgressIndicator()
+                                              padding: EdgeInsets.only(
+                                                  right: 25, top: 40),
+                                              child:
+                                                unitsMeasure.length != 0 ? Text(
+                                                    unitsMeasure[i][0].countedValue.toString(),
+                                                    style: TextStyle(
+                                                        color:
+                                                            Colors.deepOrangeAccent,
+                                                        fontStyle:
+                                                            FontStyle.normal,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 40))
+                                                    : CircularProgressIndicator()
                                           )
-                                      ]
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(right: 25, top: 40),
-                                          child: Text(indexOfSelectedUnit.toString(), style: TextStyle(color: Colors.deepOrangeAccent, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold, fontSize: 40))
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                )
-                                  )
-                              ),
-                            Expanded(
-                                child:
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                            child:
-                                            Container(
-                                                color: Colors.blueGrey[900],
-                                                child:
-                                                FutureBuilder<List<UnitMeasureDB>>(
-                                                    future: _getUnitsFromDatabase(i),
-                                                    initialData: List<UnitMeasureDB>(),
-                                                    builder: (context, snapshot) {
-                                                      return snapshot.hasData
-                                                          ? ReorderableList(
-                                                          onReorder: this._reorderCallback,
-                                                          onReorderDone: this._reorderDone,
-                                                          child: CustomScrollView(
-                                                            slivers: <Widget>[
-                                                              SliverPadding(
-                                                                  padding: EdgeInsets.only(
-                                                                      bottom: MediaQuery.of(context)
-                                                                          .padding
-                                                                          .bottom),
-                                                                  sliver: SliverList(
-                                                                    delegate:
-                                                                    SliverChildBuilderDelegate(
-                                                                          (BuildContext context, int index) {
-                                                                        return ReorderableListItem(
-                                                                          data: unitsMeasure[i][index],
-                                                                          // first and last attributes affect border drawn during dragging
-                                                                          isFirst: index == 0,
-                                                                          isLast: index == unitsMeasure[i].length - 1,
-                                                                          key: ValueKey(unitsMeasure[i][index].id),
-                                                                        );},
-                                                                      childCount: unitsMeasure[i].length,
-                                                                    ),
-                                                                  )),
-                                                            ],
-                                                          ))
-                                                          : Center(child: CircularProgressIndicator());
-                                                    })))
-                                                ]))
-                          ]
-                      )
+                                        ],
+                                      )
+                                    ],
+                                  ))),
+                          Expanded(
+                              child: Row(children: [
+                                Expanded(
+                                  child: Container(
+                                    color: Colors.blueGrey[900],
+                                    child: FutureBuilder<List<UnitMeasureDB>>(
+                                        future: _getUnitsFromDatabase(i),
+                                        initialData: List<UnitMeasureDB>(),
+                                        builder: (context, snapshot) {
+                                          return snapshot.hasData
+                                              ? ReorderableList(
+                                                  onReorder:
+                                                      this._reorderCallback,
+                                                  onReorderDone:
+                                                      this._reorderDone,
+                                                  child: CustomScrollView(
+                                                    slivers: <Widget>[
+                                                      SliverPadding(
+                                                          padding: EdgeInsets.only(
+                                                              bottom:
+                                                                  MediaQuery.of(context).padding.bottom),
+                                                          sliver: SliverList(
+                                                            delegate:
+                                                                SliverChildBuilderDelegate(
+                                                              (BuildContext context, int index) {
+                                                                return ReorderableListItem(
+                                                                  data:
+                                                                      unitsMeasure[i][index], // first and last attributes affect border drawn during dragging
+                                                                  isFirst:
+                                                                      index == 0,
+                                                                  isLast: index == unitsMeasure[i].length - 1,
+                                                                  key: ValueKey(
+                                                                      unitsMeasure[i][index].id),
+                                                                );
+                                                              },
+                                                              childCount:
+                                                                  unitsMeasure[i].length,
+                                                            ),
+                                                          )),
+                                                    ],
+                                                  ))
+                                              : Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                        })))
+                          ]))
+                        ])
                     ],
                   )));
         }));

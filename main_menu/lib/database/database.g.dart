@@ -55,6 +55,7 @@ class _$FlutterDatabase extends AppDatabase {
   }
 
   UnitMeasureDao _unitMeasureDaoInstance;
+  UnitTypeDao _unitTypeDaoInstance;
 
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
@@ -75,6 +76,8 @@ class _$FlutterDatabase extends AppDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `UnitMeasureDB` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `abbreviation` TEXT, `type` INTEGER, `countedValue` INTEGER)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `UnitTypeDB` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -85,6 +88,11 @@ class _$FlutterDatabase extends AppDatabase {
   @override
   UnitMeasureDao get unitMeasureDao {
     return _unitMeasureDaoInstance ??= _$UnitMeasureDao(database, changeListener);
+  }
+
+  @override
+  UnitTypeDao get unitTypeDao {
+    return _unitTypeDaoInstance ??= _$UnitTypeDao(database, changeListener);
   }
 }
 
@@ -195,4 +203,80 @@ class _$UnitMeasureDao extends UnitMeasureDao {
   // Future<void> deleteTasks(List<Task> tasks) async {
   //   await _taskDeletionAdapter.deleteList(tasks);
   // }
+}
+
+class _$UnitTypeDao extends UnitTypeDao {
+  _$UnitTypeDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database, changeListener),
+        _taskInsertionAdapter = InsertionAdapter(
+            database,
+            'UnitTypeDB',
+                (UnitTypeDB item) =>
+            <String, dynamic>{'id': item.id, 'name': item.name},
+            changeListener),
+        _taskUpdateAdapter = UpdateAdapter(
+            database,
+            'UnitTypeDB',
+            ['id'],
+                (UnitTypeDB item) =>
+            <String, dynamic>{'id': item.id, 'name': item.name},
+            changeListener),
+        _taskDeletionAdapter = DeletionAdapter(
+            database,
+            'UnitTypeDB',
+            ['id'],
+                (UnitTypeDB item) =>
+            <String, dynamic>{'id': item.id, 'name': item.name},
+            changeListener);
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<UnitTypeDB> _taskInsertionAdapter;
+
+  final UpdateAdapter<UnitTypeDB> _taskUpdateAdapter;
+
+  final DeletionAdapter<UnitTypeDB> _taskDeletionAdapter;
+
+  @override
+  Future<UnitTypeDB> findUnitTypeById(int id) async {
+    return _queryAdapter.query('SELECT * FROM UnitTypeDB WHERE id = ?',
+        arguments: <dynamic>[id],
+        mapper: (Map<String, dynamic> row) =>
+            UnitTypeDB(row['id'] as int, row['name'] as String));
+  }
+
+  @override
+  Future<List<UnitTypeDB>> getAllUnitTypes() async {
+    return _queryAdapter.queryList('SELECT * FROM UnitTypeDB',
+        mapper: (Map<String, dynamic> row) =>
+            UnitTypeDB(row['id'] as int, row['name'] as String));
+  }
+
+  @override
+  Stream<List<UnitTypeDB>> findAllUnitTypesAsStream() {
+    return _queryAdapter.queryListStream('SELECT * FROM UnitTypeDB',
+        queryableName: 'UnitTypeDB',
+        isView: false,
+        mapper: (Map<String, dynamic> row) =>
+            UnitTypeDB(row['id'] as int, row['name'] as String));
+  }
+
+  @override
+  Future<void> insertUnitType(UnitTypeDB unitType) async {
+    await _taskInsertionAdapter.insert(unitType, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateUnitType(UnitTypeDB unitType) async {
+    await _taskUpdateAdapter.update(unitType, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> deleteUnitType(UnitTypeDB unitType) async {
+    await _taskDeletionAdapter.delete(unitType);
+  }
 }
