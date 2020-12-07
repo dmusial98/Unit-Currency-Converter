@@ -203,7 +203,35 @@ class _HomePageState extends State<Home> {
                                                   child:
                                                       CircularProgressIndicator());
                                         })))
-                          ]))
+                          ])),
+                          SizedBox(
+                              height: 50,
+                              child: Container(
+                                color: Colors.blueGrey[900],
+                                  child: ButtonBar(
+                                    alignment: MainAxisAlignment.center,
+                                    children: [
+                                      OutlineButton(
+                                        onPressed: (){
+
+                                        },
+                                          autofocus: true,
+                                        disabledTextColor: Colors.deepPurple,
+                                        child: Text('Kategorie', style: TextStyle(color: Colors.white70, fontSize: 20))
+                                      ),
+                                      OutlineButton(
+                                        child: Text('Jednostki', style: TextStyle(color: Colors.white70, fontSize: 20))
+                                      ),
+                                      // OutlineButton(
+                                      //   child: Text('Dodaj jednostkę', style: TextStyle(color: Colors.white70, fontSize: 20))
+                                      // ),
+                                      // OutlineButton(
+                                      //   child: Text('Edytuj jednostkę', style: TextStyle(color: Colors.white70, fontSize: 20),)
+                                      // )
+                                    ],
+                                  ),
+                                ),
+                          )
                         ])
                     ],
                   )));
