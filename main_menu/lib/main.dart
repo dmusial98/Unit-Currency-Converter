@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import '../database/database.dart';
-import 'exchange_rates_page.dart';
-import '../database/unit_measure_db/unit_measure_dao.dart';
-import 'unit_page.dart';
-import 'options_page.dart';
-import 'custom_widgets.dart';
-import 'exchange_converter_page.dart';
-import '../database/unit_measure_db/unit_measure_db.dart';
-
+import 'database/database.dart';
+import 'database/unit_measure_db/unit_measure_db.dart';
+import 'view/exchange_rates_page.dart';
+import 'database/unit_measure_db/unit_measure_dao.dart';
+import 'view/unit_page.dart';
+import 'view/options_page.dart';
+import 'view/custom_widgets.dart';
+import 'view/exchange_converter_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -33,7 +32,7 @@ void main() async {
   // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0, 15));
   // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0, 16));
   // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0, 17));
-  //
+  
   // await dao.insertUnitMeasure(UnitMeasureDB(null, "metr", "m", 1, 1));
   // await dao.insertUnitMeasure(UnitMeasureDB(null, "kilometr", "km", 1, 2));
   // await dao.insertUnitMeasure(UnitMeasureDB(null, "decymetr", "dm", 1, 3));
@@ -52,8 +51,8 @@ void main() async {
   // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 16));
   // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 17));
 
-  var test = await dao.findUnitMeasureById(1);
-  print("udało się: " + test.name);
+  // var test = await dao.findUnitMeasureById(1);
+  // print("udało się: " + test.name);
 
   runApp(MyApp(dao));
 }
