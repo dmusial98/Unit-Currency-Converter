@@ -31,6 +31,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomePageState extends State<Home> {
+  var isLoading = true;
   var cardTitles = ["Masa", "Długość"];
   var tabIndex = 0;
   final UnitMeasureDao dao;
@@ -39,10 +40,18 @@ class _HomePageState extends State<Home> {
 
   _HomePageState(this.dao);
 
-  Future<List<UnitMeasureDB>> _getUnitsFromDatabase(int index) async {
-    unitsMeasure.add(await dao.getUnitsByType(index));
+  _getUnitsFromDatabase() async {
+    for (int i = 0; i < cardTitles.length; i++)
+      unitsMeasure.add(await dao.getUnitsByType(i));
 
-    return await dao.getUnitsByType(index);
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    _getUnitsFromDatabase();
   }
 
   int _indexOfKey(Key key) {
@@ -70,8 +79,8 @@ class _HomePageState extends State<Home> {
   }
 
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 2,
+    return isLoading ? CircularProgressIndicator() : DefaultTabController(
+        length: cardTitles.length,
         child: Builder(builder: (BuildContext context) {
           final TabController tabController = DefaultTabController.of(context);
           tabController.addListener(() {
@@ -114,25 +123,23 @@ class _HomePageState extends State<Home> {
                                         CrossAxisAlignment.stretch,
                                     children: [
                                       Row(children: [
-                                        unitsMeasure.length != 0 ?
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 25, left: 15),
-                                              child: Text(
-                                                  unitsMeasure[i][indexOfSelectedUnit].name,
-                                                  style: TextStyle(
-                                                      color:
-                                                          Colors.white70,
-                                                      fontStyle:
-                                                          FontStyle.normal,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 30)))
-                                          : Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 15, left: 15),
-                                              child:
-                                                  CircularProgressIndicator())
+                                        Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 25, left: 15),
+                                                child: Text(
+                                                    unitsMeasure[i][
+                                                            indexOfSelectedUnit]
+                                                        .name,
+                                                    overflow: TextOverflow.fade,
+                                                    style:
+                                                        TextStyle(
+                                                            color:
+                                                                Colors.white70,
+                                                            fontStyle: FontStyle
+                                                                .normal,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 30)))
                                       ]),
                                       Row(
                                         mainAxisAlignment:
@@ -141,34 +148,28 @@ class _HomePageState extends State<Home> {
                                           Padding(
                                               padding: EdgeInsets.only(
                                                   right: 25, top: 40),
-                                              child:
-                                                unitsMeasure.length != 0 ? Text(
-                                                    unitsMeasure[i][0].countedValue.toString(),
-                                                    style: TextStyle(
-                                                        color:
-                                                            Colors.deepOrangeAccent,
-                                                        fontStyle:
-                                                            FontStyle.normal,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 40))
-                                                    : CircularProgressIndicator()
-                                          )
+                                              child: Text(
+                                                      unitsMeasure[i][0]
+                                                          .countedValue
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          color: Colors
+                                                              .deepOrangeAccent,
+                                                          fontStyle:
+                                                              FontStyle.normal,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 40)))
                                         ],
                                       )
                                     ],
                                   ))),
                           Expanded(
                               child: Row(children: [
-                                Expanded(
-                                  child: Container(
+                            Expanded(
+                                child: Container(
                                     color: Colors.blueGrey[900],
-                                    child: FutureBuilder<List<UnitMeasureDB>>(
-                                        future: _getUnitsFromDatabase(i),
-                                        initialData: List<UnitMeasureDB>(),
-                                        builder: (context, snapshot) {
-                                          return snapshot.hasData
-                                              ? ReorderableList(
+                                    child: ReorderableList(
                                                   onReorder:
                                                       this._reorderCallback,
                                                   onReorderDone:
@@ -178,59 +179,73 @@ class _HomePageState extends State<Home> {
                                                       SliverPadding(
                                                           padding: EdgeInsets.only(
                                                               bottom:
-                                                                  MediaQuery.of(context).padding.bottom),
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .padding
+                                                                      .bottom),
                                                           sliver: SliverList(
                                                             delegate:
                                                                 SliverChildBuilderDelegate(
-                                                              (BuildContext context, int index) {
+                                                              (BuildContext
+                                                                      context,
+                                                                  int index) {
                                                                 return ReorderableListItem(
-                                                                  data:
-                                                                      unitsMeasure[i][index], // first and last attributes affect border drawn during dragging
+                                                                  data: unitsMeasure[
+                                                                          i][
+                                                                      index], // first and last attributes affect border drawn during dragging
                                                                   isFirst:
-                                                                      index == 0,
-                                                                  isLast: index == unitsMeasure[i].length - 1,
+                                                                      index ==
+                                                                          0,
+                                                                  isLast: index ==
+                                                                      unitsMeasure[i]
+                                                                              .length -
+                                                                          1,
                                                                   key: ValueKey(
-                                                                      unitsMeasure[i][index].id),
+                                                                      unitsMeasure[i]
+                                                                              [
+                                                                              index]
+                                                                          .id),
                                                                 );
                                                               },
                                                               childCount:
-                                                                  unitsMeasure[i].length,
+                                                                  unitsMeasure[
+                                                                          i]
+                                                                      .length,
                                                             ),
                                                           )),
                                                     ],
                                                   ))
-                                              : Center(
-                                                  child:
-                                                      CircularProgressIndicator());
-                                        })))
+                                        ))
                           ])),
                           SizedBox(
-                              height: 50,
-                              child: Container(
-                                color: Colors.blueGrey[900],
-                                  child: ButtonBar(
-                                    alignment: MainAxisAlignment.center,
-                                    children: [
-                                      OutlineButton(
-                                        onPressed: (){
-
-                                        },
-                                          autofocus: true,
-                                        disabledTextColor: Colors.deepPurple,
-                                        child: Text('Kategorie', style: TextStyle(color: Colors.white70, fontSize: 20))
-                                      ),
-                                      OutlineButton(
-                                        child: Text('Jednostki', style: TextStyle(color: Colors.white70, fontSize: 20))
-                                      ),
-                                      // OutlineButton(
-                                      //   child: Text('Dodaj jednostkę', style: TextStyle(color: Colors.white70, fontSize: 20))
-                                      // ),
-                                      // OutlineButton(
-                                      //   child: Text('Edytuj jednostkę', style: TextStyle(color: Colors.white70, fontSize: 20),)
-                                      // )
-                                    ],
-                                  ),
-                                ),
+                            height: 50,
+                            child: Container(
+                              color: Colors.blueGrey[900],
+                              child: ButtonBar(
+                                alignment: MainAxisAlignment.center,
+                                children: [
+                                  OutlineButton(
+                                      onPressed: () {},
+                                      autofocus: true,
+                                      disabledTextColor: Colors.deepPurple,
+                                      child: Text('Kategorie',
+                                          style: TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 20))),
+                                  OutlineButton(
+                                      child: Text('Jednostki',
+                                          style: TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 20))),
+                                  // OutlineButton(
+                                  //   child: Text('Dodaj jednostkę', style: TextStyle(color: Colors.white70, fontSize: 20))
+                                  // ),
+                                  // OutlineButton(
+                                  //   child: Text('Edytuj jednostkę', style: TextStyle(color: Colors.white70, fontSize: 20),)
+                                  // )
+                                ],
+                              ),
+                            ),
                           )
                         ])
                     ],
