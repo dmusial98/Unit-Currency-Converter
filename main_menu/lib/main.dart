@@ -4,7 +4,6 @@ import 'database/unit_measure_db/unit_measure_db.dart';
 import 'view/exchange_rates_page.dart';
 import 'database/unit_measure_db/unit_measure_dao.dart';
 import 'view/unit_page.dart';
-import 'view/options_page.dart';
 import 'view/custom_widgets.dart';
 import 'view/exchange_converter_page.dart';
 void main() async {
