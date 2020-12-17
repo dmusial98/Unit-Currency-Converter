@@ -44,6 +44,7 @@ class ReorderableListItem extends StatelessWidget {
 
     Widget content = Container(
       decoration: decoration,
+      padding: new EdgeInsets.all(7.0),
       child: SafeArea(
           top: false,
           bottom: false,
@@ -52,37 +53,27 @@ class ReorderableListItem extends StatelessWidget {
             opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
             child: IntrinsicHeight(
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
+                  ExcludeSemantics(
+                      child: CircleAvatar(
+                          child: Text(data.abbreviation,
+                              style: Theme.of(context).textTheme.headline4),
+                          backgroundColor: Colors.blue[700],
+                          foregroundColor: Colors.white)),
                   Expanded(
-                      child: Padding(
-                        padding:
-                        EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
-                        child: Row(children: [
-                          ExcludeSemantics(
-                              child: CircleAvatar(
-                                  child: Text(data.abbreviation,
-                                      style: Theme.of(context).textTheme.headline4),
-                                  backgroundColor: Colors.blue[700],
-                                  foregroundColor: Colors.white)),
-                          Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.0),
-                                    child: Text(data.name,
-                                        style: Theme.of(context).textTheme.headline2),
-                                  ),
-                                  Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.only(right: 10),
-                                    child: Text(data.countedValue.toString(), style: TextStyle(color: Colors.blue, fontStyle: FontStyle.normal, fontSize: 20)),
-                                  )
-                                ])
-                          )
-                        ]),
-                      )),
+                      child: Container(
+                          padding: new EdgeInsets.only(left: 5.0),
+                          child: Text(data.name,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.headline2))),
+                  Text(data.countedValue.toString(),
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 20)),
+
                   // Triggers the reordering
                   dragHandle,
                 ],
