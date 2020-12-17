@@ -108,7 +108,7 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
-  List<bool> highLightedButton = List.filled(4, false);
+  List<bool> highLightedButton = List.filled(3, false);
   Widget currentPage;
   AnimationController animationController;
   Animation<Offset> pageAnimation;
@@ -220,15 +220,6 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                         changePage: changePage,
                         correspondingWidget:
                             ExchangeConverterPage(openMenuFunction: mockUp)),
-                    MenuEntry(
-                        context: context,
-                        label: "Opcje",
-                        iconName: "png/options.png",
-                        entryIndex: 3,
-                        isHighLighted: isHighLighted,
-                        changePage: changePage,
-                        correspondingWidget:
-                            OptionsPage(openMenuFunction: mockUp)),
                   ]))),
       SlideTransition(
           position: pageAnimation,
