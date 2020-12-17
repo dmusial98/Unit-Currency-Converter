@@ -1,65 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:main_menu/database/unit_type_db/unit_type_db.dart';
 import 'database/database.dart';
 import 'database/unit_measure_db/unit_measure_db.dart';
+import 'database/unit_type_db/unit_type_dao.dart';
 import 'view/exchange_rates_page.dart';
 import 'database/unit_measure_db/unit_measure_dao.dart';
 import 'view/unit_page.dart';
 import 'view/custom_widgets.dart';
 import 'view/exchange_converter_page.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final database = await $FloorFlutterDatabase
-    .databaseBuilder('flutter_database.db')
-    .build();
-  final dao = database.unitMeasureDao;
+      .databaseBuilder('flutter_database.db')
+      .build();
+  final unitMeasureDao = database.unitMeasureDao;
+  final unitTypeDao = database.unitTypeDao;
 
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "kilogram", "kg", 0, 1));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "gram", "g", 0, 2));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "dekagram", "dag", 0, 3));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "miligram", "mg", 0, 4));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "funt", "lb", 0, 5));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "uncja", "oz", 0, 6));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "tona", "t", 0, 7));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "kwintal", "q", 0, 8));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "unit (masa atomowa)", "u", 0, 9));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "karat", "ct", 0, 10));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0, 11));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0, 12));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0, 13));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0, 14));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0, 15));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0, 16));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 0, 17));
-  
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "metr", "m", 1, 1));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "kilometr", "km", 1, 2));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "decymetr", "dm", 1, 3));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "centymetr", "cm", 1, 4));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "milimetr", "mm", 1, 5));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "mila morska", "INM", 1, 6));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "mila angielska", "LM", 1, 7));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "łokieć", "ell", 1, 8));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "stopa", "ft", 1, 9));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "jard", "yd", 1, 10));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 11));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 12));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 13));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 14));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 15));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 16));
-  // await dao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 17));
+  // await unitTypeDao.insertUnitType(UnitTypeDB(null, "Masa"));
+  // await unitTypeDao.insertUnitType(UnitTypeDB(null, "Długość"));
+  // await unitTypeDao.insertUnitType(UnitTypeDB(null, "Czas"));
+  //
+  //
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kilogram", "kg", 1, 1));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "gram", "g", 1, 2));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "dekagram", "dag", 1, 3));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "miligram", "mg", 1, 4));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "funt", "lb", 1, 5));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "uncja", "oz", 1, 6));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "tona", "t", 1, 7));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kwintal", "q", 1, 8));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "unit (masa atomowa)", "u", 1, 9));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "karat", "ct", 1, 10));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 11));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 12));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 13));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 14));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 15));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 16));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 17));
+  //
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "metr", "m", 2, 1));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kilometr", "km", 2, 2));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "decymetr", "dm", 2, 3));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "centymetr", "cm", 2, 4));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "milimetr", "mm", 2, 5));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "mila morska", "INM", 2, 6));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "mila angielska", "LM", 2, 7));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "łokieć", "ell", 2, 8));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "stopa", "ft", 2, 9));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "jard", "yd", 2, 10));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 11));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 12));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 13));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 14));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 15));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 16));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 17));
 
-  // var test = await dao.findUnitMeasureById(1);
-  // print("udało się: " + test.name);
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "sekunda", "s", 3, 1));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "godzina", "h", 3, 2));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "tydzień", "t", 3, 3));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "miesiąc", "m", 3, 4));
 
-  runApp(MyApp(dao));
+  var test = await unitMeasureDao.findUnitMeasureById(1);
+  print("udało się: " + test.name);
+
+  var test2 = await unitTypeDao.getAllUnitTypes();
+  print('udało się: ' + test2[2].name);
+
+  runApp(MyApp(unitMeasureDao, unitTypeDao));
 }
 
 class MyApp extends StatelessWidget {
-  final UnitMeasureDao dao;
+  final UnitMeasureDao unitMeasureDao;
+  final UnitTypeDao unitTypeDao;
 
-  const MyApp(this.dao);
+  const MyApp(this.unitMeasureDao, this.unitTypeDao);
 
   @override
   Widget build(BuildContext context) {
@@ -92,18 +110,19 @@ class MyApp extends StatelessWidget {
               color: Colors.brown[50]),
         ),
       ),
-      home: MainMenu(title: 'Unit Currency Converter', dao: dao),
+      home: MainMenu(title: 'Unit Currency Converter', unitMeasureDao: unitMeasureDao, unitTypeDao: unitTypeDao),
     );
   }
 }
 
 class MainMenu extends StatefulWidget {
-  MainMenu({Key key, this.title, this.dao}) : super(key: key);
+  MainMenu({Key key, this.title, this.unitMeasureDao, this.unitTypeDao}) : super(key: key);
   final String title;
-  final UnitMeasureDao dao;
+  final UnitMeasureDao unitMeasureDao;
+  final UnitTypeDao unitTypeDao;
 
   @override
-  _MainMenuState createState() => _MainMenuState(dao);
+  _MainMenuState createState() => _MainMenuState(unitMeasureDao, unitTypeDao);
 }
 
 class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
@@ -112,9 +131,10 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   AnimationController animationController;
   Animation<Offset> pageAnimation;
   Animation<Offset> menuAnimation;
-  final UnitMeasureDao dao;
+  final UnitMeasureDao unitMeasureDao;
+  final UnitTypeDao unitTypeDao;
 
-  _MainMenuState(this.dao);
+  _MainMenuState(this.unitMeasureDao, this.unitTypeDao);
 
   void changePage(int index, Widget newTopWidget) {
     if (highLightedButton[index] == true) {
@@ -165,7 +185,9 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     changePage(
         0,
         UnitConverterPage(
-          openMenuFunction: mockUp, dao: dao,
+          openMenuFunction: mockUp,
+          unitMeasureDao: unitMeasureDao,
+          unitTypeDao: unitTypeDao,
         ));
 
     super.initState();
@@ -183,7 +205,10 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image(image: AssetImage("png/logo.png"), width: 128, height: 128),
+                    Image(
+                        image: AssetImage("png/logo.png"),
+                        width: 128,
+                        height: 128),
                     Container(
                         margin: EdgeInsets.fromLTRB(0.0, 20.0, 50.0, 50.0),
                         child: Text(
@@ -198,8 +223,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                         isHighLighted: isHighLighted,
                         changePage: changePage,
                         correspondingWidget: UnitConverterPage(
-                          openMenuFunction: mockUp, dao: dao
-                        )),
+                            openMenuFunction: mockUp, unitMeasureDao: unitMeasureDao, unitTypeDao: unitTypeDao)),
                     MenuEntry(
                         context: context,
                         label: "Tabela kursów",

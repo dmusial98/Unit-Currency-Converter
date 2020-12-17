@@ -75,9 +75,10 @@ class _$FlutterDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `UnitMeasureDB` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `abbreviation` TEXT, `type` INTEGER, `countedValue` INTEGER)');
-        await database.execute(
             'CREATE TABLE IF NOT EXISTS `UnitTypeDB` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `UnitMeasureDB` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `abbreviation` TEXT, `type` INTEGER, `countedValue` INTEGER, FOREIGN KEY(`type`) REFERENCES `UnitTypeDB`(`id`))');
+
 
         await callback?.onCreate?.call(database, version);
       },

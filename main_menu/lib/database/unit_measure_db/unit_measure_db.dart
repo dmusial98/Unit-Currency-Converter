@@ -1,7 +1,16 @@
 import 'package:floor/floor.dart';
+import 'package:main_menu/database/unit_type_db/unit_type_db.dart';
 
-@entity
-  // (tableName: 'unit_measure', foreignKeys: [ForeignKey(childColumns: ['unit_measure_type'], parentColumns: ['unit_type_id'], entity: UnitTypeDB)])
+@Entity(
+    foreignKeys: [
+      ForeignKey(
+         childColumns: ['type'],
+         parentColumns: ['id'],
+         entity: UnitTypeDB
+      )
+    ]
+)
+
 class UnitMeasureDB {
 
   @PrimaryKey(autoGenerate: true)
