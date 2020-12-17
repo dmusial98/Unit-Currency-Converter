@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'custom_widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -54,8 +53,7 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     tabController = TabController(vsync: this, length: cardTitles.length);
     tabController.addListener(() {
-      if (tabController.indexIsChanging ||
-          (tabController.index != tabController.previousIndex)) {
+      if (tabController.index != tabController.previousIndex) {
         setState(() {
           tabIndex = tabController.index;
         });
@@ -96,9 +94,10 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
 
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.blueGrey[900],
         appBar: AppBar(
-          centerTitle: true,
           backgroundColor: Colors.blueGrey[900],
+          centerTitle: true,
           automaticallyImplyLeading: false,
           title: CustomTitle(
               title: "Konwerter Miar",
@@ -112,117 +111,63 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
         body: isLoading
             ? CircularProgressIndicator()
             : TabBarView(
-                dragStartBehavior: DragStartBehavior.start,
                 controller: tabController,
                 children: [
                   for (int i = 0; i < cardTitles.length; i++)
-                    Column(mainAxisSize: MainAxisSize.max, children: [
-                      Container(
-                          color: Colors.blueGrey[900],
-                          child: SizedBox(
-                              height: 150,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Row(children: [
-                                    Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 25, left: 15),
-                                        child: Text(
-                                            unitsMeasure[i][indexOfSelectedUnit]
-                                                .name,
-                                            overflow: TextOverflow.fade,
-                                            style: TextStyle(
-                                                color: Colors.white70,
-                                                fontStyle: FontStyle.normal,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 30)))
-                                  ]),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                          padding: EdgeInsets.only(
-                                              right: 25, top: 40),
-                                          child: Text(
-                                              unitsMeasure[i][0]
-                                                  .countedValue
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  color:
-                                                      Colors.deepOrangeAccent,
-                                                  fontStyle: FontStyle.normal,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 40)))
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(top: 25, left: 15),
+                              child: Text(
+                                  unitsMeasure[i][indexOfSelectedUnit].name,
+                                  style:
+                                      Theme.of(context).textTheme.headline1)),
+                          Padding(
+                              padding: EdgeInsets.only(right: 25, top: 40),
+                              child: Text(
+                                  unitsMeasure[i][0].countedValue.toString(),
+                                  textAlign: TextAlign.end,
+                                  style:
+                                      Theme.of(context).textTheme.headline1)),
+                          Expanded(
+                              child: ReorderableList(
+                                  onReorder: this._reorderCallback,
+                                  onReorderDone: this._reorderDone,
+                                  child: CustomScrollView(
+                                    slivers: <Widget>[
+                                      SliverList(
+                                        delegate: SliverChildBuilderDelegate(
+                                          (BuildContext context, int index) {
+                                            return ReorderableListItem(
+                                              data: unitsMeasure[i][
+                                                  index], // first and last attributes affect border drawn during dragging
+                                              isFirst: index == 0,
+                                              isLast: index ==
+                                                  unitsMeasure[i].length - 1,
+                                              key: ValueKey(
+                                                  unitsMeasure[i][index].id),
+                                            );
+                                          },
+                                          childCount: unitsMeasure[i].length,
+                                        ),
+                                      ),
                                     ],
-                                  )
-                                ],
-                              ))),
-                      Expanded(
-                          child: Row(children: [
-                        Expanded(
-                            child: Container(
-                                color: Colors.blueGrey[900],
-                                child: ReorderableList(
-                                    onReorder: this._reorderCallback,
-                                    onReorderDone: this._reorderDone,
-                                    child: CustomScrollView(
-                                      slivers: <Widget>[
-                                        SliverPadding(
-                                            padding: EdgeInsets.only(
-                                                bottom: MediaQuery.of(context)
-                                                    .padding
-                                                    .bottom),
-                                            sliver: SliverList(
-                                              delegate:
-                                                  SliverChildBuilderDelegate(
-                                                (BuildContext context,
-                                                    int index) {
-                                                  return ReorderableListItem(
-                                                    data: unitsMeasure[i][
-                                                        index], // first and last attributes affect border drawn during dragging
-                                                    isFirst: index == 0,
-                                                    isLast: index ==
-                                                        unitsMeasure[i].length -
-                                                            1,
-                                                    key: ValueKey(
-                                                        unitsMeasure[i][index]
-                                                            .id),
-                                                  );
-                                                },
-                                                childCount:
-                                                    unitsMeasure[i].length,
-                                              ),
-                                            )),
-                                      ],
-                                    ))))
-                      ])),
-                      SizedBox(
-                        height: 50,
-                        child: Container(
-                          color: Colors.blueGrey[900],
-                          child: ButtonBar(
-                            alignment: MainAxisAlignment.center,
-                            children: [
-                              OutlineButton(
-                                  onPressed: () {},
-                                  autofocus: true,
-                                  disabledTextColor: Colors.deepPurple,
-                                  child: Text('Kategorie',
-                                      style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 20))),
-                              OutlineButton(
-                                  child: Text('Jednostki',
-                                      style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 20))),
-                            ],
-                          ),
-                        ),
-                      )
-                    ])
+                                  ))),
+                        ])
                 ],
-              ));
+              ),
+        bottomNavigationBar: ButtonBar(
+          alignment: MainAxisAlignment.center,
+          children: [
+            OutlineButton(
+                onPressed: () {},
+                child: Text('Kategorie',
+                    style: Theme.of(context).textTheme.headline4)),
+            OutlineButton(
+                child: Text('Jednostki',
+                    style: Theme.of(context).textTheme.headline4)),
+          ],
+        ));
   }
 }
