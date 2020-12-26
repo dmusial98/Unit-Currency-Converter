@@ -104,21 +104,21 @@ class _$UnitMeasureDao extends UnitMeasureDao {
             database,
             'UnitMeasureDB',
                 (UnitMeasureDB item) =>
-            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type, 'countedValue': item.countedValue},
+            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type, 'lastComputedValue': item.lastComputedValue, 'equation': item.equation, 'baseUnitType': item.baseUnitType},
             changeListener),
         _taskUpdateAdapter = UpdateAdapter(
             database,
             'UnitMeasureDB',
             ['id'],
                 (UnitMeasureDB item) =>
-            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type, 'countedValue': item.countedValue},
+            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type, 'lastComputedValue': item.lastComputedValue, 'equation': item.equation, 'baseUnitType': item.baseUnitType},
             changeListener),
         _taskDeletionAdapter = DeletionAdapter(
             database,
             'UnitMeasureDB',
             ['id'],
                 (UnitMeasureDB item) =>
-            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type, 'countedValue': item.countedValue},
+            <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type, 'lastComputedValue': item.lastComputedValue, 'equation': item.equation, 'baseUnitType': item.baseUnitType},
             changeListener);
 
   final sqflite.DatabaseExecutor database;
@@ -138,7 +138,7 @@ class _$UnitMeasureDao extends UnitMeasureDao {
     return _queryAdapter.query('SELECT * FROM UnitMeasureDB WHERE id = ?',
         arguments: <dynamic>[id],
         mapper: (Map<String, dynamic> row) =>
-            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['countedValue'] as int));
+            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['equation'] as String, row['baseUnitType'] as int, row['lastComputedValue'] as double));
   }
 
   @override
@@ -146,14 +146,14 @@ class _$UnitMeasureDao extends UnitMeasureDao {
     return _queryAdapter.queryList('SELECT * FROM UnitMeasureDB WHERE type = ?',
         arguments: <dynamic>[type],
         mapper: (Map<String, dynamic> row) =>
-            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['countedValue'] as int));
+            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['equation'] as String, row['baseUnitType'] as int, row['lastComputedValue'] as double));
   }
 
   @override
   Future<List<UnitMeasureDB>> getAllUnits() async {
     return _queryAdapter.queryList('SELECT * FROM UnitMeasureDB',
         mapper: (Map<String, dynamic> row) =>
-            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['countedValue'] as int));
+            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['equation'] as String, row['baseUnitType'] as int, row['lastComputedValue'] as double));
   }
 
   @override
@@ -162,7 +162,7 @@ class _$UnitMeasureDao extends UnitMeasureDao {
         queryableName: 'UnitMeasureDB',
         isView: false,
         mapper: (Map<String, dynamic> row) =>
-            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['countedValue'] as int));
+            UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['equation'] as String, row['baseUnitType'] as int, row['lastComputedValue'] as double));
   }
 
 

@@ -18,10 +18,12 @@ class UnitMeasureDB {
 
   String name;
   String abbreviation;
+  String equation;
 
   // @ColumnInfo(name: 'unit_measure_type')
   int type;
-  int countedValue;
+  int baseUnitType;
+  double lastComputedValue;
   // final Key key;
 
   @override
@@ -33,15 +35,17 @@ class UnitMeasureDB {
               name == other.name &&
               abbreviation == other.abbreviation &&
               type == other.type &&
-              countedValue == other.countedValue;
+              baseUnitType == other.baseUnitType &&
+              equation == other.equation &&
+              lastComputedValue == other.lastComputedValue;
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ abbreviation.hashCode ^ type.hashCode ^ countedValue.hashCode;
+  int get hashCode => id.hashCode ^ name.hashCode ^ abbreviation.hashCode ^ type.hashCode ^ baseUnitType.hashCode ^ equation.hashCode ^ lastComputedValue.hashCode;
 
   @override
   String toString() {
-    return 'UnitMeasureDB{id: $id, name: $name abbreviation: $abbreviation type: $type countedValue $countedValue}';
+    return 'UnitMeasureDB{id: $id, name: $name abbreviation: $abbreviation type: $type baseUnitType $baseUnitType equation: $equation lastComputedValue: $lastComputedValue}';
   }
 
-  UnitMeasureDB(this.id, this.name, this.abbreviation, this.type, this.countedValue);
+  UnitMeasureDB(this.id, this.name, this.abbreviation, this.type, this.equation, this.baseUnitType, this.lastComputedValue);
 }

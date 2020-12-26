@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:main_menu/database/unit_type_db/unit_type_dao.dart';
 import 'package:main_menu/database/unit_type_db/unit_type_db.dart';
+import 'package:main_menu/view/edit_units_page.dart';
 import 'custom_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import '../database/unit_measure_db/unit_measure_db.dart';
@@ -13,12 +14,16 @@ class UnitConverterPage extends StatelessWidget {
   final UnitMeasureDao unitMeasureDao;
   final UnitTypeDao unitTypeDao;
 
-  const UnitConverterPage({Key key, this.openMenuFunction, this.unitMeasureDao, this.unitTypeDao})
+  const UnitConverterPage(
+      {Key key, this.openMenuFunction, this.unitMeasureDao, this.unitTypeDao})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Home(openMenuFunction: openMenuFunction, unitMeasureDao: unitMeasureDao, unitTypeDao: this.unitTypeDao);
+    return Home(
+        openMenuFunction: openMenuFunction,
+        unitMeasureDao: unitMeasureDao,
+        unitTypeDao: this.unitTypeDao);
   }
 }
 
@@ -27,21 +32,21 @@ class Home extends StatefulWidget {
   final UnitMeasureDao unitMeasureDao;
   final UnitTypeDao unitTypeDao;
 
-  Home({Key key, this.openMenuFunction, this.unitMeasureDao, this.unitTypeDao}) : super(key: key);
+  Home({Key key, this.openMenuFunction, this.unitMeasureDao, this.unitTypeDao})
+      : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState(this.unitMeasureDao, this.unitTypeDao);
+  _HomePageState createState() =>
+      _HomePageState(this.unitMeasureDao, this.unitTypeDao);
 }
 
-class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
-  var unitsMeasureIsLoading = true;
-  var unitTypesIsLoading = true;
+class _HomePageState extends State<Home> with TickerProviderStateMixin {
+  var isLoading = true;
   var tabIndex = 0;
   final UnitMeasureDao unitMeasureDao;
   final UnitTypeDao unitTypeDao;
   List<List<UnitMeasureDB>> unitsMeasure = new List<List<UnitMeasureDB>>();
   List<UnitTypeDB> unitTypes = new List<UnitTypeDB>();
-  List<String> cardTitles = new List<String>();
   int indexOfSelectedUnit = 0;
   TabController tabController;
 
@@ -49,49 +54,37 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
 
   _getUnitTypesFromDatabase() async {
     unitTypes = await unitTypeDao.getAllUnitTypes();
-
-    setState(() {
-      unitTypesIsLoading = false;
-    });
-    _setCardTitles();
   }
 
   _getUnitsFromDatabase() async {
     for (int i = 1; i <= unitTypes.length; i++)
       unitsMeasure.add(await unitMeasureDao.getUnitsByType(i));
-
-    // setState(() {
-    //   unitsMeasureIsLoading = false;
-    // });
   }
 
-  _setCardTitles() {
-    cardTitles = new List<String>();
+  _getData() async {
+    unitTypes = await unitTypeDao.getAllUnitTypes();
+    for (int i = 1; i <= unitTypes.length; i++)
+      unitsMeasure.add(await unitMeasureDao.getUnitsByType(i));
 
-    for(final unitType in unitTypes)
-      cardTitles.add(unitType.name);
-  }
-
-  Future<bool> _getData() async {
-    await _getUnitTypesFromDatabase();
-    await _getUnitsFromDatabase();
-
-    if(tabController == null) {
-      tabController = TabController(vsync: this, length: unitTypes.length);
-      tabController.addListener(() {
-        if (tabController.index != tabController.previousIndex) {
-          setState(() {
-            tabIndex = tabController.index;
-          });
-        }
-      });
-    }
-    return true;
+    setState(() {
+      isLoading = false;
+      tabController = new TabController(vsync: this, length: unitTypes.length);
+    });
   }
 
   @override
   void initState() {
+    super.initState();
+    _getData();
 
+    tabController = new TabController(vsync: this, length: unitTypes.length);
+    tabController.addListener(() {
+      if (tabController.index != tabController.previousIndex) {
+        setState(() {
+          tabIndex = tabController.index;
+        });
+      }
+    });
   }
 
   @override
@@ -124,93 +117,94 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
     debugPrint("Reordering finished for ${draggedItem.name}}");
   }
 
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _getData(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            // Future hasn't finished yet, return a placeholder
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          else {
-            return Scaffold(
-                backgroundColor: Colors.blueGrey[900],
-                appBar: AppBar(
-                  backgroundColor: Colors.blueGrey[900],
-                  centerTitle: true,
-                  automaticallyImplyLeading: false,
-                  title: CustomTitle(
-                      title: "Konwerter Miar",
-                      openMenuFunction: widget.openMenuFunction),
-                  bottom: TabBar(
-                    isScrollable: false,
-                    controller: tabController,
-                    tabs: [for (final tab in cardTitles) Tab(text: tab)],
-                  ),
-                ),
-                body: TabBarView(
-                  controller: tabController,
-                  children: [
-                    for (int i = 0; i < cardTitles.length; i++)
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Padding(
-                                padding: EdgeInsets.only(top: 25, left: 15),
-                                child: Text(
-                                    unitsMeasure[i][indexOfSelectedUnit].name,
-                                    style:
-                                    Theme.of(context).textTheme.headline1)),
-                            Padding(
-                                padding: EdgeInsets.only(right: 25, top: 40),
-                                child: Text(
-                                    unitsMeasure[i][0].countedValue.toString(),
-                                    textAlign: TextAlign.end,
-                                    style:
-                                    Theme.of(context).textTheme.headline1)),
-                            Expanded(
-                                child: ReorderableList(
-                                    onReorder: this._reorderCallback,
-                                    onReorderDone: this._reorderDone,
-                                    child: CustomScrollView(
-                                      slivers: <Widget>[
-                                        SliverList(
-                                          delegate: SliverChildBuilderDelegate(
-                                                (BuildContext context, int index) {
-                                              return ReorderableListItem(
-                                                data: unitsMeasure[i][
-                                                index], // first and last attributes affect border drawn during dragging
-                                                isFirst: index == 0,
-                                                isLast: index ==
-                                                    unitsMeasure[i].length - 1,
-                                                key: ValueKey(
-                                                    unitsMeasure[i][index].id),
-                                              );
-                                            },
-                                            childCount: unitsMeasure[i].length,
-                                          ),
-                                        ),
-                                      ],
-                                    ))),
-                          ])
-                  ],
-                ),
-                bottomNavigationBar: ButtonBar(
-                  alignment: MainAxisAlignment.center,
-                  children: [
-                    OutlineButton(
-                        onPressed: () {},
-                        child: Text('Kategorie',
-                            style: Theme.of(context).textTheme.headline4)),
-                    OutlineButton(
-                        child: Text('Jednostki',
-                            style: Theme.of(context).textTheme.headline4)),
-                  ],
-                ));
-          }
-        }
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => EditUnitsPage(
+          unitMeasureDao: this.unitMeasureDao,
+          unitTypeDao: this.unitTypeDao,
+          unitTypes: this.unitTypes,
+          unitsMeasure: this.unitsMeasure),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return child;
+      },
     );
+  }
+
+  Widget build(BuildContext context) {
+    return isLoading
+        ? CircularProgressIndicator()
+        : Scaffold(
+            backgroundColor: Colors.blueGrey[900],
+            appBar: AppBar(
+              backgroundColor: Colors.blueGrey[900],
+              centerTitle: true,
+              automaticallyImplyLeading: false,
+              title: CustomTitle(
+                  title: "Konwerter Miar",
+                  openMenuFunction: widget.openMenuFunction),
+              bottom: TabBar(
+                isScrollable: false,
+                controller: tabController,
+                tabs: [
+                  for (final unitType in unitTypes) Tab(text: unitType.name)
+                ],
+              ),
+            ),
+            body: TabBarView(
+              controller: tabController,
+              children: [
+                for (int i = 0; i < unitTypes.length; i++)
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.only(top: 25, left: 15),
+                            child: Text(
+                                unitsMeasure[i][indexOfSelectedUnit].name,
+                                style: Theme.of(context).textTheme.headline1)),
+                        Padding(
+                            padding: EdgeInsets.only(right: 25, top: 40),
+                            child: Text(
+                                unitsMeasure[i][0].lastComputedValue.toString(),
+                                textAlign: TextAlign.end,
+                                style: Theme.of(context).textTheme.headline1)),
+                        Expanded(
+                            child: ReorderableList(
+                                onReorder: this._reorderCallback,
+                                onReorderDone: this._reorderDone,
+                                child: CustomScrollView(
+                                  slivers: <Widget>[
+                                    SliverList(
+                                      delegate: SliverChildBuilderDelegate(
+                                        (BuildContext context, int index) {
+                                          return ReorderableListItem(
+                                            data: unitsMeasure[i][
+                                                index], // first and last attributes affect border drawn during dragging
+                                            isFirst: index == 0,
+                                            isLast: index ==
+                                                unitsMeasure[i].length - 1,
+                                            key: ValueKey(
+                                                unitsMeasure[i][index].id),
+                                          );
+                                        },
+                                        childCount: unitsMeasure[i].length,
+                                      ),
+                                    ),
+                                  ],
+                                ))),
+                      ])
+              ],
+            ),
+            bottomNavigationBar:
+                ButtonBar(alignment: MainAxisAlignment.center, children: [
+              RaisedButton(
+                color: Colors.blue[700],
+                  onPressed: () {
+                    Navigator.of(context).push(_createRoute());
+                  },
+                  child: Text('Edytuj jednostki',
+                      style: Theme.of(context).textTheme.headline4),
+                  )
+            ]));
   }
 }

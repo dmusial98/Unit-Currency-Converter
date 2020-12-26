@@ -68,7 +68,7 @@ class ReorderableListItem extends StatelessWidget {
                           child: Text(data.name,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.headline2))),
-                  Text(data.countedValue.toString(),
+                  Text(data.lastComputedValue.toString(),
                       style: TextStyle(
                           color: Colors.blue,
                           fontStyle: FontStyle.normal,
