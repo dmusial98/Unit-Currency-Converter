@@ -21,8 +21,8 @@ void main() async {
   // await unitTypeDao.insertUnitType(UnitTypeDB(null, "Masa"));
   // await unitTypeDao.insertUnitType(UnitTypeDB(null, "Długość"));
   // await unitTypeDao.insertUnitType(UnitTypeDB(null, "Czas"));
-  //
-  //
+  
+  
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kilogram", "kg", 1, 1));
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "gram", "g", 1, 2));
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "dekagram", "dag", 1, 3));
@@ -40,7 +40,7 @@ void main() async {
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 15));
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 16));
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 17));
-  //
+  
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "metr", "m", 2, 1));
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kilometr", "km", 2, 2));
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "decymetr", "dm", 2, 3));
