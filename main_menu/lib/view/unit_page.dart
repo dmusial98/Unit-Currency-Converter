@@ -69,6 +69,13 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
     setState(() {
       isLoading = false;
       tabController = new TabController(vsync: this, length: unitTypes.length);
+      tabController.addListener(() {
+      if (tabController.index != tabController.previousIndex || tabController.indexIsChanging) {
+        setState(() {
+          tabIndex = tabController.index;
+        });
+      }
+    });
     });
   }
 
@@ -85,12 +92,6 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
         });
       }
     });
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
   }
 
   int _indexOfKey(Key key) {
