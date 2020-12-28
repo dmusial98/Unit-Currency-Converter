@@ -18,23 +18,23 @@ void main() async {
   final unitMeasureDao = database.unitMeasureDao;
   final unitTypeDao = database.unitTypeDao;
 
-  await unitTypeDao.insertUnitType(UnitTypeDB(null, "Masa"));
-  await unitTypeDao.insertUnitType(UnitTypeDB(null, "Długość"));
-  await unitTypeDao.insertUnitType(UnitTypeDB(null, "Czas"));
+  // await unitTypeDao.insertUnitType(UnitTypeDB(null, "Masa"));
+  // await unitTypeDao.insertUnitType(UnitTypeDB(null, "Długość"));
+  // await unitTypeDao.insertUnitType(UnitTypeDB(null, "Czas"));
   
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kilogram", "kg", 1, "#kg = #g * 1000", "#g = #kg / 1000", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "gram", "g", 1, "#g = #kg / 1000", "#kg = #g * 1000", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "dekagram", "dag", 1, "#dag = #g * 100", "#g = #dag / 100", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "miligram", "mg", 1, "#mg = #g / 1000", "#g = #mg * 1000", 0));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kilogram", "kg", 1, "#kg = #g * 1000", "#g = #kg / 1000", 0));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "gram", "g", 1, "#g = #kg / 1000", "#kg = #g * 1000", 0));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "dekagram", "dag", 1, "#dag = #g * 100", "#g = #dag / 100", 0));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "miligram", "mg", 1, "#mg = #g / 1000", "#g = #mg * 1000", 0));
   
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "metr", "m", 2, "#m = #km / 1000", "#km = #m * 1000", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kilometr", "km", 2, "#km = #m * 1000", "#m = #km / 1000", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "decymetr", "dm", 2, "#dm = #cm * 10", "#m = #dm * 10", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "centymetr", "cm", 2, "#cm = #m / 100", "#dm = #cm * 10", 0));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "metr", "m", 2, "#m = #km / 1000", "#km = #m * 1000", 0));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kilometr", "km", 2, "#km = #m * 1000", "#m = #km / 1000", 0));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "decymetr", "dm", 2, "#dm = #cm * 10", "#m = #dm * 10", 0));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "centymetr", "cm", 2, "#cm = #m / 100", "#dm = #cm * 10", 0));
 
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "sekunda", "s", 3, "#s = #m / 60", "#h = #s * 3600", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "godzina", "h", 3, "#h = 60 * #m", "#m = #h / 60", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "minuta", "m", 3, "#m = #s * 60", "#h = #m * 60", 0));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "sekunda", "s", 3, "#s = #m / 60", "#h = #s * 3600", 0));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "godzina", "h", 3, "#h = 60 * #m", "#m = #h / 60", 0));
+  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "minuta", "m", 3, "#m = #s * 60", "#h = #m * 60", 0));
 
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "funt", "lb", 1, 5));
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "uncja", "oz", 1, 6));
@@ -63,11 +63,11 @@ void main() async {
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 16));
   // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 17));
 
-  // var test = await unitMeasureDao.findUnitMeasureById(1);
-  // print("udało się: " + test.name);
+  var test = await unitMeasureDao.findUnitMeasureById(1);
+  print("udało się: " + test.name);
 
-  // var test2 = await unitTypeDao.getAllUnitTypes();
-  // print('udało się: ' + test2[2].name);
+  var test2 = await unitTypeDao.getAllUnitTypes();
+  print('udało się: ' + test2[2].name);
 
   runApp(MyApp(unitMeasureDao, unitTypeDao));
 }

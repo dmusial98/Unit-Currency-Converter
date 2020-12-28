@@ -9,38 +9,22 @@ import '../database/unit_measure_db/unit_measure_dao.dart';
 import '../unit_converter_model/reorderable_list_item.dart';
 import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
 
-class UnitConverterPage extends StatelessWidget {
+class UnitConverterPage extends StatefulWidget {
   final Function openMenuFunction;
   final UnitMeasureDao unitMeasureDao;
   final UnitTypeDao unitTypeDao;
 
-  const UnitConverterPage(
+  UnitConverterPage(
       {Key key, this.openMenuFunction, this.unitMeasureDao, this.unitTypeDao})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Home(
-        openMenuFunction: openMenuFunction,
-        unitMeasureDao: unitMeasureDao,
-        unitTypeDao: this.unitTypeDao);
-  }
+  _UnitConverterPageState createState() =>
+      _UnitConverterPageState(this.unitMeasureDao, this.unitTypeDao);
 }
 
-class Home extends StatefulWidget {
-  final Function openMenuFunction;
-  final UnitMeasureDao unitMeasureDao;
-  final UnitTypeDao unitTypeDao;
-
-  Home({Key key, this.openMenuFunction, this.unitMeasureDao, this.unitTypeDao})
-      : super(key: key);
-
-  @override
-  _HomePageState createState() =>
-      _HomePageState(this.unitMeasureDao, this.unitTypeDao);
-}
-
-class _HomePageState extends State<Home> with TickerProviderStateMixin {
+class _UnitConverterPageState extends State<UnitConverterPage>
+    with TickerProviderStateMixin {
   var isLoading = true;
   var tabIndex = 0;
   final UnitMeasureDao unitMeasureDao;
@@ -49,17 +33,9 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
   List<UnitTypeDB> unitTypes = new List<UnitTypeDB>();
   int indexOfSelectedUnit = 0;
   TabController tabController;
+  TextEditingController startValueEditingController;
 
-  _HomePageState(this.unitMeasureDao, this.unitTypeDao);
-
-  _getUnitTypesFromDatabase() async {
-    unitTypes = await unitTypeDao.getAllUnitTypes();
-  }
-
-  _getUnitsFromDatabase() async {
-    for (int i = 1; i <= unitTypes.length; i++)
-      unitsMeasure.add(await unitMeasureDao.getUnitsByType(i));
-  }
+  _UnitConverterPageState(this.unitMeasureDao, this.unitTypeDao);
 
   _getData() async {
     unitTypes = await unitTypeDao.getAllUnitTypes();
@@ -68,14 +44,19 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
 
     setState(() {
       isLoading = false;
-      tabController = new TabController(vsync: this, length: unitTypes.length);
-      tabController.addListener(() {
-      if (tabController.index != tabController.previousIndex || tabController.indexIsChanging) {
+      _setTabController();
+    });
+  }
+
+  _setTabController() {
+    tabController = new TabController(vsync: this, length: unitTypes.length);
+    tabController.addListener(() {
+      if (tabController.index != tabController.previousIndex ||
+          tabController.indexIsChanging) {
         setState(() {
           tabIndex = tabController.index;
         });
       }
-    });
     });
   }
 
@@ -83,15 +64,9 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _getData();
-
-    tabController = new TabController(vsync: this, length: unitTypes.length);
-    tabController.addListener(() {
-      if (tabController.index != tabController.previousIndex) {
-        setState(() {
-          tabIndex = tabController.index;
-        });
-      }
-    });
+    _setTabController();
+    startValueEditingController = TextEditingController();
+    startValueEditingController.text = "1.0";
   }
 
   int _indexOfKey(Key key) {
@@ -165,8 +140,11 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
                                 style: Theme.of(context).textTheme.headline1)),
                         Padding(
                             padding: EdgeInsets.only(right: 25, top: 40),
-                            child: Text(
-                                unitsMeasure[i][0].lastComputedValue.toString(),
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                                decoration: new InputDecoration(
+                                    border: InputBorder.none),
+                                controller: startValueEditingController,
                                 textAlign: TextAlign.end,
                                 style: Theme.of(context).textTheme.headline1)),
                         Expanded(
@@ -200,12 +178,12 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
                 ButtonBar(alignment: MainAxisAlignment.center, children: [
               RaisedButton(
                 color: Colors.blue[700],
-                  onPressed: () {
-                    Navigator.of(context).push(_createRoute());
-                  },
-                  child: Text('Edytuj jednostki',
-                      style: Theme.of(context).textTheme.headline4),
-                  )
+                onPressed: () {
+                  Navigator.of(context).push(_createRoute());
+                },
+                child: Text('Edytuj jednostki',
+                    style: Theme.of(context).textTheme.headline4),
+              )
             ]));
   }
 }
