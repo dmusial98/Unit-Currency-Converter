@@ -118,9 +118,9 @@ class _UnitConverterPageState extends State<UnitConverterPage>
         }
       }
 
-      missingValues.forEach((missing) {});
       for (int i = 0; i < calculatedValues.length; i++) {
-        var result = _tryCalculateFromKnown(calculatedValues[i], missingValues);
+        var result = _tryCalculateFromReversedEquation(
+            calculatedValues[i], missingValues);
         if (result != null) {
           calculatedValues.add(result);
           missingValues.remove(result);
@@ -159,11 +159,11 @@ class _UnitConverterPageState extends State<UnitConverterPage>
     return false;
   }
 
-  UnitMeasureDB _tryCalculateFromKnown(
+  UnitMeasureDB _tryCalculateFromReversedEquation(
       UnitMeasureDB current, List<UnitMeasureDB> missingValues) {
     for (int i = 0; i < missingValues.length; i++) {
       if (current.equationReversed
-          .contains(" " + missingValues[i].abbreviation + " ")) {
+          .startsWith(missingValues[i].abbreviation + " ")) {
         var equationBody = current.equationReversed
             .substring(current.equationReversed.indexOf("=") + 1);
         equationBody = equationBody.replaceAll(current.abbreviation, "x");
