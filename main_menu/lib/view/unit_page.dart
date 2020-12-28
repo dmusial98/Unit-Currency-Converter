@@ -8,6 +8,7 @@ import '../database/unit_measure_db/unit_measure_db.dart';
 import '../database/unit_measure_db/unit_measure_dao.dart';
 import '../unit_converter_model/reorderable_list_item.dart';
 import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
+import 'package:function_tree/function_tree.dart';
 
 class UnitConverterPage extends StatefulWidget {
   final Function openMenuFunction;
@@ -93,6 +94,88 @@ class _UnitConverterPageState extends State<UnitConverterPage>
     debugPrint("Reordering finished for ${draggedItem.name}}");
   }
 
+  _recalculateValues() {
+    List<UnitMeasureDB> missingValues, calculatedValues;
+    missingValues = new List<UnitMeasureDB>();
+    calculatedValues = new List<UnitMeasureDB>();
+
+    unitsMeasure[tabIndex][indexOfSelectedUnit].lastComputedValue =
+        double.parse(startValueEditingController.text);
+
+    unitsMeasure[tabIndex].forEach((element) {
+      missingValues.add(element);
+    });
+
+    missingValues.removeAt(indexOfSelectedUnit);
+    calculatedValues.add(unitsMeasure[tabIndex][indexOfSelectedUnit]);
+
+    while (missingValues.isNotEmpty) {
+      for (int i = 0; i < missingValues.length; i++) {
+        if (_tryCalculateFromEquation(missingValues[i], calculatedValues)) {
+          calculatedValues.add(missingValues[i]);
+          missingValues.remove(missingValues[i]);
+          break;
+        }
+      }
+
+      missingValues.forEach((missing) {});
+      for (int i = 0; i < calculatedValues.length; i++) {
+        var result = _tryCalculateFromKnown(calculatedValues[i], missingValues);
+        if (result != null) {
+          calculatedValues.add(result);
+          missingValues.remove(result);
+          break;
+        }
+      }
+    }
+
+    for (int i = 0; i < calculatedValues.length; i++) {
+      for (int j = 0; j < unitsMeasure[tabIndex].length; j++) {
+        if (calculatedValues[i].id == unitsMeasure[tabIndex][j].id) {
+          unitsMeasure[tabIndex][j].lastComputedValue =
+              calculatedValues[i].lastComputedValue;
+        }
+      }
+    }
+  }
+
+  bool _tryCalculateFromEquation(
+      UnitMeasureDB current, List<UnitMeasureDB> calculatedValues) {
+    for (int i = 0; i < calculatedValues.length; i++) {
+      var equalSignIndex = current.equation.indexOf("=");
+      var unitSignIndex = current.equation
+          .indexOf(" " + calculatedValues[i].abbreviation + " ");
+      if (equalSignIndex < unitSignIndex) {
+        var equationBody = current.equation.substring(equalSignIndex + 1);
+        equationBody =
+            equationBody.replaceAll(calculatedValues[i].abbreviation, "x");
+        final equation = equationBody.toSingleVariableFunction();
+        current.lastComputedValue =
+            equation(calculatedValues[i].lastComputedValue);
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  UnitMeasureDB _tryCalculateFromKnown(
+      UnitMeasureDB current, List<UnitMeasureDB> missingValues) {
+    for (int i = 0; i < missingValues.length; i++) {
+      if (current.equationReversed
+          .contains(" " + missingValues[i].abbreviation + " ")) {
+        var equationBody = current.equationReversed
+            .substring(current.equationReversed.indexOf("=") + 1);
+        equationBody = equationBody.replaceAll(current.abbreviation, "x");
+        final equation = equationBody.toSingleVariableFunction();
+        missingValues[i].lastComputedValue =
+            equation(current.lastComputedValue);
+        return missingValues[i];
+      }
+    }
+    return null;
+  }
+
   Route _createRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => EditUnitsPage(
@@ -141,7 +224,7 @@ class _UnitConverterPageState extends State<UnitConverterPage>
                         Padding(
                             padding: EdgeInsets.only(right: 25, top: 40),
                             child: TextField(
-                              keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.number,
                                 decoration: new InputDecoration(
                                     border: InputBorder.none),
                                 controller: startValueEditingController,
@@ -182,6 +265,16 @@ class _UnitConverterPageState extends State<UnitConverterPage>
                   Navigator.of(context).push(_createRoute());
                 },
                 child: Text('Edytuj jednostki',
+                    style: Theme.of(context).textTheme.headline4),
+              ),
+              RaisedButton(
+                color: Colors.blue[700],
+                onPressed: () {
+                  setState(() {
+                    _recalculateValues();
+                  });
+                },
+                child: Text('Oblicz',
                     style: Theme.of(context).textTheme.headline4),
               )
             ]));
