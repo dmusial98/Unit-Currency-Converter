@@ -87,13 +87,13 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
 
     unitTypes
         .map((e) => typeDDMI.add(new DropdownMenuItem<int>(
-            value: e.id,
+            value: typeDDMI.length,
             child: new Text(e.name,
                 style: mainStyle))))
         .toList();
     unitsMeasure[typeIndex]
         .map((e) => measureDDMI.add(new DropdownMenuItem<int>(
-            value: e.id,
+            value: measureDDMI.length,
             child: new Text(e.name,
                 style: mainStyle))))
         .toList();
@@ -101,11 +101,11 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
     measureDDMI.map((e) => baseMeasureDDMI.add(e)).toList();
 
     typeDDMI.add(new DropdownMenuItem(
-        value: null,
+        value: typeDDMI.length,
         child: new Text("Dodaj typ jednostki",
             style: mainStyle)));
     measureDDMI.add(new DropdownMenuItem(
-        value: null,
+        value: measureDDMI.length,
         child: new Text("Dodaj jednostkę",
             style: mainStyle)));
   }
@@ -120,7 +120,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
     //     newUnitEquation,
     //     0));
 
-    unitsMeasure[typeIndex][measureIndex].id = measureIndex + 1;
+    //unitsMeasure[typeIndex][measureIndex].id = measureIndex + 1;
     unitsMeasure[typeIndex][measureIndex].name = newUnitName;
     unitsMeasure[typeIndex][measureIndex].abbreviation = newUnitAbbreviation;
     unitsMeasure[typeIndex][measureIndex].type = typeIndex + 1;
@@ -150,7 +150,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
                 value: typeDDMI[typeIndex].value,
                 onChanged: (newIndex) {
                   setState(() {
-                    typeIndex = newIndex - 1;
+                    typeIndex = newIndex;
                     _changeType();
                   });
                 },
@@ -168,7 +168,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
                 value: measureDDMI[measureIndex].value,
                 onChanged: (newIndex) {
                   setState(() {
-                    measureIndex = newIndex - 1;
+                    measureIndex = newIndex;
                   });
                 },
               )
@@ -208,7 +208,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
                 value: baseMeasureDDMI[baseMeasureIndex].value,
                 onChanged: (newIndex) {
                   setState(() {
-                    baseMeasureIndex = newIndex - 1;
+                    baseMeasureIndex = newIndex;
                   });
                 },
               )
