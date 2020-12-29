@@ -38,6 +38,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
   String newUnitName;
   String newUnitAbbreviation;
   String newUnitEquation;
+  String newReversedUnitEquation;
 
   List<DropdownMenuItem<int>> measureDDMI = new List<DropdownMenuItem<int>>();
   List<DropdownMenuItem<int>> baseMeasureDDMI =
@@ -47,6 +48,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
   TextEditingController nameController = new TextEditingController();
   TextEditingController abbreviationController = new TextEditingController();
   TextEditingController equationController = new TextEditingController();
+  TextEditingController reversedEquationController = new TextEditingController();
 
   final TextStyle mainStyle = new TextStyle(
               fontSize: 18.0,
@@ -69,6 +71,9 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
     });
     equationController.addListener(() {
       newUnitEquation = equationController.text;
+    });
+    reversedEquationController.addListener(() {
+      newReversedUnitEquation = reversedEquationController.text;
     });
   }
 
@@ -110,22 +115,20 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
             style: mainStyle)));
   }
 
-  _updateUnit () async {
-    // await unitMeasureDao.updateUnitMeasure(UnitMeasureDB(
-    //     measureIndex + 1,
-    //     newUnitName,
-    //     newUnitAbbreviation,
-    //     measureIndex + 1,
-    //     newUnitEquation,
-    //     newUnitEquation,
-    //     0));
+  _updateUnit () {
+
+    for(final unit in unitsMeasure[typeIndex])
+    {
+      unit.equation.replaceFirst(unit.abbreviation, newUnitAbbreviation);
+      unit.equationReversed.replaceFirst(unit.abbreviation, newReversedUnitEquation);
+    }
 
     unitsMeasure[typeIndex][measureIndex].id = measureIndex + 1;
     unitsMeasure[typeIndex][measureIndex].name = newUnitName;
     unitsMeasure[typeIndex][measureIndex].abbreviation = newUnitAbbreviation;
     unitsMeasure[typeIndex][measureIndex].type = typeIndex + 1;
     unitsMeasure[typeIndex][measureIndex].equation = newUnitEquation;
-    unitsMeasure[typeIndex][measureIndex].equationReversed = newUnitEquation;
+    unitsMeasure[typeIndex][measureIndex].equationReversed = newReversedUnitEquation;
   }
 
   @override
@@ -223,6 +226,17 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
                 controller: equationController,
                 style: Theme.of(context).textTheme.headline4
               ))
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Pomocnicze równanie: ", style: Theme.of(context).textTheme.headline4),
+              Expanded(
+                  child: TextField(
+                      controller: reversedEquationController,
+                      style: Theme.of(context).textTheme.headline4
+                  ))
             ],
           )
         ],
