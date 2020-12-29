@@ -96,11 +96,14 @@ class _UnitConverterPageState extends State<UnitConverterPage>
 
   _recalculateValues() {
     List<UnitMeasureDB> missingValues, calculatedValues;
+    var previousLength;
     missingValues = new List<UnitMeasureDB>();
     calculatedValues = new List<UnitMeasureDB>();
 
     unitsMeasure[tabIndex][indexOfSelectedUnit].lastComputedValue =
         double.parse(startValueEditingController.text);
+
+    previousLength = unitsMeasure[tabIndex].length;
 
     unitsMeasure[tabIndex].forEach((element) {
       missingValues.add(element);
@@ -127,6 +130,11 @@ class _UnitConverterPageState extends State<UnitConverterPage>
           break;
         }
       }
+
+      if (previousLength == missingValues.length)
+        break;
+
+      previousLength = missingValues.length;
     }
 
     for (int i = 0; i < calculatedValues.length; i++) {
