@@ -49,6 +49,21 @@ class _UnitConverterPageState extends State<UnitConverterPage>
     });
   }
 
+  _saveUnits() async {
+    for(int i = 0; i < unitsMeasure.length; i++)
+      for(int j = 0; j < unitsMeasure[i].length; j++)
+      {
+        await unitMeasureDao.updateUnitMeasure(UnitMeasureDB(
+            unitsMeasure[i][j].id,
+            unitsMeasure[i][j].name,
+            unitsMeasure[i][j].abbreviation,
+            unitsMeasure[i][j].type,
+            unitsMeasure[i][j].equation,
+            unitsMeasure[i][j].equationReversed,
+            unitsMeasure[i][j].lastComputedValue));
+      }
+  }
+
   _setTabController() {
     tabController = new TabController(vsync: this, length: unitTypes.length);
     tabController.addListener(() {
@@ -68,6 +83,12 @@ class _UnitConverterPageState extends State<UnitConverterPage>
     _setTabController();
     startValueEditingController = TextEditingController();
     startValueEditingController.text = "1.0";
+  }
+
+  @override
+  void dispose () {
+    super.dispose();
+    _saveUnits();
   }
 
   int _indexOfKey(Key key) {

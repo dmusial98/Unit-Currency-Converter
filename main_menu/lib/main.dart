@@ -18,58 +18,138 @@ void main() async {
   final unitMeasureDao = database.unitMeasureDao;
   final unitTypeDao = database.unitTypeDao;
 
-  await unitTypeDao.insertUnitType(UnitTypeDB(null, "Masa"));
-  await unitTypeDao.insertUnitType(UnitTypeDB(null, "Długość"));
-  await unitTypeDao.insertUnitType(UnitTypeDB(null, "Czas"));
-  
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kilogram", "kg", 1, "kg = g / 1000", "g = kg * 1000", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "gram", "g", 1, "g = kg * 1000", "kg = g / 1000", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "dekagram", "dag", 1, "dag = g / 100", "g = dag * 100", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "miligram", "mg", 1, "mg = g * 1000", "g = mg / 1000", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "mikrogram", "ug", 1, "ug = g * 1000000", "g = ug / 1000000", 0));
+  var test = await unitTypeDao.getAllUnitTypes();
+  if(test.isEmpty || test.length == 0) {
+    await unitTypeDao.insertUnitType(UnitTypeDB(null, "Masa"));
+    await unitTypeDao.insertUnitType(UnitTypeDB(null, "Długość"));
+    await unitTypeDao.insertUnitType(UnitTypeDB(null, "Czas"));
 
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "metr", "m", 2, "m = km * 1000", "km = m / 1000", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kilometr", "km", 2, "km = m / 1000", "m = km * 1000", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "decymetr", "dm", 2, "dm = cm / 10", "m = dm / 10", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "centymetr", "cm", 2, "cm = m * 100", "dm = cm / 10", 0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "kilogram",
+        "kg",
+        1,
+        "kg = g / 1000",
+        "g = kg * 1000",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "gram",
+        "g",
+        1,
+        "g = kg * 1000",
+        "kg = g / 1000",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "dekagram",
+        "dag",
+        1,
+        "dag = g / 100",
+        "g = dag * 100",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "miligram",
+        "mg",
+        1,
+        "mg = g * 1000",
+        "g = mg / 1000",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "mikrogram",
+        "ug",
+        1,
+        "ug = g * 1000000",
+        "g = ug / 1000000",
+        0));
 
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "sekunda", "s", 3, "s = m * 60", "h = s / 3600", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "godzina", "h", 3, "h = m / 60", "m = h * 60", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "minuta", "m", 3, "m = s / 60", "h = m / 60", 0));
-  await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "doba", "d", 3, "d = h / 24", "h = d * 24", 0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "metr",
+        "m",
+        2,
+        "m = km * 1000",
+        "km = m / 1000",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "kilometr",
+        "km",
+        2,
+        "km = m / 1000",
+        "m = km * 1000",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "decymetr",
+        "dm",
+        2,
+        "dm = cm / 10",
+        "m = dm / 10",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "centymetr",
+        "cm",
+        2,
+        "cm = m * 100",
+        "dm = cm / 10",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "hektometr",
+        "hm",
+        2,
+        "hm = m * 100",
+        "m = hm * 100",
+        0));
 
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "funt", "lb", 1, 5));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "uncja", "oz", 1, 6));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "tona", "t", 1, 7));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "kwintal", "q", 1, 8));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "unit (masa atomowa)", "u", 1, 9));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "karat", "ct", 1, 10));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 11));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 12));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 13));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 14));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 15));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 16));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 1, 17));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "milimetr", "mm", 2, 5));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "mila morska", "INM", 2, 6));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "mila angielska", "LM", 2, 7));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "łokieć", "ell", 2, 8));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "stopa", "ft", 2, 9));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "jard", "yd", 2, 10));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 11));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 12));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 13));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 14));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 15));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 16));
-  // await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(null, "Jednostka", "jed", 2, 17));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "sekunda",
+        "s",
+        3,
+        "s = m * 60",
+        "h = s / 3600",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "godzina",
+        "h",
+        3,
+        "h = m / 60",
+        "m = h * 60",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "minuta",
+        "m",
+        3,
+        "m = s / 60",
+        "h = m / 60",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "doba",
+        "d",
+        3,
+        "d = h / 24",
+        "h = d * 24",
+        0));
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        "tydzień",
+        "t",
+        3,
+        "t = d / 7",
+        "d = t * 7",
+        0));
+  }
 
-  var test = await unitMeasureDao.findUnitMeasureById(1);
-  print("udało się: " + test.name);
-
-  var test2 = await unitTypeDao.getAllUnitTypes();
-  print('udało się: ' + test2[2].name);
+  // test = await unitMeasureDao.findUnitMeasureById(1);
+  // print("udało się: " + test.name);
 
   runApp(MyApp(unitMeasureDao, unitTypeDao));
 }

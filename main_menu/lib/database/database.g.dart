@@ -100,20 +100,20 @@ class _$FlutterDatabase extends AppDatabase {
 class _$UnitMeasureDao extends UnitMeasureDao {
   _$UnitMeasureDao(this.database, this.changeListener)
       : _queryAdapter = QueryAdapter(database, changeListener),
-        _taskInsertionAdapter = InsertionAdapter(
+        _unitsInsertionAdapter = InsertionAdapter(
             database,
             'UnitMeasureDB',
                 (UnitMeasureDB item) =>
             <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type, 'equation': item.equation, 'equationReversed': item.equationReversed, 'lastComputedValue': item.lastComputedValue},
             changeListener),
-        _taskUpdateAdapter = UpdateAdapter(
+        _unitsUpdateAdapter = UpdateAdapter(
             database,
             'UnitMeasureDB',
             ['id'],
                 (UnitMeasureDB item) =>
             <String, dynamic>{'id': item.id, 'name': item.name, 'abbreviation': item.abbreviation, 'type': item.type, 'equation': item.equation, 'equationReversed': item.equationReversed, 'lastComputedValue': item.lastComputedValue},
             changeListener),
-        _taskDeletionAdapter = DeletionAdapter(
+        _unitsDeletionAdapter = DeletionAdapter(
             database,
             'UnitMeasureDB',
             ['id'],
@@ -127,11 +127,11 @@ class _$UnitMeasureDao extends UnitMeasureDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<UnitMeasureDB> _taskInsertionAdapter;
+  final InsertionAdapter<UnitMeasureDB> _unitsInsertionAdapter;
 
-  final UpdateAdapter<UnitMeasureDB> _taskUpdateAdapter;
+  final UpdateAdapter<UnitMeasureDB> _unitsUpdateAdapter;
 
-  final DeletionAdapter<UnitMeasureDB> _taskDeletionAdapter;
+  final DeletionAdapter<UnitMeasureDB> _unitsDeletionAdapter;
 
   @override
   Future<UnitMeasureDB> findUnitMeasureById(int id) async {
@@ -165,45 +165,20 @@ class _$UnitMeasureDao extends UnitMeasureDao {
             UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['equation'] as String, row['equationReversed'] as String, row['lastComputedValue'] as double));
   }
 
-
-  // @override
-  // Stream<List<UnitMeasureDB>> findAllTasksAsStream() {
-  //   return _queryAdapter.queryListStream('SELECT * FROM task',
-  //       queryableName: 'Task',
-  //       isView: false,
-  //       mapper: (Map<String, dynamic> row) =>
-  //           UnitMeasureDB(row['id'] as int, row['name'] as String, row['abbreviation'] as String, row['type'] as int, row['key'] as Key));
-  // }
-
   @override
   Future<void> insertUnitMeasure(UnitMeasureDB unitMeasure) async {
-    await _taskInsertionAdapter.insert(unitMeasure, OnConflictStrategy.abort);
+    await _unitsInsertionAdapter.insert(unitMeasure, OnConflictStrategy.abort);
   }
-
-  // @override
-  // Future<void> insertTasks(List<Task> tasks) async {
-  //   await _taskInsertionAdapter.insertList(tasks, OnConflictStrategy.abort);
-  // }
 
   @override
   Future<void> updateUnitMeasure(UnitMeasureDB unitMeasure) async {
-    await _taskUpdateAdapter.update(unitMeasure, OnConflictStrategy.abort);
+    await _unitsUpdateAdapter.update(unitMeasure, OnConflictStrategy.abort);
   }
-
-  // @override
-  // Future<void> updateTasks(List<Task> task) async {
-  //   await _taskUpdateAdapter.updateList(task, OnConflictStrategy.abort);
-  // }
 
   @override
   Future<void> deleteUnitMeasure(UnitMeasureDB unitMeasure) async {
-    await _taskDeletionAdapter.delete(unitMeasure);
+    await _unitsDeletionAdapter.delete(unitMeasure);
   }
-
-  // @override
-  // Future<void> deleteTasks(List<Task> tasks) async {
-  //   await _taskDeletionAdapter.deleteList(tasks);
-  // }
 }
 
 class _$UnitTypeDao extends UnitTypeDao {

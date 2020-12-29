@@ -35,14 +35,18 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
   var measureIndex = 0;
   var baseMeasureIndex = 0;
 
+  String newUnitName;
+  String newUnitAbbreviation;
+  String newUnitEquation;
+
   List<DropdownMenuItem<int>> measureDDMI = new List<DropdownMenuItem<int>>();
   List<DropdownMenuItem<int>> baseMeasureDDMI =
       new List<DropdownMenuItem<int>>();
   List<DropdownMenuItem<int>> typeDDMI = new List<DropdownMenuItem<int>>();
 
-  TextEditingController nameComtroller;
-  TextEditingController abbreviationController;
-  TextEditingController equationController;
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController abbreviationController = new TextEditingController();
+  TextEditingController equationController = new TextEditingController();
 
   final TextStyle mainStyle = new TextStyle(
               fontSize: 18.0,
@@ -57,6 +61,23 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
   void initState() {
     super.initState();
     _changeType ();
+    nameController.addListener(() {
+      newUnitName = nameController.text;
+    });
+    abbreviationController.addListener(() {
+      newUnitAbbreviation = abbreviationController.text;
+    });
+    equationController.addListener(() {
+      newUnitEquation = equationController.text;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
+    abbreviationController.dispose();
+    equationController.dispose();
   }
 
   _changeType () {
@@ -87,6 +108,24 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
         value: measureDDMI.length,
         child: new Text("Dodaj jednostkę",
             style: mainStyle)));
+  }
+
+  _updateUnit () async {
+    // await unitMeasureDao.updateUnitMeasure(UnitMeasureDB(
+    //     measureIndex + 1,
+    //     newUnitName,
+    //     newUnitAbbreviation,
+    //     measureIndex + 1,
+    //     newUnitEquation,
+    //     newUnitEquation,
+    //     0));
+
+    unitsMeasure[typeIndex][measureIndex].id = measureIndex + 1;
+    unitsMeasure[typeIndex][measureIndex].name = newUnitName;
+    unitsMeasure[typeIndex][measureIndex].abbreviation = newUnitAbbreviation;
+    unitsMeasure[typeIndex][measureIndex].type = typeIndex + 1;
+    unitsMeasure[typeIndex][measureIndex].equation = newUnitEquation;
+    unitsMeasure[typeIndex][measureIndex].equationReversed = newUnitEquation;
   }
 
   @override
@@ -141,7 +180,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
               Text("Nazwa: ", style: Theme.of(context).textTheme.headline4),
               Expanded(
                   child: TextField(
-                controller: nameComtroller,
+                controller: nameController,
                 style: Theme.of(context).textTheme.headline4
                 
               ))
@@ -150,7 +189,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Nazwa skrótowa: ", style: Theme.of(context).textTheme.headline4),
+              Text("Skrót: ", style: Theme.of(context).textTheme.headline4),
               Expanded(
                   child: TextField(
                 controller: abbreviationController,
@@ -198,7 +237,11 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
                   style: Theme.of(context).textTheme.headline4)),
           RaisedButton(
               color: Colors.blue[700],
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  _updateUnit();
+                });
+              },
               child: Text('Aktualizuj',
                   style: Theme.of(context).textTheme.headline4)),
         ],
