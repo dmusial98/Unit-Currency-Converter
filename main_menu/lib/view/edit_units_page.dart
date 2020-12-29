@@ -203,23 +203,6 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Jednostka bazowa: ", style: Theme.of(context).textTheme.headline4),
-              DropdownButton<int>(
-                items: baseMeasureDDMI,
-                dropdownColor: Colors.blueGrey[800],
-                icon: Icon(Icons.keyboard_arrow_down),
-                value: baseMeasureDDMI[baseMeasureIndex].value,
-                onChanged: (newIndex) {
-                  setState(() {
-                    baseMeasureIndex = newIndex - 1;
-                  });
-                },
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
               Text("Równanie: ", style: Theme.of(context).textTheme.headline4),
               Expanded(
                   child: TextField(
@@ -257,6 +240,11 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
                 });
               },
               child: Text('Aktualizuj',
+                  style: Theme.of(context).textTheme.headline4)),
+          RaisedButton(
+              color: Colors.blue[700],
+              onPressed: () {},
+              child: Text('Dodaj kategorię/jednostkę',
                   style: Theme.of(context).textTheme.headline4)),
         ],
       ),
