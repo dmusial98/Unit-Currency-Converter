@@ -134,6 +134,41 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
     unitsMeasure[typeIndex][measureIndex].equationReversed = newReversedUnitEquation;
   }
 
+  _deleteUnit() async {
+    await unitMeasureDao.deleteUnitMeasure(UnitMeasureDB(
+        unitsMeasure[typeIndex][measureIndex].id,
+        unitsMeasure[typeIndex][measureIndex].name,
+        unitsMeasure[typeIndex][measureIndex].abbreviation,
+        unitsMeasure[typeIndex][measureIndex].type,
+        unitsMeasure[typeIndex][measureIndex].equation,
+        unitsMeasure[typeIndex][measureIndex].equationReversed,
+        unitsMeasure[typeIndex][measureIndex].lastComputedValue));
+
+    unitsMeasure[typeIndex].removeAt(measureIndex);
+  }
+
+  _deleteUnitType() async {
+
+    for(final unit in unitsMeasure[typeIndex])
+      await unitMeasureDao.deleteUnitMeasure(UnitMeasureDB(
+          unit.id,
+          unit.name,
+          unit.abbreviation,
+          unit.type,
+          unit.equation,
+          unit.equationReversed,
+          unit.lastComputedValue));
+
+      unitsMeasure[typeIndex].clear();
+
+      await unitTypeDao.deleteUnitType(UnitTypeDB(
+          unitTypes[typeIndex].id,
+          unitTypes[typeIndex].name));
+
+      unitsMeasure.removeAt(typeIndex);
+      unitTypes.removeAt(typeIndex);
+  }
+
   Route _createRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
@@ -256,8 +291,17 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
                   style: Theme.of(context).textTheme.headline4)),
           RaisedButton(
               color: Colors.blue[700],
-              onPressed: () {},
+              onPressed: () {
+                _deleteUnit();
+              },
               child: Text('Usuń jednostkę',
+                  style: Theme.of(context).textTheme.headline4)),
+          RaisedButton(
+              color: Colors.blue[700],
+              onPressed: () {
+                _deleteUnitType();
+              },
+              child: Text('Usuń kategorię',
                   style: Theme.of(context).textTheme.headline4)),
           RaisedButton(
               color: Colors.blue[700],
