@@ -101,11 +101,11 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
     measureDDMI.map((e) => baseMeasureDDMI.add(e)).toList();
 
     typeDDMI.add(new DropdownMenuItem(
-        value: typeDDMI.length,
+        value: null,
         child: new Text("Dodaj typ jednostki",
             style: mainStyle)));
     measureDDMI.add(new DropdownMenuItem(
-        value: measureDDMI.length,
+        value: null,
         child: new Text("Dodaj jednostkę",
             style: mainStyle)));
   }
