@@ -86,6 +86,19 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
     equationController.dispose();
   }
 
+  _fillEditFields() {
+    var unit = unitsMeasure[typeIndex][measureIndex];
+    nameController.text = unit.name;
+    abbreviationController.text = unit.abbreviation;
+    equationController.text = unit.equation;
+    reversedEquationController.text = unit.equationReversed;
+
+    newUnitName = unit.name;
+    newUnitAbbreviation = unit.abbreviation;
+    newUnitEquation = unit.equation;
+    newReversedUnitEquation = unit.equationReversed;
+  }
+
   _changeType () {
     typeDDMI.clear();
     baseMeasureDDMI.clear();
@@ -105,23 +118,14 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
         .toList();
 
     measureDDMI.map((e) => baseMeasureDDMI.add(e)).toList();
-
-    typeDDMI.add(new DropdownMenuItem(
-        value: typeDDMI.length,
-        child: new Text("Dodaj typ jednostki",
-            style: mainStyle)));
-    measureDDMI.add(new DropdownMenuItem(
-        value: measureDDMI.length,
-        child: new Text("Dodaj jednostkę",
-            style: mainStyle)));
   }
 
   _updateUnit() {
 
-    for(final unit in unitsMeasure[typeIndex])
+    for(int i = 0; i < unitsMeasure[typeIndex].length; i++)
     {
-      unit.equation.replaceFirst(unit.abbreviation, newUnitAbbreviation);
-      unit.equationReversed.replaceFirst(unit.abbreviation, newReversedUnitEquation);
+      unitsMeasure[typeIndex][i].equation = unitsMeasure[typeIndex][i].equation.replaceFirst(unitsMeasure[typeIndex][measureIndex].abbreviation, newUnitAbbreviation);
+      unitsMeasure[typeIndex][i].equationReversed = unitsMeasure[typeIndex][i].equationReversed.replaceFirst(unitsMeasure[typeIndex][measureIndex].abbreviation, newUnitAbbreviation);
     }
 
     unitsMeasure[typeIndex][measureIndex].name = newUnitName;
@@ -168,6 +172,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
                   setState(() {
                     typeIndex = newIndex;
                     _changeType();
+                    _fillEditFields();
                   });
                 },
               )
@@ -185,6 +190,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
                 onChanged: (newIndex) {
                   setState(() {
                     measureIndex = newIndex;
+                    _fillEditFields();
                   });
                 },
               )
