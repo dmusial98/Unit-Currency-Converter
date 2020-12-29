@@ -3,30 +3,29 @@ import 'package:main_menu/database/unit_measure_db/unit_measure_dao.dart';
 import 'package:main_menu/database/unit_measure_db/unit_measure_db.dart';
 import 'package:main_menu/database/unit_type_db/unit_type_dao.dart';
 import 'package:main_menu/database/unit_type_db/unit_type_db.dart';
-import 'package:main_menu/view/add_units_page.dart';
 
-class EditUnitsPage extends StatefulWidget {
+class AddUnitsPage extends StatefulWidget {
   final UnitMeasureDao unitMeasureDao;
   final UnitTypeDao unitTypeDao;
   final List<List<UnitMeasureDB>> unitsMeasure;
   final List<UnitTypeDB> unitTypes;
 
-  const EditUnitsPage(
+  const AddUnitsPage(
       {Key key,
-      this.unitMeasureDao,
-      this.unitTypeDao,
-      this.unitsMeasure,
-      this.unitTypes})
+        this.unitMeasureDao,
+        this.unitTypeDao,
+        this.unitsMeasure,
+        this.unitTypes})
       : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _EditUnitsPageState(this.unitMeasureDao, this.unitTypeDao,
+    return _AddUnitsPageState(this.unitMeasureDao, this.unitTypeDao,
         this.unitsMeasure, this.unitTypes);
   }
 }
 
-class _EditUnitsPageState extends State<EditUnitsPage> {
+class _AddUnitsPageState extends State<AddUnitsPage> {
   final UnitMeasureDao unitMeasureDao;
   final UnitTypeDao unitTypeDao;
   final List<List<UnitMeasureDB>> unitsMeasure;
@@ -41,9 +40,6 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
   String newUnitEquation;
   String newReversedUnitEquation;
 
-  List<DropdownMenuItem<int>> measureDDMI = new List<DropdownMenuItem<int>>();
-  List<DropdownMenuItem<int>> baseMeasureDDMI =
-      new List<DropdownMenuItem<int>>();
   List<DropdownMenuItem<int>> typeDDMI = new List<DropdownMenuItem<int>>();
 
   TextEditingController nameController = new TextEditingController();
@@ -52,12 +48,12 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
   TextEditingController reversedEquationController = new TextEditingController();
 
   final TextStyle mainStyle = new TextStyle(
-              fontSize: 18.0,
-              fontFamily: 'Sans',
-              fontWeight: FontWeight.w300,
-              color: Colors.brown[50]);
+      fontSize: 18.0,
+      fontFamily: 'Sans',
+      fontWeight: FontWeight.w300,
+      color: Colors.brown[50]);
 
-  _EditUnitsPageState(
+  _AddUnitsPageState(
       this.unitMeasureDao, this.unitTypeDao, this.unitsMeasure, this.unitTypes);
 
   @override
@@ -88,60 +84,31 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
 
   _changeType () {
     typeDDMI.clear();
-    baseMeasureDDMI.clear();
-    measureDDMI.clear();
+    // baseMeasureDDMI.clear();
+    // measureDDMI.clear();
 
     unitTypes
         .map((e) => typeDDMI.add(new DropdownMenuItem<int>(
-            value: typeDDMI.length,
-            child: new Text(e.name,
-                style: mainStyle))))
+        value: typeDDMI.length,
+        child: new Text(e.name,
+            style: mainStyle))))
         .toList();
-    unitsMeasure[typeIndex]
-        .map((e) => measureDDMI.add(new DropdownMenuItem<int>(
-            value: measureDDMI.length,
-            child: new Text(e.name,
-                style: mainStyle))))
-        .toList();
-
-    measureDDMI.map((e) => baseMeasureDDMI.add(e)).toList();
 
     typeDDMI.add(new DropdownMenuItem(
         value: typeDDMI.length,
         child: new Text("Dodaj typ jednostki",
             style: mainStyle)));
-    measureDDMI.add(new DropdownMenuItem(
-        value: measureDDMI.length,
-        child: new Text("Dodaj jednostkę",
-            style: mainStyle)));
   }
 
-  _updateUnit() {
-
-    for(final unit in unitsMeasure[typeIndex])
-    {
-      unit.equation.replaceFirst(unit.abbreviation, newUnitAbbreviation);
-      unit.equationReversed.replaceFirst(unit.abbreviation, newReversedUnitEquation);
-    }
-
-    unitsMeasure[typeIndex][measureIndex].name = newUnitName;
-    unitsMeasure[typeIndex][measureIndex].abbreviation = newUnitAbbreviation;
-    unitsMeasure[typeIndex][measureIndex].equation = newUnitEquation;
-    unitsMeasure[typeIndex][measureIndex].equationReversed = newReversedUnitEquation;
-  }
-
-  Route _createRoute() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          AddUnitsPage(
-              unitMeasureDao: this.unitMeasureDao,
-              unitTypeDao: this.unitTypeDao,
-              unitTypes: this.unitTypes,
-              unitsMeasure: this.unitsMeasure),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return child;
-      },
-    );
+  _addUnit() {
+    unitsMeasure[typeIndex].add(UnitMeasureDB(
+        null,
+        newUnitName,
+        newUnitAbbreviation,
+        typeIndex + 1,
+        newUnitEquation,
+        newReversedUnitEquation,
+        0));
   }
 
   @override
@@ -150,7 +117,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
       backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
           backgroundColor: Colors.blueGrey[900],
-          title: Text("Edytuj jednostki",
+          title: Text("Dodaj jednostkę/kategorię",
               style: Theme.of(context).textTheme.headline2)),
       body: Column(
         children: [
@@ -167,7 +134,6 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
                 onChanged: (newIndex) {
                   setState(() {
                     typeIndex = newIndex;
-                    _changeType();
                   });
                 },
               )
@@ -176,40 +142,23 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Jednostka: ", style: Theme.of(context).textTheme.headline4),
-              DropdownButton<int>(
-                dropdownColor: Colors.blueGrey[800],
-                items: measureDDMI,
-                icon: Icon(Icons.keyboard_arrow_down),
-                value: measureDDMI[measureIndex].value,
-                onChanged: (newIndex) {
-                  setState(() {
-                    measureIndex = newIndex;
-                  });
-                },
-              )
+              Text("Nazwa jednostki: ", style: Theme.of(context).textTheme.headline4),
+              Expanded(
+                  child: TextField(
+                      controller: nameController,
+                      style: Theme.of(context).textTheme.headline4
+                  ))
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Nazwa: ", style: Theme.of(context).textTheme.headline4),
+              Text("Skrót jednostki: ", style: Theme.of(context).textTheme.headline4),
               Expanded(
                   child: TextField(
-                controller: nameController,
-                style: Theme.of(context).textTheme.headline4
-              ))
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Skrót: ", style: Theme.of(context).textTheme.headline4),
-              Expanded(
-                  child: TextField(
-                controller: abbreviationController,
-                style: Theme.of(context).textTheme.headline4
-              ))
+                      controller: abbreviationController,
+                      style: Theme.of(context).textTheme.headline4
+                  ))
             ],
           ),
           Row(
@@ -218,9 +167,9 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
               Text("Równanie: ", style: Theme.of(context).textTheme.headline4),
               Expanded(
                   child: TextField(
-                controller: equationController,
-                style: Theme.of(context).textTheme.headline4
-              ))
+                      controller: equationController,
+                      style: Theme.of(context).textTheme.headline4
+                  ))
             ],
           ),
           Row(
@@ -242,23 +191,14 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
           RaisedButton(
               color: Colors.blue[700],
               onPressed: () {
-                setState(() {
-                  _updateUnit();
-                });
+                _addUnit();
               },
-              child: Text('Aktualizuj',
+              child: Text('Dodaj jednostkę',
                   style: Theme.of(context).textTheme.headline4)),
           RaisedButton(
               color: Colors.blue[700],
               onPressed: () {},
-              child: Text('Usuń jednostkę',
-                  style: Theme.of(context).textTheme.headline4)),
-          RaisedButton(
-              color: Colors.blue[700],
-              onPressed: () {
-                Navigator.of(context).push(_createRoute());
-              },
-              child: Text('Dodaj kategorię/jednostkę',
+              child: Text('Dodaj kategorię',
                   style: Theme.of(context).textTheme.headline4)),
         ],
       ),
