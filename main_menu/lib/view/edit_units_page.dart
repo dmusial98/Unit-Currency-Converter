@@ -115,7 +115,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
             style: mainStyle)));
   }
 
-  _updateUnit () {
+  Future<void> _updateUnit() async  {
 
     for(final unit in unitsMeasure[typeIndex])
     {
@@ -123,10 +123,8 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
       unit.equationReversed.replaceFirst(unit.abbreviation, newReversedUnitEquation);
     }
 
-    //unitsMeasure[typeIndex][measureIndex].id = measureIndex + 1;
     unitsMeasure[typeIndex][measureIndex].name = newUnitName;
     unitsMeasure[typeIndex][measureIndex].abbreviation = newUnitAbbreviation;
-    unitsMeasure[typeIndex][measureIndex].type = typeIndex + 1;
     unitsMeasure[typeIndex][measureIndex].equation = newUnitEquation;
     unitsMeasure[typeIndex][measureIndex].equationReversed = newReversedUnitEquation;
   }
@@ -185,7 +183,6 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
                   child: TextField(
                 controller: nameController,
                 style: Theme.of(context).textTheme.headline4
-                
               ))
             ],
           ),
@@ -229,17 +226,17 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
         children: [
           RaisedButton(
               color: Colors.blue[700],
-              onPressed: () {},
-              child: Text('Usuń jednostkę',
-                  style: Theme.of(context).textTheme.headline4)),
-          RaisedButton(
-              color: Colors.blue[700],
               onPressed: () {
                 setState(() {
                   _updateUnit();
                 });
               },
               child: Text('Aktualizuj',
+                  style: Theme.of(context).textTheme.headline4)),
+          RaisedButton(
+              color: Colors.blue[700],
+              onPressed: () {},
+              child: Text('Usuń jednostkę',
                   style: Theme.of(context).textTheme.headline4)),
           RaisedButton(
               color: Colors.blue[700],
