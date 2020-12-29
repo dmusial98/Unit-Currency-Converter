@@ -24,17 +24,18 @@ class UnitConverterPage extends StatefulWidget {
       _UnitConverterPageState(this.unitMeasureDao, this.unitTypeDao);
 }
 
-class _UnitConverterPageState extends State<UnitConverterPage>
-    with TickerProviderStateMixin {
+class _UnitConverterPageState extends State<UnitConverterPage> with TickerProviderStateMixin {
   var isLoading = true;
   var tabIndex = 0;
   final UnitMeasureDao unitMeasureDao;
   final UnitTypeDao unitTypeDao;
   List<List<UnitMeasureDB>> unitsMeasure = new List<List<UnitMeasureDB>>();
+  // List<int> unitsMeasureAmounts = new List<int>();
   List<UnitTypeDB> unitTypes = new List<UnitTypeDB>();
   int indexOfSelectedUnit = 0;
   TabController tabController;
   TextEditingController startValueEditingController;
+
 
   _UnitConverterPageState(this.unitMeasureDao, this.unitTypeDao);
 
@@ -50,18 +51,54 @@ class _UnitConverterPageState extends State<UnitConverterPage>
   }
 
   _saveUnits() async {
-    for(int i = 0; i < unitsMeasure.length; i++)
-      for(int j = 0; j < unitsMeasure[i].length; j++)
+    // for(int i = 0; i < unitsMeasure.length; i++)
+    //   for(int j = 0; j < unitsMeasure[i].length; j++)
+    //   {
+    //     await unitMeasureDao.updateUnitMeasure(UnitMeasureDB(
+    //         unitsMeasure[i][j].id,
+    //         unitsMeasure[i][j].name,
+    //         unitsMeasure[i][j].abbreviation,
+    //         unitsMeasure[i][j].type,
+    //         unitsMeasure[i][j].equation,
+    //         unitsMeasure[i][j].equationReversed,
+    //         unitsMeasure[i][j].lastComputedValue));
+    //   }
+
+    for(final unitType in unitTypes)
+      if(unitType.id != null)
+        await unitTypeDao.updateUnitType(UnitTypeDB(
+            unitType.id,
+            unitType.name));
+      else
+        await unitTypeDao.insertUnitType(UnitTypeDB(
+            null,
+            unitType.name));
+
+    for(final unitType in unitsMeasure)
+      for(final unitMeasure in unitType)
+        if(unitMeasure.id != null)
+        {
+          await unitMeasureDao.updateUnitMeasure(UnitMeasureDB(
+              unitMeasure.id,
+              unitMeasure.name,
+              unitMeasure.abbreviation,
+              unitMeasure.type,
+              unitMeasure.equation,
+              unitMeasure.equationReversed,
+              unitMeasure.lastComputedValue));
+        }
+      else
       {
-        await unitMeasureDao.updateUnitMeasure(UnitMeasureDB(
-            unitsMeasure[i][j].id,
-            unitsMeasure[i][j].name,
-            unitsMeasure[i][j].abbreviation,
-            unitsMeasure[i][j].type,
-            unitsMeasure[i][j].equation,
-            unitsMeasure[i][j].equationReversed,
-            unitsMeasure[i][j].lastComputedValue));
+            await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+                null,
+                unitMeasure.name,
+                unitMeasure.abbreviation,
+                unitMeasure.type,
+                unitMeasure.equation,
+                unitMeasure.equationReversed,
+                unitMeasure.lastComputedValue));
       }
+
   }
 
   _setTabController() {
@@ -79,10 +116,17 @@ class _UnitConverterPageState extends State<UnitConverterPage>
   @override
   void initState() {
     super.initState();
-    _getData();
-    _setTabController();
+    if(unitsMeasure.isEmpty || unitTypes.isEmpty)
+      _getData();
+
     startValueEditingController = TextEditingController();
     startValueEditingController.text = "1.0";
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _setTabController();
   }
 
   @override
@@ -211,7 +255,9 @@ class _UnitConverterPageState extends State<UnitConverterPage>
           unitMeasureDao: this.unitMeasureDao,
           unitTypeDao: this.unitTypeDao,
           unitTypes: this.unitTypes,
-          unitsMeasure: this.unitsMeasure),
+          unitsMeasure: this.unitsMeasure,
+      ),
+
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return child;
       },
@@ -247,8 +293,12 @@ class _UnitConverterPageState extends State<UnitConverterPage>
                       children: [
                         Padding(
                             padding: EdgeInsets.only(top: 25, left: 15),
-                            child: Text(
+                            child: unitsMeasure[i].isNotEmpty ?
+                            Text(
                                 unitsMeasure[i][indexOfSelectedUnit].name,
+                                style: Theme.of(context).textTheme.headline1) :
+                            Text(
+                                "Pusto tu",
                                 style: Theme.of(context).textTheme.headline1)),
                         Padding(
                             padding: EdgeInsets.only(right: 25, top: 40),
@@ -292,6 +342,7 @@ class _UnitConverterPageState extends State<UnitConverterPage>
                 color: Colors.blue[700],
                 onPressed: () {
                   Navigator.of(context).push(_createRoute());
+                  _setTabController();
                 },
                 child: Text('Edytuj jednostki',
                     style: Theme.of(context).textTheme.headline4),

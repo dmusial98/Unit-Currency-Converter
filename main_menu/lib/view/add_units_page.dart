@@ -39,13 +39,15 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
   String newUnitAbbreviation;
   String newUnitEquation;
   String newReversedUnitEquation;
+  String newUnitTypeName;
 
   List<DropdownMenuItem<int>> typeDDMI = new List<DropdownMenuItem<int>>();
 
-  TextEditingController nameController = new TextEditingController();
+  TextEditingController unitNameController = new TextEditingController();
   TextEditingController abbreviationController = new TextEditingController();
   TextEditingController equationController = new TextEditingController();
   TextEditingController reversedEquationController = new TextEditingController();
+  TextEditingController unitTypeNameController = new TextEditingController();
 
   final TextStyle mainStyle = new TextStyle(
       fontSize: 18.0,
@@ -60,8 +62,8 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
   void initState() {
     super.initState();
     _changeType ();
-    nameController.addListener(() {
-      newUnitName = nameController.text;
+    unitNameController.addListener(() {
+      newUnitName = unitNameController.text;
     });
     abbreviationController.addListener(() {
       newUnitAbbreviation = abbreviationController.text;
@@ -72,20 +74,23 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
     reversedEquationController.addListener(() {
       newReversedUnitEquation = reversedEquationController.text;
     });
+    unitTypeNameController.addListener(() {
+      newUnitTypeName = unitTypeNameController.text;
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
-    nameController.dispose();
+    unitNameController.dispose();
     abbreviationController.dispose();
     equationController.dispose();
+    reversedEquationController.dispose();
+    unitTypeNameController.dispose();
   }
 
   _changeType () {
     typeDDMI.clear();
-    // baseMeasureDDMI.clear();
-    // measureDDMI.clear();
 
     unitTypes
         .map((e) => typeDDMI.add(new DropdownMenuItem<int>(
@@ -111,6 +116,11 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
         0));
   }
 
+  _addUnitType() {
+    unitTypes.add(UnitTypeDB(null, newUnitTypeName));
+    unitsMeasure.add(List<UnitMeasureDB>());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,10 +131,24 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
               style: Theme.of(context).textTheme.headline2)),
       body: Column(
         children: [
+          Padding(
+            padding: EdgeInsets.only(bottom: 30.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Nazwa nowej kategorii: ", style: Theme.of(context).textTheme.headline4),
+                Expanded(
+                    child: TextField(
+                        controller: unitTypeNameController,
+                        style: Theme.of(context).textTheme.headline4
+                    ))
+              ],
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Kategoria jednostek: ",
+              Text("Kategoria nowej jednostki: ",
                   style: Theme.of(context).textTheme.headline4),
               DropdownButton<int>(
                 items: typeDDMI,
@@ -142,10 +166,10 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Nazwa jednostki: ", style: Theme.of(context).textTheme.headline4),
+              Text("Nazwa nowej jednostki: ", style: Theme.of(context).textTheme.headline4),
               Expanded(
                   child: TextField(
-                      controller: nameController,
+                      controller: unitNameController,
                       style: Theme.of(context).textTheme.headline4
                   ))
             ],
@@ -153,7 +177,7 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Skrót jednostki: ", style: Theme.of(context).textTheme.headline4),
+              Text("Skrót nowej jednostki: ", style: Theme.of(context).textTheme.headline4),
               Expanded(
                   child: TextField(
                       controller: abbreviationController,
@@ -197,7 +221,9 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
                   style: Theme.of(context).textTheme.headline4)),
           RaisedButton(
               color: Colors.blue[700],
-              onPressed: () {},
+              onPressed: () {
+                _addUnitType();
+              },
               child: Text('Dodaj kategorię',
                   style: Theme.of(context).textTheme.headline4)),
         ],
