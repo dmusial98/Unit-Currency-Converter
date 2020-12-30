@@ -124,7 +124,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
     measureDDMI.map((e) => baseMeasureDDMI.add(e)).toList();
   }
 
-  _updateUnit() {
+  _updateUnit() async {
     for (int i = 0; i < unitsMeasure[typeIndex].length; i++) {
       unitsMeasure[typeIndex][i].equation = unitsMeasure[typeIndex][i]
           .equation
@@ -141,6 +141,15 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
     unitsMeasure[typeIndex][measureIndex].equation = newUnitEquation;
     unitsMeasure[typeIndex][measureIndex].equationReversed =
         newReversedUnitEquation;
+
+    await unitMeasureDao.updateUnitMeasure(UnitMeasureDB(
+        unitsMeasure[typeIndex][measureIndex].id,
+        newUnitName,
+        newUnitAbbreviation,
+        unitsMeasure[typeIndex][measureIndex].type,
+        newUnitEquation,
+        newReversedUnitEquation,
+        unitsMeasure[typeIndex][measureIndex].lastComputedValue));
 
     Fluttertoast.showToast(
         msg: "Zaktualizowano jednostkę.",
