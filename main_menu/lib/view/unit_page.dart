@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:main_menu/database/unit_type_db/unit_type_dao.dart';
 import 'package:main_menu/database/unit_type_db/unit_type_db.dart';
 import 'package:main_menu/view/edit_units_page.dart';
@@ -24,7 +25,8 @@ class UnitConverterPage extends StatefulWidget {
       _UnitConverterPageState(this.unitMeasureDao, this.unitTypeDao);
 }
 
-class _UnitConverterPageState extends State<UnitConverterPage> with TickerProviderStateMixin {
+class _UnitConverterPageState extends State<UnitConverterPage>
+    with TickerProviderStateMixin {
   var isLoading = true;
   var tabIndex = 0;
   final UnitMeasureDao unitMeasureDao;
@@ -35,7 +37,6 @@ class _UnitConverterPageState extends State<UnitConverterPage> with TickerProvid
   int indexOfSelectedUnit = 0;
   TabController tabController;
   TextEditingController startValueEditingController;
-
 
   _UnitConverterPageState(this.unitMeasureDao, this.unitTypeDao);
 
@@ -64,20 +65,16 @@ class _UnitConverterPageState extends State<UnitConverterPage> with TickerProvid
     //         unitsMeasure[i][j].lastComputedValue));
     //   }
 
-    for(final unitType in unitTypes)
-      if(unitType.id != null)
-        await unitTypeDao.updateUnitType(UnitTypeDB(
-            unitType.id,
-            unitType.name));
+    for (final unitType in unitTypes)
+      if (unitType.id != null)
+        await unitTypeDao
+            .updateUnitType(UnitTypeDB(unitType.id, unitType.name));
       else
-        await unitTypeDao.insertUnitType(UnitTypeDB(
-            null,
-            unitType.name));
+        await unitTypeDao.insertUnitType(UnitTypeDB(null, unitType.name));
 
-    for(final unitType in unitsMeasure)
-      for(final unitMeasure in unitType)
-        if(unitMeasure.id != null)
-        {
+    for (final unitType in unitsMeasure)
+      for (final unitMeasure in unitType)
+        if (unitMeasure.id != null) {
           await unitMeasureDao.updateUnitMeasure(UnitMeasureDB(
               unitMeasure.id,
               unitMeasure.name,
@@ -86,19 +83,16 @@ class _UnitConverterPageState extends State<UnitConverterPage> with TickerProvid
               unitMeasure.equation,
               unitMeasure.equationReversed,
               unitMeasure.lastComputedValue));
+        } else {
+          await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+              null,
+              unitMeasure.name,
+              unitMeasure.abbreviation,
+              unitMeasure.type,
+              unitMeasure.equation,
+              unitMeasure.equationReversed,
+              unitMeasure.lastComputedValue));
         }
-      else
-      {
-            await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
-                null,
-                unitMeasure.name,
-                unitMeasure.abbreviation,
-                unitMeasure.type,
-                unitMeasure.equation,
-                unitMeasure.equationReversed,
-                unitMeasure.lastComputedValue));
-      }
-
   }
 
   _setTabController() {
@@ -116,8 +110,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> with TickerProvid
   @override
   void initState() {
     super.initState();
-    if(unitsMeasure.isEmpty || unitTypes.isEmpty)
-      _getData();
+    if (unitsMeasure.isEmpty || unitTypes.isEmpty) _getData();
 
     startValueEditingController = TextEditingController();
     startValueEditingController.text = "1.0";
@@ -130,7 +123,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> with TickerProvid
   }
 
   @override
-  void dispose () {
+  void dispose() {
     super.dispose();
     _saveUnits();
   }
@@ -159,7 +152,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> with TickerProvid
     debugPrint("Reordering finished for ${draggedItem.name}}");
   }
 
-  _recalculateValues() {
+  bool _recalculateValues() {
     List<UnitMeasureDB> missingValues, calculatedValues;
     var previousLength;
     missingValues = new List<UnitMeasureDB>();
@@ -196,8 +189,9 @@ class _UnitConverterPageState extends State<UnitConverterPage> with TickerProvid
         }
       }
 
-      if (previousLength == missingValues.length)
-        break;
+      if (previousLength == missingValues.length) {
+        return true;
+      }
 
       previousLength = missingValues.length;
     }
@@ -210,6 +204,8 @@ class _UnitConverterPageState extends State<UnitConverterPage> with TickerProvid
         }
       }
     }
+
+    return false;
   }
 
   bool _tryCalculateFromEquation(
@@ -252,12 +248,11 @@ class _UnitConverterPageState extends State<UnitConverterPage> with TickerProvid
   Route _createRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => EditUnitsPage(
-          unitMeasureDao: this.unitMeasureDao,
-          unitTypeDao: this.unitTypeDao,
-          unitTypes: this.unitTypes,
-          unitsMeasure: this.unitsMeasure,
+        unitMeasureDao: this.unitMeasureDao,
+        unitTypeDao: this.unitTypeDao,
+        unitTypes: this.unitTypes,
+        unitsMeasure: this.unitsMeasure,
       ),
-
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return child;
       },
@@ -293,13 +288,14 @@ class _UnitConverterPageState extends State<UnitConverterPage> with TickerProvid
                       children: [
                         Padding(
                             padding: EdgeInsets.only(top: 25, left: 15),
-                            child: unitsMeasure[i].isNotEmpty ?
-                            Text(
-                                unitsMeasure[i][indexOfSelectedUnit].name,
-                                style: Theme.of(context).textTheme.headline1) :
-                            Text(
-                                "Pusto tu",
-                                style: Theme.of(context).textTheme.headline1)),
+                            child: unitsMeasure[i].isNotEmpty
+                                ? Text(
+                                    unitsMeasure[i][indexOfSelectedUnit].name,
+                                    style:
+                                        Theme.of(context).textTheme.headline1)
+                                : Text("Pusto tu",
+                                    style:
+                                        Theme.of(context).textTheme.headline1)),
                         Padding(
                             padding: EdgeInsets.only(right: 25, top: 40),
                             child: TextField(
@@ -351,7 +347,13 @@ class _UnitConverterPageState extends State<UnitConverterPage> with TickerProvid
                 color: Colors.blue[700],
                 onPressed: () {
                   setState(() {
-                    _recalculateValues();
+                    if (_recalculateValues()) {
+                      Fluttertoast.showToast(
+                          msg:
+                              "Nie udało się policzyć wartości. Sprawdź równania.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER);
+                    }
                   });
                 },
                 child: Text('Oblicz',
