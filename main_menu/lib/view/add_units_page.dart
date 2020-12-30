@@ -101,6 +101,17 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
         .toList();
   }
 
+  int _getLastUnitId() {
+    int lastId = 0;
+
+    for(final unitType in unitsMeasure)
+      for(final unit in unitType)
+        if(lastId < unit.id)
+          lastId = unit.id;
+
+        return lastId;
+  }
+
   _addUnit() async {
     await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
         null,
@@ -112,7 +123,7 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
         0));
 
     unitsMeasure[typeIndex].add(UnitMeasureDB(
-        null,
+        _getLastUnitId() + 1,
         newUnitName,
         newUnitAbbreviation,
         unitTypes[typeIndex].id,
