@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:main_menu/database/unit_measure_db/unit_measure_dao.dart';
 import 'package:main_menu/database/unit_measure_db/unit_measure_db.dart';
 import 'package:main_menu/database/unit_type_db/unit_type_dao.dart';
@@ -28,8 +29,8 @@ class AddUnitsPage extends StatefulWidget {
 class _AddUnitsPageState extends State<AddUnitsPage> {
   final UnitMeasureDao unitMeasureDao;
   final UnitTypeDao unitTypeDao;
-  final List<List<UnitMeasureDB>> unitsMeasure;
-  final List<UnitTypeDB> unitTypes;
+  List<List<UnitMeasureDB>> unitsMeasure;
+  List<UnitTypeDB> unitTypes;
 
   var typeIndex = 0;
   var measureIndex = 0;
@@ -98,27 +99,45 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
         child: new Text(e.name,
             style: mainStyle))))
         .toList();
-
-    typeDDMI.add(new DropdownMenuItem(
-        value: typeDDMI.length,
-        child: new Text("Dodaj typ jednostki",
-            style: mainStyle)));
   }
 
-  _addUnit() {
+  _addUnit() async {
+    await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
+        null,
+        newUnitName,
+        newUnitAbbreviation,
+        unitTypes[typeIndex].id,
+        newUnitEquation,
+        newReversedUnitEquation,
+        0));
+
     unitsMeasure[typeIndex].add(UnitMeasureDB(
         null,
         newUnitName,
         newUnitAbbreviation,
-        typeIndex + 1,
+        unitTypes[typeIndex].id,
         newUnitEquation,
         newReversedUnitEquation,
         0));
+
+    Fluttertoast.showToast(
+        msg: "Dodano jednostkę $newUnitName.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER);
   }
 
-  _addUnitType() {
-    unitTypes.add(UnitTypeDB(null, newUnitTypeName));
+  _addUnitType() async {
+    await unitTypeDao.insertUnitType(UnitTypeDB(
+        unitTypes.last.id + 1,
+        newUnitTypeName));
+
+    unitTypes.add(UnitTypeDB(unitTypes.last.id + 1, newUnitTypeName));
     unitsMeasure.add(List<UnitMeasureDB>());
+
+    Fluttertoast.showToast(
+        msg: "Dodano kategorię $newUnitTypeName.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER);
   }
 
   @override

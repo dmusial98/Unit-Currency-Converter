@@ -148,9 +148,6 @@ void main() async {
         0));
   }
 
-  // test = await unitMeasureDao.findUnitMeasureById(1);
-  // print("udało się: " + test.name);
-
   runApp(MyApp(unitMeasureDao, unitTypeDao));
 }
 

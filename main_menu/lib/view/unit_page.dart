@@ -42,8 +42,8 @@ class _UnitConverterPageState extends State<UnitConverterPage>
 
   _getData() async {
     unitTypes = await unitTypeDao.getAllUnitTypes();
-    for (int i = 1; i <= unitTypes.length; i++)
-      unitsMeasure.add(await unitMeasureDao.getUnitsByType(i));
+    for (int i = 0; i < unitTypes.length; i++)
+      unitsMeasure.add(await unitMeasureDao.getUnitsByType(unitTypes[i].id));
 
     setState(() {
       isLoading = false;
@@ -52,29 +52,12 @@ class _UnitConverterPageState extends State<UnitConverterPage>
   }
 
   _saveUnits() async {
-    // for(int i = 0; i < unitsMeasure.length; i++)
-    //   for(int j = 0; j < unitsMeasure[i].length; j++)
-    //   {
-    //     await unitMeasureDao.updateUnitMeasure(UnitMeasureDB(
-    //         unitsMeasure[i][j].id,
-    //         unitsMeasure[i][j].name,
-    //         unitsMeasure[i][j].abbreviation,
-    //         unitsMeasure[i][j].type,
-    //         unitsMeasure[i][j].equation,
-    //         unitsMeasure[i][j].equationReversed,
-    //         unitsMeasure[i][j].lastComputedValue));
-    //   }
-
     for (final unitType in unitTypes)
-      if (unitType.id != null)
         await unitTypeDao
             .updateUnitType(UnitTypeDB(unitType.id, unitType.name));
-      else
-        await unitTypeDao.insertUnitType(UnitTypeDB(null, unitType.name));
 
     for (final unitType in unitsMeasure)
       for (final unitMeasure in unitType)
-        if (unitMeasure.id != null) {
           await unitMeasureDao.updateUnitMeasure(UnitMeasureDB(
               unitMeasure.id,
               unitMeasure.name,
@@ -83,16 +66,6 @@ class _UnitConverterPageState extends State<UnitConverterPage>
               unitMeasure.equation,
               unitMeasure.equationReversed,
               unitMeasure.lastComputedValue));
-        } else {
-          await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
-              null,
-              unitMeasure.name,
-              unitMeasure.abbreviation,
-              unitMeasure.type,
-              unitMeasure.equation,
-              unitMeasure.equationReversed,
-              unitMeasure.lastComputedValue));
-        }
   }
 
   _setTabController() {
