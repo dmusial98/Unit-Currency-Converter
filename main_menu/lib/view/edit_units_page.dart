@@ -37,10 +37,10 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
   var measureIndex = 0;
   var baseMeasureIndex = 0;
 
-  String newUnitName;
-  String newUnitAbbreviation;
-  String newUnitEquation;
-  String newReversedUnitEquation;
+  String newUnitName = "";
+  String newUnitAbbreviation = "";
+  String newUnitEquation = "";
+  String newReversedUnitEquation = "";
 
   List<DropdownMenuItem<int>> measureDDMI = new List<DropdownMenuItem<int>>();
   List<DropdownMenuItem<int>> baseMeasureDDMI =
@@ -125,6 +125,14 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
   }
 
   _updateUnit() async {
+    if (newUnitAbbreviation.isEmpty || newUnitName.isEmpty || newUnitEquation.isEmpty || newReversedUnitEquation.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Żadne pole nie może pozostać puste.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER);
+      return;
+    }
+
     for (int i = 0; i < unitsMeasure[typeIndex].length; i++) {
       unitsMeasure[typeIndex][i].equation = unitsMeasure[typeIndex][i]
           .equation
@@ -312,7 +320,7 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
             child: SingleChildScrollView(
                 scrollDirection: Axis.vertical, //.horizontal
                 child: Text(
-                    "Definicja jednostki składa się z kilku pól. Nazwa jednostki jest dla użytkownika i może być dowolna. Skrót musi składać się z samych liter i być unikalny w danej katerogii. Równanie i równanie pomocnicze to informacja dla aplikacji jakie są zależności między jednostaki. Równanie może mieć postać: \"kg = g / 1000\" Ważne jest aby druga podana jednostka już istniała w aplikacji i jej skrót był otoczony spacjami. Do definicji możliwe jest użycie wszystkich operatorów dostępynch w języku Dart. Równanie pomocnicze pozwala z naszej jednostki obliczyć inną już dostępną w systemie.",
+                    "Definicja jednostki składa się z kilku pól. Nazwa jednostki jest dla użytkownika i może być dowolna. Skrót musi składać się z samych liter i być unikalny w danej kategorii. Równanie i równanie pomocnicze to informacja dla aplikacji jakie są zależności między jednostkami. Równanie może mieć postać: \"kg = g / 1000\" Ważne jest aby druga podana jednostka już istniała w aplikacji i jej skrót był otoczony spacjami. Do definicji możliwe jest użycie wszystkich operatorów dostępynch w języku Dart. Równanie pomocnicze pozwala z naszej jednostki obliczyć inną już dostępną w systemie.",
                     style: Theme.of(context).textTheme.headline4)),
           ),
         ]),

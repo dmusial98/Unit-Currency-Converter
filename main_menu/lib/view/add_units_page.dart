@@ -36,11 +36,11 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
   var measureIndex = 0;
   var baseMeasureIndex = 0;
 
-  String newUnitName;
-  String newUnitAbbreviation;
-  String newUnitEquation;
-  String newReversedUnitEquation;
-  String newUnitTypeName;
+  String newUnitName = "";
+  String newUnitAbbreviation = "";
+  String newUnitEquation = "";
+  String newReversedUnitEquation = "";
+  String newUnitTypeName = "";
 
   List<DropdownMenuItem<int>> typeDDMI = new List<DropdownMenuItem<int>>();
 
@@ -113,6 +113,14 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
   }
 
   _addUnit() async {
+    if (newUnitAbbreviation.isEmpty || newUnitEquation.isEmpty || newReversedUnitEquation.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Żadne pole nowej jednostki nie może być puste.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER);
+      return;
+    }
+
     await unitMeasureDao.insertUnitMeasure(UnitMeasureDB(
         null,
         newUnitName,
@@ -138,6 +146,14 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
   }
 
   _addUnitType() async {
+    if (newUnitTypeName.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Nazwa nowej jednostki nie może być pusta.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER);
+      return;
+    }
+
     await unitTypeDao.insertUnitType(UnitTypeDB(
         unitTypes.last.id + 1,
         newUnitTypeName));
@@ -236,6 +252,14 @@ class _AddUnitsPageState extends State<AddUnitsPage> {
                       style: Theme.of(context).textTheme.headline4
                   ))
             ],
+          ),
+          Expanded(
+            flex: 1,
+            child: SingleChildScrollView(
+                scrollDirection: Axis.vertical, //.horizontal
+                child: Text(
+                    "Definicja jednostki składa się z kilku pól. Nazwa jednostki jest dla użytkownika i może być dowolna. Skrót musi składać się z samych liter i być unikalny w danej kategorii. Równanie i równanie pomocnicze to informacja dla aplikacji jakie są zależności między jednostkami. Równanie może mieć postać: \"kg = g / 1000\" Ważne jest aby druga podana jednostka już istniała w aplikacji i jej skrót był otoczony spacjami. Do definicji możliwe jest użycie wszystkich operatorów dostępynch w języku Dart. Równanie pomocnicze pozwala z naszej jednostki obliczyć inną już dostępną w systemie.",
+                    style: Theme.of(context).textTheme.headline4)),
           )
         ],
       ),
