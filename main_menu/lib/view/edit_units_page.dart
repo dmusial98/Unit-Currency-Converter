@@ -133,15 +133,24 @@ class _EditUnitsPageState extends State<EditUnitsPage> {
       return;
     }
 
-    for (int i = 0; i < unitsMeasure[typeIndex].length; i++) {
-      unitsMeasure[typeIndex][i].equation = unitsMeasure[typeIndex][i]
-          .equation
-          .replaceFirst(unitsMeasure[typeIndex][measureIndex].abbreviation,
-              newUnitAbbreviation);
-      unitsMeasure[typeIndex][i].equationReversed = unitsMeasure[typeIndex][i]
-          .equationReversed
-          .replaceFirst(unitsMeasure[typeIndex][measureIndex].abbreviation,
-              newUnitAbbreviation);
+
+    if(unitsMeasure[typeIndex][measureIndex].abbreviation != newUnitAbbreviation) {
+      for (int i = 0; i < unitsMeasure[typeIndex].length; i++) {
+        unitsMeasure[typeIndex][i].equation =
+            unitsMeasure[typeIndex][i].equation.replaceFirst(
+                ' ${unitsMeasure[typeIndex][measureIndex].abbreviation} ',
+                ' $newUnitAbbreviation ');
+        if(unitsMeasure[typeIndex][i].equationReversed.startsWith('${unitsMeasure[typeIndex][measureIndex].abbreviation} '))
+          unitsMeasure[typeIndex][i].equationReversed =
+              unitsMeasure[typeIndex][i].equationReversed.replaceFirst(
+                  '${unitsMeasure[typeIndex][measureIndex].abbreviation} ',
+                  ' $newUnitAbbreviation ');
+        else
+          unitsMeasure[typeIndex][i].equationReversed =
+              unitsMeasure[typeIndex][i].equationReversed.replaceFirst(
+                  ' ${unitsMeasure[typeIndex][measureIndex].abbreviation} ',
+                  ' $newUnitAbbreviation ');
+      }
     }
 
     unitsMeasure[typeIndex][measureIndex].name = newUnitName;
