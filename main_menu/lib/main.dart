@@ -312,15 +312,15 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                         correspondingWidget: ExchangeRatesPage(
                           openMenuFunction: mockUp,
                         )),
-                    // MenuEntry(
-                    //     context: context,
-                    //     label: "Konwerter walut",
-                    //     iconName: "png/curr_tbl.png",
-                    //     entryIndex: 2,
-                    //     isHighLighted: isHighLighted,
-                    //     changePage: changePage,
-                    //     correspondingWidget:
-                    //         ExchangeConverterPage(openMenuFunction: mockUp)),
+                    MenuEntry(
+                        context: context,
+                        label: "Konwerter walut",
+                        iconName: "png/curr_tbl.png",
+                        entryIndex: 2,
+                        isHighLighted: isHighLighted,
+                        changePage: changePage,
+                        correspondingWidget:
+                            ExchangeConverterPage(openMenuFunction: mockUp)),
                   ]))),
       SlideTransition(
           position: pageAnimation,
